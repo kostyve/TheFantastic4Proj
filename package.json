@@ -1,0 +1,29 @@
+{
+  "name": "projectmanagement",
+  "version": "1.0.0",
+  "description": "Project management course",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kostyve/TheFantastic4Proj.git"
+  },
+  "keywords": [
+    "thefantastic4",
+    "TheFantastic4"
+  ],
+  "author": "TheFantastic4",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kostyve/TheFantastic4Proj/issues"
+  },
+  "homepage": "https://github.com/kostyve/TheFantastic4Proj#readme",
+  "devDependencies": {
+    "jest": "^25.3.0"
+  }
+}

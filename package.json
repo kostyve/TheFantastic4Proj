@@ -1,5 +1,11 @@
 {
   "name": "projectmanagement",
+  "jest": {
+    "verbose": true,
+    "runner": "jest-runner-eslint",
+    "displayName": "lint",
+    "testMatch": ["<rootDir>/src/**/*.js"]
+  },
   "version": "1.0.0",
   "description": "Project management course",
   "main": "index.js",
@@ -7,8 +13,7 @@
     "test": "test"
   },
   "scripts": {
-    "lint": "eslint .",
-    "prepush": "npm tun lint && npm test",
+    
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
@@ -34,7 +39,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.1",
-    "jest": "^25.3.0"
+    "jest": "^25.3.0",
+    "jest-runner-eslint": "^0.7.6"
   },
   "dependencies": {
     "abab": "^2.0.3",

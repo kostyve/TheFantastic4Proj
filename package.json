@@ -4,7 +4,9 @@
     "verbose": true,
     "runner": "jest-runner-eslint",
     "displayName": "lint",
-    "testMatch": ["<rootDir>/src/**/*.js"]
+    "testMatch": [
+      "<rootDir>/src/**/*.js"
+    ]
   },
   "version": "1.0.0",
   "description": "Project management course",
@@ -13,9 +15,8 @@
     "test": "test"
   },
   "scripts": {
-    
     "test": "jest --coverage",
-    "test:watch": "jest --watch"
+    "build": "webpack src/experiment.js"
   },
   "repository": {
     "type": "git",
@@ -472,6 +473,7 @@
     "w3c-xmlserializer": "^1.1.2",
     "walker": "^1.0.7",
     "webidl-conversions": "^4.0.2",
+    "webpack": "^4.42.1",
     "whatwg-encoding": "^1.0.5",
     "whatwg-mimetype": "^2.3.0",
     "whatwg-url": "^7.1.0",

@@ -6,7 +6,8 @@
         "node": true
     },
     "extends": [
-        "eslint:recommended"       
+        "eslint:recommended",
+        "plugin:jest-formatting/recommended"       
     ],
     "globals": {
         "Atomics": "readonly",
@@ -20,10 +21,9 @@
         "sourceType": "module"
     },
     "plugins": [
-        
         "jest-formatting"
     ],
     "rules": {
-        
+       
     }
 }

@@ -1,5 +1,4 @@
-
-
+/* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 //listen for auth status changes
 auth.onAuthStateChanged(user => {
     if (user) {

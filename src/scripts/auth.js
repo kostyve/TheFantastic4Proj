@@ -1,17 +1,20 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
-db.collection('apartments').get().then(snapshot =>{
-    console.log(snapshot.docs);
-})
+
 //listen for auth status changes login and logout
 auth.onAuthStateChanged(user => {
     if (user) {
-        console.log('user logged in: ', user.email)
+        console.log('user logged in: ', user.email);
         //get data only if the user logged in
         db.collection('apartments').get().then(snapshot => {
             setupApts(snapshot.docs);
+            //here we call setup ui with user so it will eval true = will show ui
+            setupUI(user);
         });
     }else{
         //we hide the data so when were not logged in, essentially no data is shown
+        console.log('user is not logged in');
+        //call with no user , hence evaluate to false = wont show ui
+        setupUI();
         setupApts([]);
     }
 });

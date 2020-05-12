@@ -6,6 +6,8 @@ const apartmentList = document.querySelector('.apartments');
 //ref to the logged out class so that we could implement button hiding when user is logged in/out
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
+//ref to the logged in accout
+const accountDetails = document.querySelector('.account-details');
 
 /* CONDITIONAL MENU LINKS we setup UI elements according to:
  will get a user as a parameter, and inside we want to check
@@ -13,12 +15,20 @@ const loggedInLinks = document.querySelectorAll('.logged-in');
 const setupUI = (user) => {
   //toggle UI elements
   if (user) {
+    //get the account info of the user and we input his into into the DOM
+    const html = `
+      <div>Logged in as ${user.email}</div>
+    `;
+    // get the account-details class of the inner html
+    accountDetails.innerHTML = html;
     // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   }else{
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
+    //hide the account info
+    accountDetails.innerHTML = '';
   }
 }
 
@@ -43,7 +53,7 @@ const setupApts = (data) => {
       //backticks used in js to create template string. ${} is a placeholder
       const li = `
         <li>
-          <div class="collapsible-header grey lighten-4">${apt.street}</div>
+          <div class="collapsible-header grey lighten-4">${apt.address}</div>
           <div class="collapsible-body white">${apt.description}.</div>
         </li>
       `;
@@ -54,7 +64,7 @@ const setupApts = (data) => {
     apartmentList.innerHTML = html; // here were taking all our code created and outputting it to the dom
       // that is, in our container mentioned above in the head of this file
   }else{
-    apartmentList.innerHTML = '<h5 class="center-align">Login to view guides</h5>';
+    apartmentList.innerHTML = '<h5 class="center-align">Login to view available apartments</h5>';
   }
 
 };

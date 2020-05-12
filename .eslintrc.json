@@ -3,8 +3,7 @@
         "browser": true,
         "es6": true,
         "jest": true,
-        "node": true,
-        "jest/globals": true
+        "node": true
     },
     "extends": [
         "eslint:recommended",
@@ -12,7 +11,8 @@
     ],
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "M": "writable"
     },
     "parserOptions": {
         "ecmaFeatures": {
@@ -25,6 +25,6 @@
         "jest-formatting"
     ],
     "rules": {
-              
+        
     }
 }

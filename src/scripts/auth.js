@@ -1,7 +1,11 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
-//listen for auth status changes
+db.collection('apartments').get().then(snapshot =>{
+    console.log(snapshot.docs);
+})
+//listen for auth status changes login and logout
 auth.onAuthStateChanged(user => {
     if (user) {
+        console.log('user logged in: ', user.email)
         //get data only if the user logged in
         db.collection('apartments').get().then(snapshot => {
             setupApts(snapshot.docs);
@@ -33,7 +37,7 @@ signupForm.addEventListener('submit', (e) => {
     });
 });
 
-//log out method
+//logout/signout method
 const logout = document.querySelector('#logout');
 logout.addEventListener('click', (e) => {
     e.preventDefault();
@@ -41,17 +45,16 @@ logout.addEventListener('click', (e) => {
     auth.signOut();
 });
 
-//loginuser
+//login user through submit
 const loginForm = document.querySelector('#login-form');
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    //get user info NOTE they have their own scopes
+    //get user info. *NOTE: they have their own scopesand thats why we can use email and pass again
     const email = loginForm['login-email'].value;
     const password = loginForm['login-password'].value;
 
     auth.signInWithEmailAndPassword(email, password).then(cred => {
-    
         //close login modal and reset form
         const modal = document.querySelector('#modal-login');
         M.Modal.getInstance(modal).close();

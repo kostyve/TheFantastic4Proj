@@ -110,23 +110,8 @@
   
     <!-- APARTMENT LIST -->
     <div class="container" style="margin-top: 40px;">
-      <ul class="collapsible z-depth-0 guides" style="border: none;">
-        <li>
-          <div class="collapsible-header grey lighten-4">Apartment title</div>
-          <div class="collapsible-body white">Lorem ipsum</div>
-        </li>
-        <li>
-          <div class="collapsible-header grey lighten-4">Apartment2 title</div>
-          <div class="collapsible-body white">Lorem ipsum</div>
-        </li>
-        <li>
-          <div class="collapsible-header grey lighten-4">Apartment3 title</div>
-          <div class="collapsible-body white">Lorem ipsum</div>
-        </li>
-        <li>
-          <div class="collapsible-header grey lighten-4">Apartment4 title</div>
-          <div class="collapsible-body white">Lorem ipsum</div>
-        </li>
+      <ul class="collapsible z-depth-0 apartments" style="border: none;">
+        
       </ul>
     </div>
   
@@ -145,7 +130,7 @@
       // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
       firebase.analytics();
-      //mskr suyh snf gitrestore reffs
+      //make auth and auth and firestore reffs
       const auth = firebase.auth();
       //Initialize a db constant to use in the app.js, with it we can reference it
       const db = firebase.firestore();

@@ -1,8 +1,24 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
-
 //ref to the dom though the class name, which is : class="collapsible z-depth-0 apartments"
 const apartmentList = document.querySelector('.apartments');
+
+//ref to the logged out class so that we could implement button hiding when user is logged in/out
+const loggedOutLinks = document.querySelectorAll('.logged-out');
+const loggedInLinks = document.querySelectorAll('.logged-in');
+
+// will get a user as a parameter, and indide we want to check
+// if the user exists or not and we will show or hide the links accordingly
+const setupUI = (user) => {
+  //toggle UI elements
+  if (user) {
+    loggedInLinks.forEach(item => item.style.display = 'block');
+    loggedOutLinks.forEach(item => item.style.display = 'none');
+  }else{
+    loggedInLinks.forEach(item => item.style.display = 'none');
+    loggedOutLinks.forEach(item => item.style.display = 'block');
+  }
+}
 
 // setup MATERIALIZE components
 document.addEventListener('DOMContentLoaded', function() {

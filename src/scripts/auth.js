@@ -4,8 +4,9 @@
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log('user logged in: ', user.email);
-        //get data only if the user logged in
-        db.collection('apartments').get().then(snapshot => {
+        //get data only if the user logged in previously get and then, but we changed here to 
+        // onSnapshot() so that our db will update realtime!! that easy
+        db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs);
             //here we call setup ui with user so it will eval true = will show ui
             setupUI(user);
@@ -31,7 +32,7 @@ createForm.addEventListener('submit', (e) =>{
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.
         //better to use this rather than . notation because they dont work with hyphen text
-        title: createForm['address'].value,
+        address: createForm['address'].value,
         description: createForm['description'].value
         // this is going to store an entry into our db, which works as asynch method !
     }).then(() => {

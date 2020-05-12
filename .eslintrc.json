@@ -3,7 +3,8 @@
         "browser": true,
         "es6": true,
         "jest": true,
-        "node": true
+        "node": true,
+        "jest/globals": true
     },
     "extends": [
         "eslint:recommended",
@@ -24,6 +25,6 @@
         "jest-formatting"
     ],
     "rules": {
-       
+              
     }
 }

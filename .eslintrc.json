@@ -11,7 +11,10 @@
     ],
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "M": "writable",
+        "auth": "writable",
+        "db": "writable"
     },
     "parserOptions": {
         "ecmaFeatures": {
@@ -24,6 +27,6 @@
         "jest-formatting"
     ],
     "rules": {
-       
+        
     }
 }

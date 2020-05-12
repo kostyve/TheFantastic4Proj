@@ -7,11 +7,13 @@ const apartmentList = document.querySelector('.apartments');
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 
-// will get a user as a parameter, and indide we want to check
-// if the user exists or not and we will show or hide the links accordingly
+/* CONDITIONAL MENU LINKS we setup UI elements according to:
+ will get a user as a parameter, and inside we want to check
+ if the user exists or not and we will show or hide the links accordingly*/
 const setupUI = (user) => {
   //toggle UI elements
   if (user) {
+    // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   }else{

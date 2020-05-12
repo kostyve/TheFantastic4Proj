@@ -1,16 +1,32 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
-//listen for auth status changes login and logout
+//add admin cloud functions reference so that we could make someone an admin
+const adminForm = document.querySelector('.admin-actions');
+adminForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const adminEmail = document.querySelector('#admin-email').value;
+    //we create a reference of the function named addAdminRole thorugh the callable as we created in functions/index.js
+    const addAdminRole = functions.httpsCallable('addAdminRole');
+    //this is how we call it, that adminEmail represents the 'data' in the cloud functions
+    addAdminRole({email: adminEmail}).then(result => {
+        console.log(result);
+    });
+});
+//listen for auth status changes login and logout added method to check if a user is an admin
 auth.onAuthStateChanged(user => {
     if (user) {
+        //we want to check the calaims if a user is admin if he is we will add the token to the user
+        user.getIdTokenResult().then(idTokenResult =>{
+            user.admin = idTokenResult.claims.admin;
+            setupUI(user);
+        });
         console.log('user logged in: ', user.email);
         //get data through snapshot, but we changed here to 
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs)
             //here we call setup ui with user so it will eval true = will show ui
-            setupUI(user);
-        }, (error) =>{
+        }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
             console.log(error.message)
         });
@@ -51,7 +67,7 @@ createForm.addEventListener('submit', (e) =>{
 })
 
 
-//signup and login user
+//signup form (and then login user)
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
     //preven refresh
@@ -61,24 +77,27 @@ signupForm.addEventListener('submit', (e) => {
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
 
-    // sign up the user this task is async, so were going to have to deal
-    // a promise with .then().    cred is when a user created, you get their credentials back
-    // which is used to create a new firestore (db) document
+    /* sign up the user
+    this task is async, so were going to have to deal
+    a promise with .then().    cred is when a user created, you get their credentials back
+    which is used to create a new firestore (db) document*/
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
         //were going to return a promise which is the access to db, and we go to 'users'
         //colection, so when we try to create something that doesnt exist yet, google creates
-        //auto uid for the document
+        //auto uid for the document *THIS MAY CHANGE IN THE FUTURE*
         return db.collection('users').doc(cred.user.uid).set({
             firstName: signupForm['signup-firstname'].value
-
-             // now after the entry is created with the unique user id which is going inside the collection
-        // and we finally when the db entry is done, we clear our form and reset it for further use
-        }).then(() => {
-            const modal = document.querySelector('#modal-signup');
-            M.Modal.getInstance(modal).close();
-            signupForm.reset();
         });
-    })
+        // now after the entry is created with the unique user id which is going inside the collection
+        // and we finally when the db entry is done, we clear our form and reset it for further use
+    }).then(() => {
+        const modal = document.querySelector('#modal-signup');
+        M.Modal.getInstance(modal).close();
+        signupForm.reset();
+        signupForm.querySelector('.error').innerHTML = '';
+    }).catch(error => {
+        signupForm.querySelector('.error').innerHTML = error.message;
+    });
 });
 
 
@@ -105,5 +124,8 @@ loginForm.addEventListener('submit', (e) => {
         const modal = document.querySelector('#modal-login');
         M.Modal.getInstance(modal).close();
         loginForm.reset();
-    })
+        loginForm.querySelector('.error').innerHTML = '';
+    }).catch(error => {
+        loginForm.querySelector('.error').innerHTML = error.message;
+});
 })

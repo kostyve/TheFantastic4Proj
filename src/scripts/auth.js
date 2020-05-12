@@ -4,8 +4,9 @@
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log('user logged in: ', user.email);
-        //get data only if the user logged in
-        db.collection('apartments').get().then(snapshot => {
+        //get data only if the user logged in previously get and then, but we changed here to 
+        // onSnapshot() so that our db will update realtime!! that easy
+        db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs);
             //here we call setup ui with user so it will eval true = will show ui
             setupUI(user);
@@ -20,6 +21,33 @@ auth.onAuthStateChanged(user => {
 });
 
 
+/* CREATION OF A NEW APARTMENTF FROM THE FORM
+    creation of a new form using the query selector to find createform class
+    using a listener we listen for 'submit' and when we receive the eVENT obj, we prevent the 
+    default page refresh */
+const createForm = document.querySelector('#create-form');
+createForm.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
+    db.collection('apartments').add({
+        //with square brackets we get the content of the fields in the form in index.html.
+        //better to use this rather than . notation because they dont work with hyphen text
+        address: createForm['address'].value,
+        description: createForm['description'].value
+        // this is going to store an entry into our db, which works as asynch method !
+    }).then(() => {
+        // when it returns the promise we want to reset the form and close the modal
+        const modal = document.querySelector('#modal-create');
+        M.Modal.getInstance(modal).close();
+        createForm.reset();
+        //HERE important thing happens here. we get the authentication method error because were not authenticated
+        //now we want to catch it so we could show a different message
+    }).catch(err => {
+        console.log(err.message)
+    })
+})
+
+
 //signup and login user
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
@@ -32,13 +60,14 @@ signupForm.addEventListener('submit', (e) => {
 
     // sign up the user this task is async, so were going to have to deal a promise with .then()
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        //were taking the credention and log it
+        //were taking the credential and doing nothing with it
         const modal = document.querySelector('#modal-signup');
         M.Modal.getInstance(modal).close();
         signupForm.reset();
 
     });
 });
+
 
 //logout/signout method
 const logout = document.querySelector('#logout');
@@ -47,6 +76,7 @@ logout.addEventListener('click', (e) => {
     //async logout
     auth.signOut();
 });
+
 
 //login user through submit
 const loginForm = document.querySelector('#login-form');

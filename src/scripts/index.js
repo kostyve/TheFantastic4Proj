@@ -8,6 +8,8 @@ const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 //ref to the logged in accout
 const accountDetails = document.querySelector('.account-details');
+//make a ref for admin items, most likely it will be set to landlord
+const adminItems = document.querySelectorAll('.admin');
 
 /* CONDITIONAL MENU LINKS we setup UI elements according to:
  will get a user as a parameter, and inside we want to check
@@ -15,16 +17,30 @@ const accountDetails = document.querySelector('.account-details');
 const setupUI = (user) => {
   //toggle UI elements
   if (user) {
-    //get the account info of the user and we input his into into the DOM
-    const html = `
+    // check if he has admin token if so, then present all the admin items
+    if(user.admin){
+      adminItems.forEach(item => item.style.display = 'block');
+    }
+    //account info from db by the user id weve setup before. POTENTIALLY CHANGE IT TO GOOGLE FUNCTIONS
+    db.collection('users').doc(user.uid).get().then(doc => {
+      //get the account info of the user and we input his into into the DOM
+      //we will use in case of an admin a check. if user is admin then 'Admin' else ''
+      const html = `
       <div>Logged in as ${user.email}</div>
-    `;
-    // get the account-details class of the inner html
-    accountDetails.innerHTML = html;
+      <div>${doc.data().firstName}</div>
+      <div class="pink-text">${user.admin ? 'Admin' : ''}</div>
+      `;
+      // get the account-details class of the inner html
+      accountDetails.innerHTML = html;
+    });
+    
     // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
   }else{
+    //hide admin items
+    adminItems.forEach(item => item.style.display = 'none');
+
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
     //hide the account info

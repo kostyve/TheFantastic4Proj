@@ -4,12 +4,15 @@
 auth.onAuthStateChanged(user => {
     if (user) {
         console.log('user logged in: ', user.email);
-        //get data only if the user logged in previously get and then, but we changed here to 
+        //get data through snapshot, but we changed here to 
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
-            setupApts(snapshot.docs);
+            setupApts(snapshot.docs)
             //here we call setup ui with user so it will eval true = will show ui
             setupUI(user);
+        }, (error) =>{
+            //this is how to handle error on listeners, that is the onSnapshot!
+            console.log(error.message)
         });
     }else{
         //we hide the data so when were not logged in, essentially no data is shown
@@ -58,14 +61,24 @@ signupForm.addEventListener('submit', (e) => {
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
 
-    // sign up the user this task is async, so were going to have to deal a promise with .then()
+    // sign up the user this task is async, so were going to have to deal
+    // a promise with .then().    cred is when a user created, you get their credentials back
+    // which is used to create a new firestore (db) document
     auth.createUserWithEmailAndPassword(email, password).then(cred => {
-        //were taking the credential and doing nothing with it
-        const modal = document.querySelector('#modal-signup');
-        M.Modal.getInstance(modal).close();
-        signupForm.reset();
+        //were going to return a promise which is the access to db, and we go to 'users'
+        //colection, so when we try to create something that doesnt exist yet, google creates
+        //auto uid for the document
+        return db.collection('users').doc(cred.user.uid).set({
+            firstName: signupForm['signup-firstname'].value
 
-    });
+             // now after the entry is created with the unique user id which is going inside the collection
+        // and we finally when the db entry is done, we clear our form and reset it for further use
+        }).then(() => {
+            const modal = document.querySelector('#modal-signup');
+            M.Modal.getInstance(modal).close();
+            signupForm.reset();
+        });
+    })
 });
 
 

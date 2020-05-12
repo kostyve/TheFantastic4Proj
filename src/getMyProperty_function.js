@@ -1,4 +1,5 @@
 
+/* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
 
 const fs = require('fs');

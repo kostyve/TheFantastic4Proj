@@ -1,3 +1,5 @@
+/* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
+
 const database = firebase.database();
 
 function addProperty(aptIdIN, cityIN, descriptionIN, floorIN, isRentedIN, leasedOnIN, maxLeaseIN, minLeaseIN, ownerIdIN, picturesIN, priceIN, streetIN, streetNumIN, studentIdIN, zipIN) {

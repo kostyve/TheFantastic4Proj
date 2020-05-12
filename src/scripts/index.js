@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 // setup materialize components
 document.addEventListener('DOMContentLoaded', function() {
   //M is materialize library, propery Modal, we init it will all our modals

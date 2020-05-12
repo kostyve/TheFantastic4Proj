@@ -12,7 +12,9 @@
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
-        "M": "writable"
+        "M": "writable",
+        "auth": "writable",
+        "db": "writable"
     },
     "parserOptions": {
         "ecmaFeatures": {

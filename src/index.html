@@ -14,6 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-functions.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-storage.js"></script>
     
     <!-- Compiled and minified JavaScript -->
     
@@ -30,6 +31,9 @@
           <img src="/src/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li class="logged-in" style="display: none">
+            <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload</a>
+          </li>
             <li class="logged-in" style="display: none">
               <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
             </li>
@@ -53,6 +57,31 @@
       </div>
     </nav>
 
+    <!--UPLOAD FILE WITH A BAR-->
+        <div id="modal-upload" class="modal">
+          <div class="modal-content center-align">
+            <h4>Upload the student card</h4><br />
+              <div class="progress">
+                <div class="determinate" style="width:70%" id="uploader"></div>
+                  </div>
+                    <form action="#">
+                      <div class="file-field input-field">
+                        <div class="btn">
+                          <span>File</span>
+                          <input type="file">
+                        </div>
+                       <div class="file-path-wrapper">
+                          <input class="file-path validate" type="text">
+                        </div>
+                      </div>
+                    </form>
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Upload
+                    <i class="material-icons right">send</i>
+                    </button>
+                    <div class="account-upload"></div>
+                  </div>
+                </div>
+    
     <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
     <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
       <input type="email" placeholder="User email" id="admin-email" required />
@@ -163,13 +192,13 @@
       const db = firebase.firestore();
       //Initialize firebase functions
       const functions = firebase.functions();
+      //Initialize firebase storage
+      const storage = firebase.storage();
     </script>
     
-    <script defer src="scripts/index.js">
-    //anything to do with the dom will go in here</script>
-
-    <script defer src="scripts/auth.js">
-    //anything to do with authentication will go in here</script>
+    <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>
+    <script defer src="scripts/auth.js">//anything to do with authentication will go in here</script>
+    <script defer src="scripts/storage.js">//anything to do with storage will go in here</script>
             
   </body>
 </html> 

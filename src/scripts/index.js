@@ -66,10 +66,10 @@ const setupApts = (data) => {
     let html = '';
     data.forEach(doc => {
       const apt = doc.data();
-      //backticks used in js to create template string. ${} is a placeholder
-      const li =readApartments(apt)
-      // '*****'must setup here the proper function for stars. this is just for visualization
+      
       // we summ our const li templates appending each cycle
+      const li =readApartments(apt)
+      // TODO:'*****'must setup here the proper function for stars. this is just for visualization
       html += li;
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
     });
@@ -82,7 +82,9 @@ const setupApts = (data) => {
 };
 
 function readApartments(apt){
-  //function for gettin list of apartments based on user id.
+  //function for gettin list of apartments based on user id. This function populates setupApts with data
+  //a template whic is dynamically constructed
+  //backticks used in js to create template string. ${} is a placeholder
   const li= `
     <li>
       <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}

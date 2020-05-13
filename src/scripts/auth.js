@@ -47,12 +47,23 @@ auth.onAuthStateChanged(user => {
 const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) =>{
     e.preventDefault();
+    //example how to pull user data. first we get data from firebase auth
+    var user = auth.currentUser;
+    //create the data we need
+    var name, email, uid;
+    if (user != null){
+        name = user.displayName;
+        email= user.email;
+        uid = user.uid;
+    }
+    console.log(uid,name,email)
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.
         //better to use this rather than . notation because they dont work with hyphen text
         address: createForm['address'].value,
-        description: createForm['description'].value
+        description: createForm['description'].value,
+        ownerId: uid
         // this is going to store an entry into our db, which works as asynch method !
     }).then(() => {
         // when it returns the promise we want to reset the form and close the modal

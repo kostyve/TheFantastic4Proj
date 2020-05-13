@@ -67,20 +67,8 @@ const setupApts = (data) => {
     data.forEach(doc => {
       const apt = doc.data();
       //backticks used in js to create template string. ${} is a placeholder
-      const li = `
-        <li>
-          <div class="collapsible-header grey lighten-4">${apt.description}
-              <i class="right small material-icons grey-text right">
-                star_border star_border star_border star_border star_border
-              </i>
-          </div>
-          <div class="collapsible-body white">${"<b>City:</b> "+apt.city}.</div>
-          <div class="collapsible-body white">${"<b>Street:</b> "+apt.street}.</div>
-          <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
-          <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
-          <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
-        </li>
-      `;// '*****'must setup here the proper function for stars. this is just for visualization
+      const li =readApartments(apt)
+      // '*****'must setup here the proper function for stars. this is just for visualization
       // we summ our const li templates appending each cycle
       html += li;
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
@@ -92,3 +80,21 @@ const setupApts = (data) => {
   }
 
 };
+
+function readApartments(apt){
+  //function for gettin list of apartments based on user id.
+  const li= `
+    <li>
+      <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
+          <i class="right small material-icons grey-text right">
+            star_border star_border star_border star_border star_border
+          </i>
+      </div>
+      <div class="collapsible-body white">${"<b>description:</b> "+apt.description}.</div>
+      <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
+      <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
+      <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
+    </li>
+  `;
+  return li
+}

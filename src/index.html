@@ -43,6 +43,7 @@
               <a href="#" class="grey-text" id="logout">Logout</a>
             </li>
         </ul>
+        <img src="images/SamiRoomLogo_low_px.png" height="65px" width="100px">
       </div>
     </nav>
   
@@ -97,11 +98,26 @@
         <form id="create-form">
           <div class="input-field">
             <input type="text" id="title" required>
+            <label for="title">City</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="title" required>
             <label for="title">Address</label>
+          </div>
+          <div class="input-field">
+            <input type="text"  id="title" placeholder="State" required>
+            <input type="text"  id="title" placeholder="Zip" required>
           </div>
           <div class="input-field">
             <textarea id="content" class="materialize-textarea" required></textarea>
             <label for="content">Apartment Description</label>
+          </div>
+          <div class="input-field">
+              <div class="form-group">
+                <label class="file">
+                  <input type="file" id="file" aria-label="File browser">
+                </label>
+              </div>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
@@ -114,6 +130,7 @@
         
       </ul>
     </div>
+    <div class="big_pic"></div>
   
     <script>
       // Your web app's Firebase configuration

@@ -28,12 +28,12 @@ const setupUI = (user) => {
       const html = `
       <div>Logged in as ${user.email}</div>
       <div>${doc.data().firstName}</div>
-      <div class="pink-text">${user.admin ? 'Admin' : ''}</div>
+      <div class="green-text">${user.admin ? 'Admin' : ''}</div>
       `;
       // get the account-details class of the inner html
       accountDetails.innerHTML = html;
     });
-    
+
     // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
@@ -69,10 +69,18 @@ const setupApts = (data) => {
       //backticks used in js to create template string. ${} is a placeholder
       const li = `
         <li>
-          <div class="collapsible-header grey lighten-4">${apt.address}</div>
-          <div class="collapsible-body white">${apt.description}.</div>
+          <div class="collapsible-header grey lighten-4">${apt.description}
+              <i class="right small material-icons grey-text right">
+                star_border star_border star_border star_border star_border
+              </i>
+          </div>
+          <div class="collapsible-body white">${"<b>City:</b> "+apt.city}.</div>
+          <div class="collapsible-body white">${"<b>Street:</b> "+apt.street}.</div>
+          <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
+          <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
+          <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
         </li>
-      `;
+      `;// '*****'must setup here the proper function for stars. this is just for visualization
       // we summ our const li templates appending each cycle
       html += li;
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li

@@ -4,30 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    
-    <script  src="https://www.gstatic.com/firebasejs/7.14.3/firebase-app.js"></script>
-    
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-functions.js"></script>
-    
+
     <!-- Compiled and minified JavaScript -->
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <title>SamiRoom</title>
   </head>
   <body class="grey lighten-3">
+
     <!-- NAVBAR -->
     <nav class="z-depth-0 grey lighten-4">
       <div class="nav-wrapper container">
         <a href="#" class="brand-logo">
-          <img src="" style="width: 180px; margin-top: 10px;">
+          <img src="/src/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <span><!---->
+            <li class="logged-in" style="display: none">
+              <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
+            </li>
             <li class="logged-in" style="display: none">
               <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
             </li>
@@ -50,9 +54,17 @@
 
     <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
     <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
-    <input type="email" placeholder="User email" id="admin-email" required />
-    <button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
+      <input type="email" placeholder="User email" id="admin-email" required />
+      <button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
     </form>
+
+    <!--DASHBOARD MODAL-->
+    <div id="modal-dashboard" class="modal">
+      <div class="modal-content center-align">
+        <h4>Your Dashboard</h4><br />
+        <div class="dashboard-details"></div>
+      </div>
+    </div>
 
     <!-- SIGN UP MODAL ADD FUNCTIONALITY HERE FOR USER STORY-->
     <div id="modal-signup" class="modal">
@@ -72,11 +84,11 @@
             <label for="signup-firstname">First name</label>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Sign up</button>
-          <p class="error pink-text center-align"></p>
+          <p class="error green-text center-align"></p>
         </form>
       </div>
     </div>
-  
+
     <!-- LOGIN MODAL -->
     <div id="modal-login" class="modal">
       <div class="modal-content">
@@ -91,11 +103,11 @@
             <label for="login-password">Your password</label>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Login</button>
-          <p class="error pink-text center-align"></p>
+          <p class="error green-text center-align"></p>
         </form>
       </div>
     </div>
-  
+
     <!-- ACCOUNT MODAL -->
     <div id="modal-account" class="modal">
       <div class="modal-content center-align">
@@ -103,32 +115,48 @@
         <div class="account-details"></div>
       </div>
     </div>
-  
+
     <!-- CREATE APARTMENT MODAL -->
     <div id="modal-create" class="modal">
       <div class="modal-content">
         <h4>Create an Apartment</h4><br />
         <form id="create-form">
           <div class="input-field">
-            <input type="text" id="address" required>
-            <label for="address">Address</label>
+            <input type="text" id="city" required>
+            <label for="city">City</label>
           </div>
           <div class="input-field">
-            <textarea id="description" class="materialize-textarea" required></textarea>
-            <label for="description">Apartment Description</label>
+            <input type="text" id="street" required>
+            <label for="street">Street</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="floor" required>
+            <label for="floor">Floor</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="description" required>
+            <label for="description">Description</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="zip" required>
+            <label for="zip">Zip</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="price" required>
+            <label for="price">Price</label>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
       </div>
     </div>
-  
+
     <!-- APARTMENT LIST -->
     <div class="container" style="margin-top: 40px;">
       <ul class="collapsible z-depth-0 apartments" style="border: none;">
-        
+
       </ul>
     </div>
-  
+
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
@@ -151,12 +179,12 @@
       //Initialize firebase functions
       const functions = firebase.functions();
     </script>
-    
+
     <script defer src="scripts/index.js">
     //anything to do with the dom will go in here</script>
 
     <script defer src="scripts/auth.js">
     //anything to do with authentication will go in here</script>
-            
+
   </body>
-</html> 
+</html>

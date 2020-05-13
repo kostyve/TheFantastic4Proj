@@ -228,7 +228,7 @@
     </script>
     
     <script>
-      // Create a storage reference from our storage service
+      /*// Create a storage reference from our storage service
       var storageRef = storage.ref(); 
       // Create a child reference
       
@@ -262,16 +262,20 @@
 
       // Reference's bucket is the name of the storage bucket where files are stored
       spaceRef.bucket;
-      //get elements
+      //get elements*/
       var uploader = document.getElementById('uploader');
       var fileButton = document.getElementById('fileButton');
       //listen for file selection
 
-    fileButton.addEventListener('change', function(e) {
+      fileButton.addEventListener('change', function(e) {
 
       var file = e.target.files[0];
-
-      var storageRef = firebase.storage().ref('folder_name/' + file.name);
+      var userId ='';
+      //sketchy try catch doesnt work
+      try{userId = auth.currentUser.uid}catch(err){console.log(err.code)}
+      var imgPath = 'img/' + userId;
+      
+      var storageRef = firebase.storage().ref(imgPath + '/' + file.name);
 
       var task = storageRef.put(file);
 
@@ -282,11 +286,11 @@
             uploader.value = percentage;
         },
         function error(err){
-
+          console.log(err)
         },
         
         function complete(){
-
+          console.log(complete)
         }
         
       );

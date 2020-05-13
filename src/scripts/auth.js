@@ -21,7 +21,7 @@ auth.onAuthStateChanged(user => {
             setupUI(user);
         });
         console.log('user logged in: ', user.email);
-        //get data through snapshot, but we changed here to 
+        //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs)
@@ -42,7 +42,7 @@ auth.onAuthStateChanged(user => {
 
 /* CREATION OF A NEW APARTMENTF FROM THE FORM
     creation of a new form using the query selector to find createform class
-    using a listener we listen for 'submit' and when we receive the eVENT obj, we prevent the 
+    using a listener we listen for 'submit' and when we receive the eVENT obj, we prevent the
     default page refresh */
 const createForm = document.querySelector('#create-form');
 createForm.addEventListener('submit', (e) =>{
@@ -61,8 +61,12 @@ createForm.addEventListener('submit', (e) =>{
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.
         //better to use this rather than . notation because they dont work with hyphen text
-        address: createForm['address'].value,
+        city: createForm['city'].value,
+        street: createForm['street'].value,
+        floor: createForm['floor'].value,
         description: createForm['description'].value,
+        zip: createForm['zip'].value,
+        price: createForm['price'].value,
         ownerId: uid
         // this is going to store an entry into our db, which works as asynch method !
     }).then(() => {

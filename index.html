@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-    <head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -27,7 +27,7 @@
     <nav class="z-depth-0 grey lighten-4">
       <div class="nav-wrapper container">
         <a href="#" class="brand-logo">
-          <img src="img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
+          <img src="/src/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li class="logged-in" style="display: none">
@@ -53,7 +53,6 @@
       </div>
     </nav>
 
-
     <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
     <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
       <input type="email" placeholder="User email" id="admin-email" required />
@@ -67,6 +66,7 @@
         <div class="dashboard-details"></div>
       </div>
     </div>
+
     <!-- SIGN UP MODAL ADD FUNCTIONALITY HERE FOR USER STORY-->
     <div id="modal-signup" class="modal">
       <div class="modal-content">
@@ -77,8 +77,8 @@
             <label for="signup-email">Email address</label>
           </div>
           <div class="input-field">
-            <input type="password" id="signup-password" required />
-            <label for="signup-password">Choose password</label>
+            <input type="password" id="signup-password" name="signup-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
+            <label for="signup-password">Password</label>
           </div>
           <div class="input-field">
             <input type="text" id="signup-firstname" required />
@@ -130,11 +130,7 @@
       <div class="modal-content">
         <h4>Create an Apartment</h4><br />
         <form id="create-form">
-        <div class="input-field">
-            <input type="text" id="address" required>
-            <label for="address">Address</label>
-          </div>
-		  <div class="input-field">
+          <div class="input-field">
             <input type="text" id="city" required>
             <label for="city">City</label>
           </div>
@@ -158,13 +154,6 @@
             <input type="text" id="price" required>
             <label for="price">Price</label>
           </div>
-          <div class="input-field">
-              <div class="form-group">
-                <label class="file">
-                  <input type="file" id="file" aria-label="File browser">
-                </label>
-              </div>
-          </div>
           <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
       </div>
@@ -175,6 +164,8 @@
       <ul class="collapsible z-depth-0 apartments" style="border: none;">
 
       </ul>
+    </div>
+
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {

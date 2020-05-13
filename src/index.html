@@ -196,7 +196,11 @@
 
       </ul>
     </div>
-
+    <div class="center">
+      <progress value="0" max="100" id="uploader">0%</progress>>
+      <input type="file" value="upload" id="fileButton" /> 
+    </div>
+    
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
@@ -219,7 +223,74 @@
       //Initialize firebase functions
       const functions = firebase.functions();
       //Initialize firebase storage
+      // Get a reference to the storage service, which is used to create references in your storage bucket
       const storage = firebase.storage();
+    </script>
+    
+    <script>
+      // Create a storage reference from our storage service
+      var storageRef = storage.ref(); 
+      // Create a child reference
+      
+      var imagesRef = storageRef.child('images');
+      // imagesRef now points to 'images'
+
+      // Child references can also take paths delimited by '/'
+      var spaceRef = storageRef.child('images/space.jpg');
+      // spaceRef now points to "images/space.jpg"
+      // imagesRef still points to "images"
+      // Parent allows us to move to the parent of a reference
+      var imagesRef = spaceRef.parent;
+      // imagesRef now points to 'images'
+
+      // Root allows us to move all the way back to the top of our bucket
+      var rootRef = spaceRef.root;
+      // rootRef now points to the root
+      // References can be chained together multiple times
+      var earthRef = spaceRef.parent.child('earth.jpg');
+      // earthRef points to 'images/earth.jpg'
+
+      // nullRef is null, since the parent of root is null
+      var nullRef = spaceRef.root.parent;
+      // Reference's path is: 'images/space.jpg'
+      // This is analogous to a file path on disk
+      spaceRef.fullPath;
+
+      // Reference's name is the last segment of the full path: 'space.jpg'
+      // This is analogous to the file name
+      spaceRef.name;
+
+      // Reference's bucket is the name of the storage bucket where files are stored
+      spaceRef.bucket;
+      //get elements
+      var uploader = document.getElementById('uploader');
+      var fileButton = document.getElementById('fileButton');
+      //listen for file selection
+
+    fileButton.addEventListener('change', function(e) {
+
+      var file = e.target.files[0];
+
+      var storageRef = firebase.storage().ref('folder_name/' + file.name);
+
+      var task = storageRef.put(file);
+
+      task.on('state_changed',
+        
+        function progress(snapshot){
+            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            uploader.value = percentage;
+        },
+        function error(err){
+
+        },
+        
+        function complete(){
+
+        }
+        
+      );
+    })
     </script>
     
     <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>

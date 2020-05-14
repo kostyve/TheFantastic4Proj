@@ -37,7 +37,6 @@ task.on('state_changed',
     //update user profile to verified
 
     //give user permissions to order an apartment*/
-    console.log('upload complete')
   }
   
 );

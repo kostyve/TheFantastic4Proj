@@ -20,6 +20,7 @@ auth.onAuthStateChanged(user => {
             user.admin = idTokenResult.claims.admin;
             setupUI(user);
         });
+        //TODO: remove this console log when project is finalized
         console.log('user logged in: ', user.email);
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
@@ -82,10 +83,10 @@ createForm.addEventListener('submit', (e) =>{
 })
 
 
-//signup form (and then login user)
+//SIGNUP FORM - CREATING OF A NEW USER (signup and then login user)
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
-    //preven refresh
+    //prevent refresh
     e.preventDefault();
 
     //get user info, we can use the fields using square bracket notation with the id in''
@@ -101,7 +102,8 @@ signupForm.addEventListener('submit', (e) => {
         //colection, so when we try to create something that doesnt exist yet, google creates
         //auto uid for the document *THIS MAY CHANGE IN THE FUTURE*
         return db.collection('users').doc(cred.user.uid).set({
-            firstName: signupForm['signup-firstname'].value
+            firstName: signupForm['signup-firstname'].value,
+            isVerified: false
         });
         // now after the entry is created with the unique user id which is going inside the collection
         // and we finally when the db entry is done, we clear our form and reset it for further use

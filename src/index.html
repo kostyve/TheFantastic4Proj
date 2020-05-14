@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -21,196 +21,212 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
     <title>SamiRoom</title>
-  </head>
-  <body class="grey lighten-3">
+</head>
+<body class="grey lighten-3">
 
-    <!-- NAVBAR -->
-    <nav class="z-depth-0 grey lighten-4">
-      <div class="nav-wrapper container">
+<!-- NAVBAR -->
+<nav class="z-depth-0 grey lighten-4">
+    <div class="nav-wrapper container">
         <a href="#" class="brand-logo">
-          <img src="/src/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
+            <img src="/src/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li class="logged-in" style="display: none">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload</a>
-          </li>
             <li class="logged-in" style="display: none">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
+                <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload</a>
             </li>
             <li class="logged-in" style="display: none">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+                <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
+            </li>
+            <li class="logged-in" style="display: none">
+                <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
             </li>
             <!--make only admin see the create apartment-->
             <li class="admin" style="display: none">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create an Apartment</a>
+                <a href="#" class="grey-text modal-trigger" data-target="modal-create">Create an Apartment</a>
             </li>
             <li class="logged-out" style="display: none">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
+                <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
             </li>
             <li class="logged-out" style="display: none">
-              <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
+                <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign up</a>
             </li>
             <li class="logged-in" style="display: none">
-              <a href="#" class="grey-text" id="logout">Logout</a>
+                <a href="#" class="grey-text" id="logout">Logout</a>
             </li>
         </ul>
-      </div>
-    </nav>
+    </div>
+</nav>
 
-    <!--UPLOAD FILE WITH A PROGRESSBAR-->
-        <div id="modal-upload" class="modal">
-          <div class="modal-content center-align">
-            <h4>Upload your student id card for verification</h4><br />
-              <div class="progress">
-                <div class="determinate" style="width:30%" value="0" max="100" id="uploader"></div>
-                <li id="uploader-done" style="display: none;">Done!</label>
-              </div>
-
-                <form action="#">
-                  <div class="file-field input-field">
-                    <div class="btn">
-                      <span>File</span>
-                      <input type="file"value="upload" id="fileButton" >
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                    </div>
-                  </div>
-                </form>
-
-              <div class="account-upload"></div>
-          </div>
+<!--UPLOAD FILE WITH A PROGRESSBAR-->
+<div id="modal-upload" class="modal">
+    <div class="modal-content center-align">
+        <h4>Upload your student id card for verification</h4><br/>
+        <div class="progress">
+            <div class="determinate" style="width:20%" id="uploader"></div>
         </div>
 
-    <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
-    <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
-      <input type="email" placeholder="User email" id="admin-email" required />
-      <button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
-    </form>
+        <form action="#">
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>File</span>
+                    <input type="file">
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
+        </form>
 
-    <!--DASHBOARD MODAL-->
-    <div id="modal-dashboard" class="modal">
-      <div class="modal-content center-align">
-        <h4>Your Dashboard</h4><br />
+        <button class="btn waves-effect waves-light" type="submit" name="action">Upload
+            <i class="material-icons right">send</i>
+        </button>
+        <div class="account-upload"></div>
+    </div>
+</div>
+
+<!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
+<form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
+    <input type="email" placeholder="User email" id="admin-email" required/>
+    <button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
+</form>
+
+<!--DASHBOARD MODAL-->
+<div id="modal-dashboard" class="modal">
+    <div class="modal-content center-align">
+        <h4>Your Dashboard</h4><br/>
+        <div class="dashboard-details"></div>
+    </div>
+</div>
+
+<!-- SIGN UP MODAL ADD FUNCTIONALITY HERE FOR USER STORY-->
+<div id="modal-signup" class="modal">
+    <div class="modal-content">
+        <h4>Sign up</h4><br/>
+        <form id="signup-form">
+            <div class="input-field">
+                <input type="email" id="signup-email" required/>
+                <label for="signup-email">Email address</label>
+            </div>
+            <div class="input-field">
+                <input type="password" id="signup-password" name="signup-password"
+                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                       title="Must contain at least one number, one uppercase, one lowercase letter, and at least 8 or more characters"
+                       required>
+                <label for="signup-password">Password</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="signup-firstname" required/>
+                <label for="signup-firstname">First name</label>
+            </div>
+            <button class="btn yellow darken-2 z-depth-0">Sign up</button>
+            <p class="error green-text center-align"></p>
+        </form>
+    </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="modal-login" class="modal">
+    <div class="modal-content">
+        <h4>Login</h4><br/>
+        <form id="login-form">
+            <div class="input-field">
+                <input type="email" id="login-email" required/>
+                <label for="login-email">Email address</label>
+            </div>
+            <div class="input-field">
+                <input type="password" id="login-password" required/>
+                <label for="login-password">Your password</label>
+            </div>
+            <button class="btn yellow darken-2 z-depth-0">Login</button>
+            <p class="error green-text center-align"></p>
+        </form>
+    </div>
+</div>
+
+<!-- ACCOUNT MODAL -->
+<div id="modal-account" class="modal">
+    <div class="modal-content center-align">
+        <h4>Account details</h4><br/>
+        <!--show list of owned apartments if user is admin-->
         <li class="admin" style="display: none">
-          <!--show list of owned apartments if user is admin-->
-          <h6><b>Owned apartments:</b></h6>
-            <div class="container" style="margin-top: 40px;">
-              <ul class="collapsible z-depth-0 owned-Apartments" style="border: none;">
-
-              </ul>
+            <div class="input-field">
+                <input type="password" id="from-account-login-password" required/>
+                <label for="from-account-login-password">Your password</label>
             </div>
         </li>
 
-        <li class="user" style="display: none">
-          <h6><b>fuck this person:</b></h6>
-        </li>
-
-        <div class="dashboard-details"></div>
-      </div>
+        <div class="account-details"></div>
     </div>
+</div>
 
-    <!-- SIGN UP MODAL ADD FUNCTIONALITY HERE FOR USER STORY-->
-    <div id="modal-signup" class="modal">
-      <div class="modal-content">
-        <h4>Sign up</h4><br />
-        <form id="signup-form">
-          <div class="input-field">
-            <input type="email" id="signup-email" required />
-            <label for="signup-email">Email address</label>
-          </div>
-          <div class="input-field">
-            <input type="password" id="signup-password" name="signup-password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required>
-            <label for="signup-password">Password</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="signup-firstname" required />
-            <label for="signup-firstname">First name</label>
-          </div>
-          <button class="btn yellow darken-2 z-depth-0">Sign up</button>
-          <p class="error green-text center-align"></p>
+<!-- CREATE REVIEWS MODAL -->
+<div id="review-modal" class="review-modal">
+    <div class="modal-content">
+        <form id="review-form">
+            <h4>Reviews</h4><br/>
+            <div class="input-field">
+                <input type="number" id="rating" name="rating" min="1" max="5" required>
+                <label for="rating">Rating (1 to 5)</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="reviewMsg" required>
+                <label for="reviewMsg">Type your review here</label>
+            </div>
+            <button class="btn yellow darken-2 z-depth-0">Publish</button>
         </form>
-      </div>
     </div>
+</div>
 
-    <!-- LOGIN MODAL -->
-    <div id="modal-login" class="modal">
-      <div class="modal-content">
-        <h4>Login</h4><br />
-        <form id="login-form">
-          <div class="input-field">
-            <input type="email" id="login-email" required />
-            <label for="login-email">Email address</label>
-          </div>
-          <div class="input-field">
-            <input type="password" id="login-password" required />
-            <label for="login-password">Your password</label>
-          </div>
-          <button class="btn yellow darken-2 z-depth-0">Login</button>
-          <p class="error green-text center-align"></p>
-        </form>
-      </div>
-    </div>
-
-    <!-- ACCOUNT MODAL -->
-    <div id="modal-account" class="modal">
-          <div class="modal-content center-align">
-            <h4>Account details</h4><br />
-            <div class="account-details"></div>
-            <li class="admin" style="display: none"></li>
-          </div>
-    </div>
-
-    <!-- CREATE APARTMENT MODAL -->
-    <div id="modal-create" class="modal">
-      <div class="modal-content">
-        <h4>Create an Apartment</h4><br />
+<!-- CREATE APARTMENT MODAL -->
+<div id="modal-create" class="modal">
+    <div class="modal-content">
+        <h4>Create an Apartment</h4><br/>
         <form id="create-form">
-          <div class="input-field">
-            <input type="text" id="city" required>
-            <label for="city">City</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="street" required>
-            <label for="street">Street</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="floor" required>
-            <label for="floor">Floor</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="description" required>
-            <label for="description">Description</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="zip" required>
-            <label for="zip">Zip</label>
-          </div>
-          <div class="input-field">
-            <input type="text" id="price" required>
-            <label for="price">Price</label>
-          </div>
-          <button class="btn yellow darken-2 z-depth-0">Create</button>
+            <div class="input-field">
+                <input type="text" id="city" required>
+                <label for="city">City</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="street" required>
+                <label for="street">Street</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="floor" required>
+                <label for="floor">Floor</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="description" required>
+                <label for="description">Description</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="zip" required>
+                <label for="zip">Zip</label>
+            </div>
+            <div class="input-field">
+                <input type="text" id="price" required>
+                <label for="price">Price</label>
+            </div>
+            <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
-      </div>
     </div>
+</div>
 
-    <!-- APARTMENT LIST -->
-    <div class="container" style="margin-top: 40px;">
-      <ul class="collapsible z-depth-0 apartments" style="border: none;">
+<!-- APARTMENT LIST -->
+<div class="container" style="margin-top: 40px;">
+    <ul class="collapsible z-depth-0 apartments" style="border: none;">
 
-      </ul>
-    </div>
+    </ul>
+</div>
+<!-- this is the upload testing algorithm, currently is uploading when user is authenticated-->
+<div class="center">
+    <progress value="0" max="100" id="uploader">0%</progress>
+    >
+    <input type="file" value="upload" id="fileButton"/>
+</div>
 
-    <!-- this is the upload testing algorithm, currently is uploading when user is authenticated-->
-    <div class="center">
-      <progress value="0" max="100" id="uploader">0%</progress>>
-      <input type="file" value="upload" id="fileButton" />
-    </div>
-
-    <script>
-      // Your web app's Firebase configuration
-      var firebaseConfig = {
+<script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
         apiKey: "AIzaSyBjqxl10WoiPS61w-wdcRbPYh9B2oNbDNk",
         authDomain: "thenewfantastic4-96af1.firebaseapp.com",
         databaseURL: "https://thenewfantastic4-96af1.firebaseio.com",
@@ -219,63 +235,24 @@
         messagingSenderId: "381362446787",
         appId: "1:381362446787:web:52b7ecebfd2a544f841d76",
         measurementId: "G-6TMGPHG6ZC"
-      };
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      firebase.analytics();
-      //Initialize auth and auth and firestore reffs
-      const auth = firebase.auth();
-      //Initialize a db constant to use in the app.js, with it we can reference it
-      const db = firebase.firestore();
-      //Initialize firebase functions
-      const functions = firebase.functions();
-      //Initialize firebase storage
-      // Get a reference to the storage service, which is used to create references in your storage bucket
-      const cloudStorage = firebase.storage();
-    </script>
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+    //Initialize auth and auth and firestore reffs
+    const auth = firebase.auth();
+    //Initialize a db constant to use in the app.js, with it we can reference it
+    const db = firebase.firestore();
+    //Initialize firebase functions
+    const functions = firebase.functions();
+    //Initialize firebase storage
+    // Get a reference to the storage service, which is used to create references in your storage bucket
+    const cloudStorage = firebase.storage();
+</script>
 
-    <script>
-      /*// Create a storage reference from our storage service
-      var storageRef = storage.ref();
-      // Create a child reference
+<script defer src="scripts/index.js">//anything to do with the dom will go in here</script>
+<script defer src="scripts/auth.js">//anything to do with authentication will go in here</script>
+<script defer src="scripts/storage.js">//anything to do with storage will go in here</script>
 
-      var imagesRef = storageRef.child('images');
-      // imagesRef now points to 'images'
-
-      // Child references can also take paths delimited by '/'
-      var spaceRef = storageRef.child('images/space.jpg');
-      // spaceRef now points to "images/space.jpg"
-      // imagesRef still points to "images"
-      // Parent allows us to move to the parent of a reference
-      var imagesRef = spaceRef.parent;
-      // imagesRef now points to 'images'
-
-      // Root allows us to move all the way back to the top of our bucket
-      var rootRef = spaceRef.root;
-      // rootRef now points to the root
-      // References can be chained together multiple times
-      var earthRef = spaceRef.parent.child('earth.jpg');
-      // earthRef points to 'images/earth.jpg'
-
-      // nullRef is null, since the parent of root is null
-      var nullRef = spaceRef.root.parent;
-      // Reference's path is: 'images/space.jpg'
-      // This is analogous to a file path on disk
-      spaceRef.fullPath;
-
-      // Reference's name is the last segment of the full path: 'space.jpg'
-      // This is analogous to the file name
-      spaceRef.name;
-
-      // Reference's bucket is the name of the storage bucket where files are stored
-      spaceRef.bucket;
-      //get elements*/
-
-    </script>
-
-    <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>
-    <script defer src="scripts/auth.js">//anything to do with authentication will go in here</script>
-    <script defer src="scripts/storage.js">//anything to do with storage will go in here</script>
-
-  </body>
+</body>
 </html>

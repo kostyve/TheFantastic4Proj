@@ -26,7 +26,6 @@ auth.onAuthStateChanged(user => {
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs)
-            getMyOwnAprts(snapshot.docs)
             //here we call setup ui with user so it will eval true = will show ui
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
@@ -38,7 +37,6 @@ auth.onAuthStateChanged(user => {
         //call with no user , hence evaluate to false = wont show ui
         setupUI();
         setupApts([]);
-        getMyOwnAprts([]);
     }
 });
 
@@ -83,6 +81,28 @@ createForm.addEventListener('submit', (e) =>{
         console.log(err.message)
     })
 })
+
+const reviewForm = document.querySelector('#review-form');
+reviewForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    //to get student id (The checking if the user is a student or not
+    // is inside the collection.add function).
+    let user = auth.currentUser;
+
+
+    db.collection('reviews').add({
+        rating: reviewForm['rating'].value,
+        reviewMsg: reviewForm['reviewMsg'].value
+    }).then(() => {
+        const modal = document.querySelector('#review-modal');
+        M.Modal.getInstance(modal).close();
+        reviewForm.reset();
+        reviewForm.querySelector('.error').innerHTML = '';
+    }).catch(error => {
+        reviewForm.querySelector('.error').innerHTML = error.message;
+    });
+});
 
 
 //SIGNUP FORM - CREATING OF A NEW USER (signup and then login user)

@@ -29,13 +29,6 @@ task.on('state_changed',
   function complete(){
     var user = auth.currentUser;
     console.log(user.uid)
-
-    /*if (user != null){
-         //update user db entry to verified
-        db.collection('users').doc(auth.currentUser.uid).set({
-            isVerified: true
-    });
-    }
     //create the data we need
     console.log('upload complete')
    
@@ -44,7 +37,6 @@ task.on('state_changed',
     //update user profile to verified
 
     //give user permissions to order an apartment*/
-    console.log('upload complete')
   }
   
 );

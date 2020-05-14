@@ -21,10 +21,6 @@ task.on('state_changed',
   function progress(snapshot){
       var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       uploader.value = percentage;
-      db.collection('users').doc(auth.currentUser.uid).set({
-        isVerified: true,
-        downloadURL: task.downloadURL()
-    });
   },
   function error(err){
     console.log(err)

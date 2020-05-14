@@ -86,7 +86,7 @@ createForm.addEventListener('submit', (e) =>{
 //SIGNUP FORM - CREATING OF A NEW USER (signup and then login user)
 const signupForm = document.querySelector('#signup-form');
 signupForm.addEventListener('submit', (e) => {
-    //preven refresh
+    //prevent refresh
     e.preventDefault();
 
     //get user info, we can use the fields using square bracket notation with the id in''

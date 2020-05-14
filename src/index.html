@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-analytics.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-functions.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.14.3/firebase-storage.js"></script>
-    
+
     <!-- Compiled and minified JavaScript -->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -83,7 +83,7 @@
               <div class="account-upload"></div>
           </div>
         </div>
-    
+
     <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
     <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
       <input type="email" placeholder="User email" id="admin-email" required />
@@ -94,6 +94,20 @@
     <div id="modal-dashboard" class="modal">
       <div class="modal-content center-align">
         <h4>Your Dashboard</h4><br />
+        <li class="admin" style="display: none">
+          <!--show list of owned apartments if user is admin-->
+          <h6><b>Owned apartments:</b></h6>
+            <div class="container" style="margin-top: 40px;">
+              <ul class="collapsible z-depth-0 owned-Apartments" style="border: none;">
+
+              </ul>
+            </div>
+        </li>
+
+        <li class="user" style="display: none">
+          <h6><b>fuck this person:</b></h6>
+        </li>
+
         <div class="dashboard-details"></div>
       </div>
     </div>
@@ -142,18 +156,11 @@
 
     <!-- ACCOUNT MODAL -->
     <div id="modal-account" class="modal">
-      <div class="modal-content center-align">
-        <h4>Account details</h4><br />
-        <!--show list of owned apartments if user is admin-->
-        <li class="admin" style="display: none">
-          <div class="input-field">
-            <input type="password" id="from-account-login-password" required />
-            <label for="from-account-login-password">Your password</label>
+          <div class="modal-content center-align">
+            <h4>Account details</h4><br />
+            <div class="account-details"></div>
+            <li class="admin" style="display: none"></li>
           </div>
-        </li>
-
-        <div class="account-details"></div>
-      </div>
     </div>
 
     <!-- CREATE APARTMENT MODAL -->
@@ -196,12 +203,13 @@
 
       </ul>
     </div>
+
     <!-- this is the upload testing algorithm, currently is uploading when user is authenticated-->
     <div class="center">
       <progress value="0" max="100" id="uploader">0%</progress>>
-      <input type="file" value="upload" id="fileButton" /> 
+      <input type="file" value="upload" id="fileButton" />
     </div>
-    
+
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {
@@ -227,12 +235,12 @@
       // Get a reference to the storage service, which is used to create references in your storage bucket
       const cloudStorage = firebase.storage();
     </script>
-    
+
     <script>
       /*// Create a storage reference from our storage service
-      var storageRef = storage.ref(); 
+      var storageRef = storage.ref();
       // Create a child reference
-      
+
       var imagesRef = storageRef.child('images');
       // imagesRef now points to 'images'
 
@@ -266,10 +274,10 @@
       //get elements*/
 
     </script>
-    
+
     <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>
     <script defer src="scripts/auth.js">//anything to do with authentication will go in here</script>
     <script defer src="scripts/storage.js">//anything to do with storage will go in here</script>
-            
+
   </body>
 </html>

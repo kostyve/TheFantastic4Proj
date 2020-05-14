@@ -59,9 +59,9 @@
     <!--UPLOAD FILE WITH A PROGRESSBAR-->
         <div id="modal-upload" class="modal">
           <div class="modal-content center-align">
-            <h4>Upload the student card</h4><br />
+            <h4>Upload your student id card for verification</h4><br />
               <div class="progress">
-                <div class="determinate" style="width:70%" id="uploader"></div>
+                <div class="determinate" style="width:20%" id="uploader"></div>
               </div>
 
                     <form action="#">
@@ -144,8 +144,8 @@
         <!--show list of owned apartments if user is admin-->
         <li class="admin" style="display: none">
           <div class="input-field">
-            <input type="password" id="login-password" required />
-            <label for="login-password">Your password</label>
+            <input type="password" id="from-account-login-password" required />
+            <label for="from-account-login-password">Your password</label>
           </div>
         </li>
 
@@ -203,7 +203,12 @@
       <ul class="collapsible z-depth-0 apartments" style="border: none;">
 
       </ul>
-    <script>
+    </div>
+    <!-- this is the upload testing algorithm, currently is uploading when user is authenticated-->
+    <div class="center">
+      <progress value="0" max="100" id="uploader">0%</progress>>
+      <input type="file" value="upload" id="fileButton" /> 
+    </div>
       // Your web app's Firebase configuration
       var firebaseConfig = {
         apiKey: "AIzaSyBjqxl10WoiPS61w-wdcRbPYh9B2oNbDNk",
@@ -225,7 +230,47 @@
       //Initialize firebase functions
       const functions = firebase.functions();
       //Initialize firebase storage
-      const storage = firebase.storage();
+      // Get a reference to the storage service, which is used to create references in your storage bucket
+      const cloudStorage = firebase.storage();
+    </script>
+    
+    <script>
+      /*// Create a storage reference from our storage service
+      var storageRef = storage.ref(); 
+      // Create a child reference
+      
+      var imagesRef = storageRef.child('images');
+      // imagesRef now points to 'images'
+
+      // Child references can also take paths delimited by '/'
+      var spaceRef = storageRef.child('images/space.jpg');
+      // spaceRef now points to "images/space.jpg"
+      // imagesRef still points to "images"
+      // Parent allows us to move to the parent of a reference
+      var imagesRef = spaceRef.parent;
+      // imagesRef now points to 'images'
+
+      // Root allows us to move all the way back to the top of our bucket
+      var rootRef = spaceRef.root;
+      // rootRef now points to the root
+      // References can be chained together multiple times
+      var earthRef = spaceRef.parent.child('earth.jpg');
+      // earthRef points to 'images/earth.jpg'
+
+      // nullRef is null, since the parent of root is null
+      var nullRef = spaceRef.root.parent;
+      // Reference's path is: 'images/space.jpg'
+      // This is analogous to a file path on disk
+      spaceRef.fullPath;
+
+      // Reference's name is the last segment of the full path: 'space.jpg'
+      // This is analogous to the file name
+      spaceRef.name;
+
+      // Reference's bucket is the name of the storage bucket where files are stored
+      spaceRef.bucket;
+      //get elements*/
+
     </script>
     
     <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>

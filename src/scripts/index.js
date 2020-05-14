@@ -96,7 +96,11 @@ function readApartments(apt){
       <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
       <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
       <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
+      <div class="collapsible-body white"><button onclick="myFunction()">Connect to landlord</button></div>
     </li>
   `;
   return li
+}
+function Confirmation(){
+  alert("The transaction was successful.Immediately the landlord will contact you soon Thanks.");
 }

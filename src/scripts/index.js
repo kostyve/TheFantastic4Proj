@@ -8,8 +8,12 @@ const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
 //ref to the logged in accout
 const accountDetails = document.querySelector('.account-details');
+//ref to dashboard aprt list.
+const dashboard = document.querySelector('.owned-Apartments');
 //make a ref for admin items, most likely it will be set to landlord
 const adminItems = document.querySelectorAll('.admin');
+//make a ref for user items.
+const userItems = document.querySelectorAll('.user');
 
 /* CONDITIONAL MENU LINKS we setup UI elements according to:
  will get a user as a parameter, and inside we want to check
@@ -20,6 +24,8 @@ const setupUI = (user) => {
     // check if he has admin token if so, then present all the admin items
     if(user.admin){
       adminItems.forEach(item => item.style.display = 'block');
+    }else {
+      userItems.forEach(item => item.style.display = 'block');
     }
     //account info from db by the user id weve setup before. POTENTIALLY CHANGE IT TO GOOGLE FUNCTIONS
     db.collection('users').doc(user.uid).get().then(doc => {
@@ -58,21 +64,29 @@ document.addEventListener('DOMContentLoaded', function() {
   M.Collapsible.init(items);
 });
 
+
 //setup apartments
 const setupApts = (data) => {
+  getMyOwnAprts(data);
+
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
       //we need to create a template and run through our data and input it inside
     let html = '';
+
     data.forEach(doc => {
+
       const apt = doc.data();
-      
       // we summ our const li templates appending each cycle
-      const li =readApartments(apt)
+      const li = readApartments(apt)
+
       // TODO:'*****'must setup here the proper function for stars. this is just for visualization
       html += li;
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
+
     });
+
+
     apartmentList.innerHTML = html; // here were taking all our code created and outputting it to the dom
       // that is, in our container mentioned above in the head of this file
   }else{
@@ -81,11 +95,37 @@ const setupApts = (data) => {
 
 };
 
-function readApartments(apt){
+const getMyOwnAprts = (data) => {
+  //check len on the data, if we have no length then user is not logged in. we show different data
+  if (data.length){
+    //we need to create a template and run through our data and input it inside
+    let html = '';
+    const user = auth.currentUser;
+    data.forEach(doc => {
+      const apt = doc.data();
+      //li is the list of the current user apratments.
+      const li = readApartments(apt, auth.currentUser.uid)
+      html += li;
+    });
+
+    if(html == ''){//if the user dont own any apartments.
+      dashboard.innerHTML = "you dont have any apartments in the database.";
+    }else{
+      //output li(user apartments) list to the user dashbord.
+      dashboard.innerHTML = html;
+    }
+  }else{
+  dashboard.innerHTML = '<h5 class="center-align">Login to view available apartments</h5>';
+  }
+};
+
+function readApartments(apt, id = apt.ownerId){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
-  const li= `
+  let li=``;
+  if(id==apt.ownerId){
+  li= `
     <li>
       <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
           <i class="right small material-icons grey-text right">
@@ -96,11 +136,8 @@ function readApartments(apt){
       <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
       <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
       <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
-      <div class="collapsible-body white"><button onclick="Confirmation()">Connect to landlord</button></div>
     </li>
   `;
+  }
   return li
-}
-function Confirmation(){
-  alert("The transaction was successful.Immediately the landlord will contact you soon Thanks.");
 }

@@ -26,6 +26,7 @@ auth.onAuthStateChanged(user => {
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
             setupApts(snapshot.docs)
+            getMyOwnAprts(snapshot.docs)
             //here we call setup ui with user so it will eval true = will show ui
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
@@ -37,6 +38,7 @@ auth.onAuthStateChanged(user => {
         //call with no user , hence evaluate to false = wont show ui
         setupUI();
         setupApts([]);
+        getMyOwnAprts([]);
     }
 });
 

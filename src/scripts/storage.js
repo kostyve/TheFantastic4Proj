@@ -21,10 +21,6 @@ task.on('state_changed',
   function progress(snapshot){
       var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       uploader.value = percentage;
-      db.collection('users').doc(auth.currentUser.uid).set({
-        isVerified: true,
-        downloadURL: task.downloadURL()
-    });
   },
   function error(err){
     console.log(err)
@@ -33,13 +29,6 @@ task.on('state_changed',
   function complete(){
     var user = auth.currentUser;
     console.log(user.uid)
-
-    /*if (user != null){
-         //update user db entry to verified
-        db.collection('users').doc(auth.currentUser.uid).set({
-            isVerified: true
-    });
-    }
     //create the data we need
     console.log('upload complete')
    

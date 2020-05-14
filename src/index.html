@@ -60,9 +60,9 @@
     <!--UPLOAD FILE WITH A PROGRESSBAR-->
         <div id="modal-upload" class="modal">
           <div class="modal-content center-align">
-            <h4>Upload the student card</h4><br />
+            <h4>Upload your student id card for verification</h4><br />
               <div class="progress">
-                <div class="determinate" style="width:70%" id="uploader"></div>
+                <div class="determinate" style="width:20%" id="uploader-mod"></div>
               </div>
 
                     <form action="#">
@@ -196,6 +196,7 @@
 
       </ul>
     </div>
+    <!-- this is the upload testing algorithm, currently is uploading when user is authenticated-->
     <div class="center">
       <progress value="0" max="100" id="uploader">0%</progress>>
       <input type="file" value="upload" id="fileButton" /> 
@@ -224,7 +225,7 @@
       const functions = firebase.functions();
       //Initialize firebase storage
       // Get a reference to the storage service, which is used to create references in your storage bucket
-      const storage = firebase.storage();
+      const cloudStorage = firebase.storage();
     </script>
     
     <script>
@@ -263,38 +264,7 @@
       // Reference's bucket is the name of the storage bucket where files are stored
       spaceRef.bucket;
       //get elements*/
-      var uploader = document.getElementById('uploader');
-      var fileButton = document.getElementById('fileButton');
-      //listen for file selection
 
-      fileButton.addEventListener('change', function(e) {
-
-      var file = e.target.files[0];
-      var userId ='';
-      //sketchy try catch doesnt work
-      try{userId = auth.currentUser.uid}catch(err){console.log(err.code)}
-      var imgPath = 'img/' + userId;
-      
-      var storageRef = firebase.storage().ref(imgPath + '/' + file.name);
-
-      var task = storageRef.put(file);
-
-      task.on('state_changed',
-        
-        function progress(snapshot){
-            var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            uploader.value = percentage;
-        },
-        function error(err){
-          console.log(err)
-        },
-        
-        function complete(){
-          console.log(complete)
-        }
-        
-      );
-    })
     </script>
     
     <script defer src="scripts/index.js">//anything to do with the dom will go in here</script>

@@ -1,12 +1,36 @@
-/*const uploader = document.getElementsById('uploader');
-const fileButton = document.getElementsById('fileButton');
+/* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
+
+var uploader = document.getElementById('uploader');
+var fileButton = document.getElementById('fileButton');
+//listen for file selection
 
 fileButton.addEventListener('change', function(e) {
-    //get file
 
-    //create storage ref
+var file = e.target.files[0];
+var userId ='';
+//sketchy try catch doesnt work
+try{userId = auth.currentUser.uid}catch(err){console.log(err.code)}
+var imgPath = 'img/' + userId;
 
-    //upload the file
+var storageRef = cloudStorage.ref(imgPath + '/' + file.name);
 
-    //update the progressbar
-})*/
+var task = storageRef.put(file);
+
+task.on('state_changed',
+  
+  function progress(snapshot){
+      var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      uploader.value = percentage;
+  },
+  function error(err){
+    console.log(err)
+  },
+  
+  function complete(){
+    console.log(complete)
+    
+    uploader.value = 0;
+  }
+  
+);
+})

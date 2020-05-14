@@ -96,7 +96,7 @@ function readApartments(apt){
       <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
       <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
       <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
-      <div class="collapsible-body white"><button onclick="myFunction()">Connect to landlord</button></div>
+      <div class="collapsible-body white"><button onclick="Confirmation()">Connect to landlord</button></div>
     </li>
   `;
   return li

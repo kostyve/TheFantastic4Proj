@@ -127,11 +127,24 @@
             <input type="text" id="signup-firstname" required />
             <label for="signup-firstname">First name</label>
           </div>
+          <div class="input-field">
+            <input type="text" id="date" class="datepicker" required/>
+            <label for="date">choose a date...</label>
+          </div>
           <button class="btn yellow darken-2 z-depth-0">Sign up</button>
           <p class="error green-text center-align"></p>
         </form>
       </div>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.datepicker');
+        var instances = M.Datepicker.init(elems, options);
+      });
+    </script>
+
+
 
     <!-- LOGIN MODAL -->
     <div id="modal-login" class="modal">

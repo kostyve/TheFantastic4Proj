@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
   //same just with the collaprsibles eg the apartments
   var items = document.querySelectorAll('.collapsible');
   M.Collapsible.init(items);
+  
+  var elems = document.querySelectorAll('.datepicker');
+  M.Datepicker.init(elems,Option);
+
 });
 
 
@@ -136,8 +140,16 @@ function readApartments(apt, id = apt.ownerId){
       <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
       <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
       <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
+      <div class="collapsible-body white">
+      <button onclick="Confirmation()">press to order</button>
+      </div> 
     </li>
   `;
   }
   return li
 }
+
+function Confirmation(){
+  alert("The transaction was successful.Immediately the landlord will contact you soon Thanks.");
+}
+

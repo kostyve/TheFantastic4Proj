@@ -25,8 +25,11 @@ auth.onAuthStateChanged(user => {
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
-            setupApts(snapshot.docs)
-            getMyOwnAprts(snapshot.docs)
+            user.getIdTokenResult().then(idTokenResult =>{
+              //to know if the person that ask for apartments is an admin or not.
+            getMyOwnAprts(snapshot.docs, idTokenResult.claims.admin);
+            setupApts(snapshot.docs, idTokenResult.claims.admin);
+            });
             //here we call setup ui with user so it will eval true = will show ui
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
@@ -70,7 +73,12 @@ createForm.addEventListener('submit', (e) =>{
         description: createForm['description'].value,
         zip: createForm['zip'].value,
         price: createForm['price'].value,
-        ownerId: uid
+        ownerId: uid,
+        //attributes to help recognize buyer.
+        studentId: '',
+        studentName: '',
+        rented: false
+
         // this is going to store an entry into our db, which works as asynch method !
     }).then(() => {
         // when it returns the promise we want to reset the form and close the modal

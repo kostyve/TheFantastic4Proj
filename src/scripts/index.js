@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //same just with the collaprsibles eg the apartments
   var items = document.querySelectorAll('.collapsible');
   M.Collapsible.init(items);
-  
+
   var elems = document.querySelectorAll('.datepicker');
   M.Datepicker.init(elems,Option);
 
@@ -70,9 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //setup apartments
-const setupApts = (data) => {
-  getMyOwnAprts(data);
-
+const setupApts = (data, isAdmin) => {
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
       //we need to create a template and run through our data and input it inside
@@ -82,7 +80,7 @@ const setupApts = (data) => {
 
       const apt = doc.data();
       // we summ our const li templates appending each cycle
-      const li = readApartments(apt)
+      const li = readApartments(apt,isAdmin);
 
       // TODO:'*****'must setup here the proper function for stars. this is just for visualization
       html += li;
@@ -99,19 +97,44 @@ const setupApts = (data) => {
 
 };
 
-const getMyOwnAprts = (data) => {
+const getMyOwnAprts = (data, isAdmin=false) => {
+  //this function get the current user apartments,total income, avarage income and
+  // everything that should be in the dashboard.
+  let countTotalApt=0;
+  let countTotalRentedApt=0;
+  let totalIncome=0;
+  const user = auth.currentUser;
+
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
-    //we need to create a template and run through our data and input it inside
+    //the final output to the dashboard.
     let html = '';
-    const user = auth.currentUser;
+    //list of all the apartments.
+    apartmentsList = '';
+
     data.forEach(doc => {
       const apt = doc.data();
-      //li is the list of the current user apratments.
-      const li = readApartments(apt, auth.currentUser.uid)
-      html += li;
+      if(user.uid==apt.ownerId){
+        countTotalApt++;
+        if(apt.rented==true){
+          countTotalRentedApt++;
+          totalIncome += apt.price;
+        }
+      }
+
+      const li = readApartments(apt, isAdmin, user.uid);
+      apartmentsList += li;
     });
 
+    html += `
+            <li>
+              ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
+              ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalApt+"</h6>"}
+              ${"<h6><b>Total income:</b> "+totalIncome+"</h6>"}
+              ${"<h6><b>Total owned apartments:</b> "+countTotalApt+"</h6>"}
+            </li>
+            `;
+    html += apartmentsList;
     if(html == ''){//if the user dont own any apartments.
       dashboard.innerHTML = "you dont have any apartments in the database.";
     }else{
@@ -123,28 +146,41 @@ const getMyOwnAprts = (data) => {
   }
 };
 
-function readApartments(apt, id = apt.ownerId){
+function readApartments(apt, isAdmin = false,id = apt.ownerId){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
   let li=``;
+
   if(id==apt.ownerId){
-  li= `
-    <li>
-      <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
-          <i class="right small material-icons grey-text right">
-            star_border star_border star_border star_border star_border
-          </i>
-      </div>
-      <div class="collapsible-body white">${"<b>description:</b> "+apt.description}.</div>
-      <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}.</div>
-      <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}.</div>
-      <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}.</div>
-      <div class="collapsible-body white">
-      <button onclick="Confirmation()">press to order</button>
-      </div> 
-    </li>
-  `;
+    li= `
+      <li>
+        <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
+            <i class="right small material-icons grey-text right">
+              star_border star_border star_border star_border star_border
+            </i>
+        </div>
+        <div class="collapsible-body white">${"<b>description:</b> "+apt.description}</div>
+        <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}</div>
+        <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}</div>
+        <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}</div>
+    `;
+
+    if(apt.rented==true){
+      li +=  `<div class="collapsible-body white">${"<b>Rented:</b> Yes"}</div>`;
+      if(isAdmin==true){
+        //if the user is admin->show the name of the person that rent the aprtment(relevent to the dashboard).
+        li +=  `<div class="collapsible-body white">${"<b>student name:</b> "+apt.studentName}</div>`;
+      }
+    }else{
+      if(isAdmin==false){
+        //admin cant buy apartment, and no one can buy rented apartment.
+        li +=  `<div class="collapsible-body white"><button onclick="Confirmation()">press to order</button></div>`;
+      }
+      li +=  `<div class="collapsible-body white">${"<b>Rented:</b> no"}</div>`;
+    }
+
+    li+= `</li>`;
   }
   return li
 }
@@ -152,4 +188,3 @@ function readApartments(apt, id = apt.ownerId){
 function Confirmation(){
   alert("The transaction was successful.Immediately the landlord will contact you soon Thanks.");
 }
-

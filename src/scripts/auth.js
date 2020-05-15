@@ -1,5 +1,7 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
+
+
 //add admin cloud functions reference so that we could make someone an admin
 const adminForm = document.querySelector('.admin-actions');
 adminForm.addEventListener('submit', (e) => {
@@ -19,22 +21,33 @@ auth.onAuthStateChanged(user => {
         user.getIdTokenResult().then(idTokenResult =>{
             user.admin = idTokenResult.claims.admin;
             setupUI(user);
-        });
+
         //TODO: remove this console log when project is finalized
         console.log('user logged in: ', user.email);
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
-            user.getIdTokenResult().then(idTokenResult =>{
-              //to know if the person that ask for apartments is an admin or not.
+            //to know if the person that ask for apartments is an admin or not.
             getMyOwnAprts(snapshot.docs, idTokenResult.claims.admin);
-            setupApts(snapshot.docs, idTokenResult.claims.admin);
-            });
+            //show as default all the apartments in the database.
+            setupApts(snapshot.docs, user.admin);
             //here we call setup ui with user so it will eval true = will show ui
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
             console.log(error.message)
         });
+
+        //grab the search div class from the html.
+        const searchEngine = document.querySelector('.search-engine');
+          searchEngine.addEventListener('submit', (e) => {
+            e.preventDefault();
+            db.collection('apartments').onSnapshot(snapshot => {
+
+              setupApts(snapshot.docs, user.admin, document.querySelector('#searchs').value);
+
+          });
+        });
+      });
     }else{
         //we hide the data so when were not logged in, essentially no data is shown
         console.log('user is not logged in');

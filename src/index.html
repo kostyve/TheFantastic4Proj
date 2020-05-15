@@ -58,29 +58,35 @@
     </nav>
 
     <!--UPLOAD FILE WITH A PROGRESSBAR-->
-        <div id="modal-upload" class="modal">
-          <div class="modal-content center-align">
-            <h4>Upload your student id card for verification</h4><br />
-              <div class="progress">
-                <div class="determinate" style="width:30%" value="0" max="100" id="uploader"></div>
-                <li id="uploader-done" style="display: none;">Done!</label>
-              </div>
-
-                <form action="#">
-                  <div class="file-field input-field">
-                    <div class="btn">
-                      <span>File</span>
-                      <input type="file"value="upload" id="fileButton" >
-                    </div>
-                    <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                    </div>
-                  </div>
-                </form>
-
-              <div class="account-upload"></div>
+    <div id="modal-upload" class="modal">
+      <div class="modal-content center-align">
+        <h4>Upload your student id card for verification</h4><br />
+          <div class="progress">
+            <div class="determinate" style="width:30%" value="0" max="100" id="uploader"></div>
+            <li id="uploader-done" style="display: none;">Done!</label>
           </div>
-        </div>
+
+            <form action="#">
+              <div class="file-field input-field">
+                <div class="btn">
+                  <span>File</span>
+                  <input type="file"value="upload" id="fileButton" >
+                </div>
+                <div class="file-path-wrapper">
+                  <input class="file-path validate" type="text">
+                </div>
+              </div>
+            </form>
+
+          <div class="account-upload"></div>
+      </div>
+    </div>
+
+      <!--openSearch engine for apartments-->
+      <form class="search-engine" style="margin: 40px auto; max-width: 300px;display: block;">
+        <input type="text" placeholder="Search: city,street." id="searchs" />
+        <button class="btn-small green darken-2 z-depth-0">Search</button>
+      </form>
 
     <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
     <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">

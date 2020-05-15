@@ -2,7 +2,6 @@
 
 //ref to the dom though the class name, which is : class="collapsible z-depth-0 apartments"
 const apartmentList = document.querySelector('.apartments');
-
 //ref to the logged out class so that we could implement button hiding when user is logged in/out
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
@@ -43,6 +42,7 @@ const setupUI = (user) => {
     // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
+
   }else{
     //hide admin items
     adminItems.forEach(item => item.style.display = 'none');
@@ -70,20 +70,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //setup apartments
-const setupApts = (data, isAdmin) => {
+const setupApts = (data, isAdmin, searchWord="") => {
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
       //we need to create a template and run through our data and input it inside
     let html = '';
 
     data.forEach(doc => {
-
       const apt = doc.data();
+
+      if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
+
       // we summ our const li templates appending each cycle
       const li = readApartments(apt,isAdmin);
 
       // TODO:'*****'must setup here the proper function for stars. this is just for visualization
       html += li;
+      }
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
 
     });
@@ -114,6 +117,8 @@ const getMyOwnAprts = (data, isAdmin=false) => {
 
     data.forEach(doc => {
       const apt = doc.data();
+      //(search engine)check if searchWord is part of the aprtment city name.
+
       if(user.uid==apt.ownerId){
         countTotalApt++;
         if(apt.rented==true){
@@ -124,6 +129,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
 
       const li = readApartments(apt, isAdmin, user.uid);
       apartmentsList += li;
+
     });
 
     html += `

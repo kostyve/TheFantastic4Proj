@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
   //same just with the collaprsibles eg the apartments
   var items = document.querySelectorAll('.collapsible');
   M.Collapsible.init(items);
+  
+  var elems = document.querySelectorAll('.datepicker');
+  M.Datepicker.init(elems,Option);
+
 });
 
 

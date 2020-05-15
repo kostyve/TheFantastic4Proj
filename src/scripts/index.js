@@ -62,6 +62,10 @@ document.addEventListener('DOMContentLoaded', function() {
   //same just with the collaprsibles eg the apartments
   var items = document.querySelectorAll('.collapsible');
   M.Collapsible.init(items);
+
+  var elems = document.querySelectorAll('.datepicker');
+  M.Datepicker.init(elems,Option);
+
 });
 
 
@@ -124,7 +128,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
 
     html += `
             <li>
-              ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+isAdmin+"</h6>"}
+              ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
               ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalApt+"</h6>"}
               ${"<h6><b>Total income:</b> "+totalIncome+"</h6>"}
               ${"<h6><b>Total owned apartments:</b> "+countTotalApt+"</h6>"}

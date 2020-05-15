@@ -29,6 +29,7 @@ function error(err){
 function complete(){
   var user = auth.currentUser;
   console.log('Upload finished')
+  alert("Uploaded successfully!");
   //create the data we need
   
   //update user db to include the url to the uploaded photo

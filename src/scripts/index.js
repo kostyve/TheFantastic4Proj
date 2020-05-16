@@ -205,9 +205,9 @@ function Confirmation(aptId="dident got any apt id ;.("){
   }).then(()=>{
     console.log("aprtment updated.");
   }).catch(err => {
-    console.log(err.message)
+    console.log(err.message);
   });
-};
+}
 
 function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
@@ -219,4 +219,4 @@ function experimentalFunction(data=""){
   testString+="\ntest done!.";
 
   alert(testString);
-};
+}

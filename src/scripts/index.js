@@ -82,7 +82,7 @@ const setupApts = (data, isAdmin, searchWord="") => {
       if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
 
       // we summ our const li templates appending each cycle
-      const li = readApartments(apt,isAdmin);
+      const li = readApartments(doc.id, apt,isAdmin);
 
       // TODO:'*****'must setup here the proper function for stars. this is just for visualization
       html += li;
@@ -127,7 +127,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
         }
       }
 
-      const li = readApartments(apt, isAdmin, user.uid);
+      const li = readApartments(doc.id ,apt, isAdmin, user.uid);
       apartmentsList += li;
 
     });
@@ -152,7 +152,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
   }
 };
 
-function readApartments(apt, isAdmin = false,id = apt.ownerId){
+function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
@@ -165,6 +165,15 @@ function readApartments(apt, isAdmin = false,id = apt.ownerId){
             <i class="right small material-icons grey-text right">
               star_border star_border star_border star_border star_border
             </i>
+    `;
+
+    if(apt.rented == true){
+
+    }else {
+      
+    }
+
+    li+=`
         </div>
         <div class="collapsible-body white">${"<b>description:</b> "+apt.description}</div>
         <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}</div>
@@ -176,12 +185,12 @@ function readApartments(apt, isAdmin = false,id = apt.ownerId){
       li +=  `<div class="collapsible-body white">${"<b>Rented:</b> Yes"}</div>`;
       if(isAdmin==true){
         //if the user is admin->show the name of the person that rent the aprtment(relevent to the dashboard).
-        li +=  `<div class="collapsible-body white">${"<b>student name:</b> "+apt.studentName}</div>`;
+        li +=  `<div class="collapsible-body white">${"<b>student email:</b> "+apt.studentName}</div>`;
       }
     }else{
       if(isAdmin==false){
         //admin cant buy apartment, and no one can buy rented apartment.
-        li +=  `<div class="collapsible-body white"><button onclick="Confirmation()">press to order</button></div>`;
+        li +=  `<div class="collapsible-body white"><button onclick="Confirmation(${"'"+aptId+"'"})">press to order</button></div>`;
       }
       li +=  `<div class="collapsible-body white">${"<b>Rented:</b> no"}</div>`;
     }
@@ -191,6 +200,27 @@ function readApartments(apt, isAdmin = false,id = apt.ownerId){
   return li
 }
 
-function Confirmation(){
-  alert("The transaction was successful.Immediately the landlord will contact you soon Thanks.");
+function Confirmation(aptId="dident got any apt id ;.("){
+  const user = auth.currentUser;
+  db.collection('apartments').doc(aptId).update({
+    studentId: user.uid,
+    studentName: user.email,
+    rented: true
+  }).then(()=>{
+    console.log("aprtment updated.");
+  }).catch(err => {
+    console.log(err.message)
+  });
+};
+
+function experimentalFunction(data=''){
+  //function for testing.... will be deleted later..
+  let testString="starting:\n";
+
+  data.forEach(doc => {
+    testString+=doc.id+"\n";
+  });
+  testString+="\ntest done!.";
+
+  alert(testString);
 }

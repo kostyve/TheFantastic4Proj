@@ -37,14 +37,24 @@ auth.onAuthStateChanged(user => {
             console.log(error.message)
         });
 
+        //Test experimental function.. will be deleted later..-------------------------------
+        const  experimental = document.querySelector('.tesing');
+          experimental.addEventListener('submit', (e) => {
+            e.preventDefault();
+              db.collection('apartments').onSnapshot(snapshot => {
+            experimentalFunction(snapshot.docs);
+            });
+        });
+        //Test experimental function.. will be deleted later..-------------------------------
+
+
         //grab the search div class from the html.
         const searchEngine = document.querySelector('.search-engine');
           searchEngine.addEventListener('submit', (e) => {
             e.preventDefault();
             db.collection('apartments').onSnapshot(snapshot => {
-
+              //reconstruct the apartment list to match the searchword.
               setupApts(snapshot.docs, user.admin, document.querySelector('#searchs').value);
-
           });
         });
       });
@@ -102,9 +112,8 @@ createForm.addEventListener('submit', (e) =>{
         //now we want to catch it so we could show a different message
     }).catch(err => {
         console.log(err.message)
-    })
-})
-
+    });
+});
 
 //SIGNUP FORM - CREATING OF A NEW USER (signup and then login user)
 const signupForm = document.querySelector('#signup-form');

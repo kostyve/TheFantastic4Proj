@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
   M.Collapsible.init(items);
 
   var elems = document.querySelectorAll('.datepicker');
-  M.Datepicker.init(elems,Option);
+  M.Datepicker.init(elems);
 
 });
 
@@ -164,59 +164,79 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
         <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
             <i class="right small material-icons grey-text right">
               star_border star_border star_border star_border star_border
-            </i>
+
     `;
 
+    if(apt.rented == true){
+      // <span class="blue-text text-darken-2">e text</span></div>
+      li+=`<class="large material-icons" span class="red-text text-darken-2">account_circle</i>`;
+    }else {
+      li+=`<class="large material-icons" span class="green-text text-darken-2">brightness_1</i>`;
+    }
 
 
     li+=`
         </div>
-        <div class="collapsible-body white">${"<b>description:</b> "+apt.description}</div>
-        <div class="collapsible-body white">${"<b>Floor:</b> "+apt.floor}</div>
-        <div class="collapsible-body white">${"<b>Zip code:</b> "+apt.zip}</div>
-        <div class="collapsible-body white">${"<b>Price:</b> "+apt.price}</div>
+        <div class="collapsible-body white">
+        ${"<b>description:</b> "+apt.description}
+        <div>${"<b>Floor:</b> "+apt.floor}</div>
+        <div>${"<b>Zip code:</b> "+apt.zip}</div>
+        <div>${"<b>Price:</b> "+apt.price}</div>
     `;
 
     if(apt.rented==true){
-      li +=  `<div class="collapsible-body white">${"<b>Rented:</b> Yes"}</div>`;
+      li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
       if(isAdmin==true){
         //if the user is admin->show the name of the person that rent the aprtment(relevent to the dashboard).
-        li +=  `<div class="collapsible-body white">${"<b>student email:</b> "+apt.studentName}</div>`;
+        li +=  `<div><b>student email:</b>${apt.studentName}</div>`;
       }
     }else{
+        li +=  `<div>${"<b>Rented:</b> no"}</div>`;
       if(isAdmin==false){
         //admin cant buy apartment, and no one can buy rented apartment.
-        li +=  `<div class="collapsible-body white"><button onclick="Confirmation(${"'"+aptId+"'"})">press to order</button></div>`;
+        li +=  `<div><button onclick="Confirmation(${"'"+aptId+"'"})">press to order</button></div>`;
       }
-      li +=  `<div class="collapsible-body white">${"<b>Rented:</b> no"}</div>`;
     }
 
-    li+= `</li>`;
+    li+= `</div></li>`;
   }
   return li
 }
 
 function Confirmation(aptId="dident got any apt id ;.("){
-  const user = auth.currentUser;
-  db.collection('apartments').doc(aptId).update({
-    studentId: user.uid,
-    studentName: user.email,
-    rented: true
-  }).then(()=>{
-    console.log("aprtment updated.");
-  }).catch(err => {
-    console.log(err.message);
-  });
+
+  //function for testing.... will be deleted later..
+  //let testString="starting:\n";
+  var txt;
+  var person = prompt("Credit card id:", "");
+  if (person == null || person == "") {
+    txt = "User cancelled the transaction.";
+  } else {
+    txt = "Transaction confirm!\nPaying with credit card: " + person;
+    const user = auth.currentUser;
+    db.collection('apartments').doc(aptId).update({
+      studentId: user.uid,
+      studentName: user.email,
+      rented: true
+    }).then(()=>{
+      console.log("aprtment updated.");
+    }).catch(err => {
+      console.log(err.message);
+    });
+  }
+  alert(txt);
 }
+
 
 function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
-  let testString="starting:\n";
-
-  data.forEach(doc => {
-    testString+=doc.id+"\n";
-  });
-  testString+="\ntest done!.";
-
-  alert(testString);
+  //let testString="starting:\n";
+  var txt;
+  var person = prompt("Credit card id:", "");
+  if (person == null || person == "") {
+    txt = "User cancelled the transaction.";
+  } else {
+    txt = "Transaction confirm!\nPaying with credit card: " + person;
+  }
+  alert(txt);
 }

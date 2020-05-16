@@ -47,6 +47,7 @@ exports.userDeleted = functions.auth.user().onDelete(user => {
     console.log('user created ', user.email, user.uid);
     //for backgroud triggers you must return a value/promise
     const doc = admin.firestore().collection('users').doc(user.uid);
+    
     //which returns a promise and explicitly deletes user from the users
     return doc.delete();
 });

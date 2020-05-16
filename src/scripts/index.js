@@ -49,7 +49,7 @@ const setupUI = (user) => {
   }else{
     //hide admin items
     adminItems.forEach(item => item.style.display = 'none');
-
+    searchEngine.forEach(item => item.style.display = 'none');
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
     //hide the account info

@@ -96,6 +96,7 @@ createForm.addEventListener('submit', (e) =>{
         description: createForm['description'].value,
         zip: createForm['zip'].value,
         price: createForm['price'].value,
+        reviews:"",
         ownerId: uid,
         //attributes to help recognize buyer.
         studentId: '',

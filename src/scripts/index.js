@@ -182,13 +182,21 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
               star_border star_border star_border star_border star_border
     `;
 
-    //if apartment is rented then spawn red circle, if not spawn green circle.
-    if(apt.rented == true){
-      li+=`<class="large material-icons" span class="red-text text-darken-2">account_circle</i>`;
+    if((isAdmin==true) || (forDashBoard==false)){
+      //if apartment is rented then spawn red circle, if not spawn green circle.
+      if(apt.rented == true){
+        li+=`<class="large material-icons" span class="red-text text-darken-2">account_circle</i>`;
+      }else {
+        li+=`<class="large material-icons" span class="green-text text-darken-2">brightness_1</i>`;
+      }
     }else {
-      li+=`<class="large material-icons" span class="green-text text-darken-2">brightness_1</i>`;
+      if(forDashBoard==true){
+      li+=`
+      <div><a class="waves-effect green btn" onclick="addReview(${"'"+aptId+"'"})">Leave a review</a></div>
+      `;
+      }
+      li+=`</i>`;
     }
-
     //for the thing that the collapsible open(that board thing).
     li+=`
         </div>
@@ -198,6 +206,7 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         <div>${"<b>Zip code:</b> "+apt.zip}</div>
         <div>${"<b>Price:</b> "+apt.price}</div>
     `;
+    //TODO: review scroll.
 
     //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
@@ -210,7 +219,11 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         li +=  `<div>${"<b>Rented:</b> no"}</div>`;
       if(isAdmin==false){
         //admin cant buy apartment, and no one can buy rented apartment.
-        li +=  `<div><button onclick="Confirmation(${"'"+aptId+"'"})">press to order</button></div>`;
+        //<a class="waves-effect waves-light btn">button</a>
+
+        li +=  `
+        <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
+        `;
       }
     }
     //close the thing that the collapsible open(that board thing).
@@ -219,7 +232,7 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
   return li
 }
 
-function Confirmation(aptId="dident got any apt id ;.("){
+function Confirmation(aptId=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
   var txt;
@@ -231,28 +244,125 @@ function Confirmation(aptId="dident got any apt id ;.("){
     const user = auth.currentUser;
 
     //update the apartment.
-    db.collection('apartments').doc(aptId).update({
-      studentId: user.uid,
-      studentName: user.email,
-      rented: true
-    }).then(()=>{
-      console.log("aprtment updated.");
-    }).catch(err => {
-      console.log(err.message);
-    });
-  }
+    if(aptId!=""){
+      rentAprt(aptId)
+    }
   alert(txt);
+  }
+}
+
+function rentAprt(aptId, unRent=false){
+  //update the apartment by aptId.
+  db.collection('apartments').doc(aptId).update({
+    studentId: unRent?"":user.uid,
+    studentName: unRent?"":user.email,
+    rented: unRent?false:true
+  }).then(()=>{
+    console.log("aprtment updated.");
+  }).catch(err => {
+    console.log(err.message);
+  });
+}
+
+
+function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
+  //this function apdate the apartments, only the apartment id.
+  //all the rest have default value if not given any.
+  let apt;
+  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        apt = doc.data();
+      }
+    })
+  db.collection('apartments').doc(aptId).update({
+    //if the INcoming is empty(equal to "") then change nothing.
+    city: INcity==""?apt.city:INcity,
+    street: INstreet==""?apt.city:INstreet,
+    floor: INfloor==""?apt.city:INfloor,
+    description: INdescription==""?apt.city:INdescription,
+    zip: INzip==""?apt.city:INzip,
+    price: INprice==""?apt.city:INprice,
+
+  }).then(()=>{
+    console.log("aprtment updated.");
+  }).catch(err => {
+    console.log(err.message);
+  });
+}
+
+function addReview(aptId){
+  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+      let apt;
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        apt = doc.data();
+        console.log(apt);
+
+      }
+
+  //popup masseg and input field for review msg.
+  let msg = prompt("Your review:", "");
+  //popup masseg and input field for ratin(number[0-5]).
+  let rating = prompt("Your rating(number between 0 to 5):", "");
+  //check if rating is number.
+  if(!isNaN==rating){
+    const num = Number(rating);
+    //check if the rating is between 0 to 5.
+    if(!(num >= 0 && Number(rating) <=5)){
+      alert("Rating must be number between 0 to 5.");
+      return;
+    }
+  }
+
+  let reviews=[];
+  let rev={
+    studentId: auth.currentUser.uid,
+    rating:rating,
+    revMsg:msg
+  };
+   if (Array.isArray(reviews) && reviews.length){
+     console.log("is emty");
+    reviews[0]=rev;
+  }else {
+    console.log("is not! emty: "+reviews.length+"\n"+ apt.reviews);
+    apt.reviews.forEach(item => {
+      reviews.push(item);
+    });
+
+    reviews.push(rev);
+  }
+
+
+  db.collection('apartments').doc(aptId).update({
+    reviews: reviews
+  }).then(()=>{
+    console.log("aprtment updated.");
+  }).catch(err => {
+    console.log(err.message);
+  });
+  alert("We added your review. \nthnks for your time.");
+}).catch(err => {
+  console.log('Error getting document', err);
+});
 }
 
 function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
-  var txt;
-  var creditCardId = prompt("Credit card id:", "");
-  if (creditCardId == null || creditCardId == "") {
-    txt = "User cancelled the transaction.";
-  } else {
-    txt = "Transaction confirm!\nPaying with credit card: " + creditCardId;
-  }
-  alert(txt);
+  //const apt = db.collection('apartments').doc("OGqYOFoudZ1Ctk6jLMKJ").get().then(doc => {});
+    let getDoc = db.collection('apartments').doc("7QT3TdSU4cYgfLMpavUE").get().then(doc => {
+        if (!doc.exists) {
+          console.log('No such document!');
+        } else {
+          console.log('Document data:', doc.data().reviews.length);
+        }
+      })
+      .catch(err => {
+        console.log('Error getting document', err);
+      });
+  alert("test");
+
 }

@@ -167,11 +167,7 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
             </i>
     `;
 
-    if(apt.rented == true){
 
-    }else {
-      
-    }
 
     li+=`
         </div>
@@ -213,7 +209,7 @@ function Confirmation(aptId="dident got any apt id ;.("){
   });
 };
 
-function experimentalFunction(data=''){
+function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   let testString="starting:\n";
 
@@ -223,4 +219,4 @@ function experimentalFunction(data=''){
   testString+="\ntest done!.";
 
   alert(testString);
-}
+};

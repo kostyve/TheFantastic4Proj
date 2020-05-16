@@ -86,6 +86,14 @@ createForm.addEventListener('submit', (e) =>{
         uid = user.uid;
     }
     console.log(uid,name,email)
+
+
+    let reviews=[];
+    let rev={
+      studentId:"reviewZero",
+      rating:3,
+      revMsg:"zero"
+    };
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.
@@ -96,7 +104,7 @@ createForm.addEventListener('submit', (e) =>{
         description: createForm['description'].value,
         zip: createForm['zip'].value,
         price: createForm['price'].value,
-        reviews:"",
+        reviews: reviews,
         ownerId: uid,
         //attributes to help recognize buyer.
         studentId: '',

@@ -35,7 +35,7 @@ const setupUI = (user) => {
       const html = `
       <div>Logged in as ${user.email}</div>
       <div>${doc.data().firstName}</div>
-      <div class="green-text">${user.admin ? 'Admin' : ''}</div>
+      <div class="green-text">${user.admin ? 'Landlord' : 'Student'}</div>
       `;
       // get the account-details class of the inner html
       accountDetails.innerHTML = html;

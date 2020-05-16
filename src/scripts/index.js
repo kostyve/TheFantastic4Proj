@@ -193,10 +193,14 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
       totalRating=apt.reviews.length;
       for(j=0;j<apt.reviews.length;j++){
-        rev=apt.reviews[j];
-        totalRating+=Number(rev.rating);
-        collectReviws+="<b><p>"+"["+j+"]"+"Review rating:"+"</b>"+rev.rating+"</p>";
-        collectReviws+="<p>"+rev.revMsg+"</p>";
+        if(apt.reviews.studentId=="reviewZero"){
+          //pass this one.
+        }else{
+          rev=apt.reviews[j];
+          totalRating+=Number(rev.rating);
+          collectReviws+="<b><p>"+"["+j+"]"+"Review rating:"+"</b>"+rev.rating+"</p>";
+          collectReviws+="<p>"+rev.revMsg+"</p>";
+        }
       }
     }
     //console.log(pt.reviews.length);

@@ -113,7 +113,7 @@ createForm.addEventListener('submit', (e) =>{
     }).catch(err => {
         console.log(err.message)
     });
-});
+})
 
 //SIGNUP FORM - CREATING OF A NEW USER (signup and then login user)
 const signupForm = document.querySelector('#signup-form');

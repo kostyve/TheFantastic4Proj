@@ -179,8 +179,43 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
       <li>
         <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
             <i class="right small material-icons grey-text right">
-              star_border star_border star_border star_border star_border
     `;
+
+    //collec all the apartments reviews to one collection(as string).
+
+    let totalRating = 0;
+    let collectReviws="";
+    let rev="";
+    let i,j,z;
+    if(apt.reviews[0]==""){
+      collectReviws+="<b><p>This apartment have no rviews.</b></p>";
+    }else{
+
+      totalRating=apt.reviews.length;
+      for(j=0;j<apt.reviews.length;j++){
+        rev=apt.reviews[j];
+        totalRating+=Number(rev.rating);
+        collectReviws+="<b><p>"+"["+j+"]"+"Review rating:"+"</b>"+rev.rating+"</p>";
+        collectReviws+="<p>"+rev.revMsg+"</p>";
+      }
+    }
+    //console.log(pt.reviews.length);
+    console.log((Array.isArray(apt.reviews) && apt.reviews.length)==1);
+
+    if((Array.isArray(apt.reviews) && apt.reviews.length)==1){
+
+      li+=`star_borderstar_borderstar_borderstar_borderstar_border`;
+
+    }else {
+      console.log("work B");
+      for(i=0;i<(totalRating/apt.reviews.length);i++){
+      li+=`stars`;
+      }
+      for(i=0;i<5-(totalRating/apt.reviews.length);i++){
+      li+=`star_border`;
+      }
+    }
+
 
     if((isAdmin==true) || (forDashBoard==false)){
       //if apartment is rented then spawn red circle, if not spawn green circle.
@@ -206,7 +241,6 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         <div>${"<b>Zip code:</b> "+apt.zip}</div>
         <div>${"<b>Price:</b> "+apt.price}</div>
     `;
-    //TODO: review scroll.
 
     //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
@@ -226,7 +260,20 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         `;
       }
     }
-    //close the thing that the collapsible open(that board thing).
+    //TODO: review scroll.
+      li+=`
+      <div><h5><b>Reviews:</b></h5></div>
+      `;
+
+
+      //add the collection of reviews msgs here.
+      li+=`
+      <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+      ${collectReviws}
+      </div>
+      `;
+
+      //close the thing that the collapsible open(that board thing).
     li+= `</div></li>`;
   }
   return li

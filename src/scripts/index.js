@@ -13,6 +13,8 @@ const dashboard = document.querySelector('.owned-Apartments');
 const adminItems = document.querySelectorAll('.admin');
 //make a ref for user items.
 const userItems = document.querySelectorAll('.user');
+//make a ref for the search bar.
+const searchEngine = document.querySelectorAll('.search-engine');
 
 /* CONDITIONAL MENU LINKS we setup UI elements according to:
  will get a user as a parameter, and inside we want to check
@@ -41,6 +43,7 @@ const setupUI = (user) => {
 
     // display = block means to show the items, where as none is to hide them
     loggedInLinks.forEach(item => item.style.display = 'block');
+    searchEngine.forEach(item => item.style.display = 'block');
     loggedOutLinks.forEach(item => item.style.display = 'none');
 
   }else{

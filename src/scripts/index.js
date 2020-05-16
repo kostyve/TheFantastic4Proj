@@ -114,7 +114,6 @@ const getMyOwnAprts = (data, isAdmin=false) => {
     let html = '';
     //list of all the apartments.
     apartmentsList = '';
-
     data.forEach(doc => {
       const apt = doc.data();
       //(search engine)check if searchWord is part of the aprtment city name.
@@ -123,23 +122,33 @@ const getMyOwnAprts = (data, isAdmin=false) => {
         countTotalApt++;
         if(apt.rented==true){
           countTotalRentedApt++;
-          totalIncome += apt.price;
+          totalIncome += Number(apt.price);
         }
       }
-
-      const li = readApartments(doc.id ,apt, isAdmin, user.uid);
+      const li = readApartments(doc.id ,apt, isAdmin, user.uid, true);
       apartmentsList += li;
 
     });
 
+    //if the user is admin show the currect information(owned apartments and incomes) in the dashboard
+    if(isAdmin){
+      console.log("info: "+countTotalApt+", "+totalIncome);
     html += `
             <li>
               ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
-              ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalApt+"</h6>"}
+              ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalRentedApt+"</h6>"}
               ${"<h6><b>Total income:</b> "+totalIncome+"</h6>"}
               ${"<h6><b>Total owned apartments:</b> "+countTotalApt+"</h6>"}
             </li>
             `;
+    }else{
+      //else->show normal user dashboard information(probably rented apartment or nothing).
+      html += `
+              <li>
+                ${"<h6><b>Rented apartments:</h6>"}
+              </li>
+              `;
+    }
     html += apartmentsList;
     if(html == ''){//if the user dont own any apartments.
       dashboard.innerHTML = "you dont have any apartments in the database.";
@@ -152,29 +161,32 @@ const getMyOwnAprts = (data, isAdmin=false) => {
   }
 };
 
-function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
+function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoard=false){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
   let li=``;
 
-  if(id==apt.ownerId){
+  //[*had to do it this way] if user is admin or the output is *not* for dashboard
+  //then compare (apt.ownerid==apt.ownerid)(witch mean its show all the apartments).
+  //else compare (id == apt.ownerid)(witch show only student or only admin owned/rented aprtments).
+  if((isAdmin)||(!forDashBoard)?(id==apt.ownerId):(id==apt.studentId)){
+    //set up the collapsible gray thing.
     li= `
       <li>
         <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
             <i class="right small material-icons grey-text right">
               star_border star_border star_border star_border star_border
-
     `;
 
+    //if apartment is rented then spawn red circle, if not spawn green circle.
     if(apt.rented == true){
-      // <span class="blue-text text-darken-2">e text</span></div>
       li+=`<class="large material-icons" span class="red-text text-darken-2">account_circle</i>`;
     }else {
       li+=`<class="large material-icons" span class="green-text text-darken-2">brightness_1</i>`;
     }
 
-
+    //for the thing that the collapsible open(that board thing).
     li+=`
         </div>
         <div class="collapsible-body white">
@@ -184,10 +196,11 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
         <div>${"<b>Price:</b> "+apt.price}</div>
     `;
 
+    //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
       li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
       if(isAdmin==true){
-        //if the user is admin->show the name of the person that rent the aprtment(relevent to the dashboard).
+        //if the user is admin->show the name of the creditCardId that rent the aprtment(relevent to the dashboard).
         li +=  `<div><b>student email:</b>${apt.studentName}</div>`;
       }
     }else{
@@ -197,23 +210,24 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId){
         li +=  `<div><button onclick="Confirmation(${"'"+aptId+"'"})">press to order</button></div>`;
       }
     }
-
+    //close the thing that the collapsible open(that board thing).
     li+= `</div></li>`;
   }
   return li
 }
 
 function Confirmation(aptId="dident got any apt id ;.("){
-
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
   var txt;
-  var person = prompt("Credit card id:", "");
-  if (person == null || person == "") {
+  var creditCardId = prompt("Credit card id:", "");
+  if (creditCardId == null || creditCardId == "") {
     txt = "User cancelled the transaction.";
   } else {
-    txt = "Transaction confirm!\nPaying with credit card: " + person;
+    txt = "Transaction confirm!\nPaying with credit card: " + creditCardId;
     const user = auth.currentUser;
+
+    //update the apartment.
     db.collection('apartments').doc(aptId).update({
       studentId: user.uid,
       studentName: user.email,
@@ -227,16 +241,15 @@ function Confirmation(aptId="dident got any apt id ;.("){
   alert(txt);
 }
 
-
 function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
   var txt;
-  var person = prompt("Credit card id:", "");
-  if (person == null || person == "") {
+  var creditCardId = prompt("Credit card id:", "");
+  if (creditCardId == null || creditCardId == "") {
     txt = "User cancelled the transaction.";
   } else {
-    txt = "Transaction confirm!\nPaying with credit card: " + person;
+    txt = "Transaction confirm!\nPaying with credit card: " + creditCardId;
   }
   alert(txt);
 }

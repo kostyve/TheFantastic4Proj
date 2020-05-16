@@ -5,6 +5,7 @@ const admin = require('firebase-admin')
 //initialize it just like we did with firebaser app
 admin.initializeApp();
 
+
 // we want to create a function that gives someone admin role
 // how we do this>? first we add them to the exports function. it will be https func with option to call from the front end
 //data is goin to inclue any data, like email of the user. context is the authenticataion of the user
@@ -23,9 +24,53 @@ exports.addAdminRole = functions.https.onCall((data, context) => {
         //after were done with that we would want to return an object to the user
     }).then(() => {
         return {
-            message: `Success! ${data.email} has been made an admin.`
+            message: `Success! ${data.email} has been made an Landlord.`
         }
     }).catch(error =>{
         return error;
+    });
+});
+
+
+//trigger for new user creation, this will create email and rated apt
+exports.newUserSignup = functions.auth.user().onCreate(user => {
+    console.log('user created ', user.email, user.uid);
+    //for backgroud triggers you must return a value/promise
+    return admin.firestore().collection('users').doc(user.uid).update({
+        email: user.email,
+        ratedApt: []
+    });
+});
+
+//trigger for user deletion
+exports.userDeleted = functions.auth.user().onDelete(user => {
+    console.log('user created ', user.email, user.uid);
+    //for backgroud triggers you must return a value/promise
+    const doc = admin.firestore().collection('users').doc(user.uid);
+    //which returns a promise and explicitly deletes user from the users
+    return doc.delete();
+});
+
+// http callable function (adding a rating)
+//data is the data we send to the function from the frontend
+//the context has the auth state and useful info
+exports.createReview = functions.https.onCall((data, context) => {
+    //only if the user is not logged in
+    if(!context.auth){
+        throw new functions.https.HttpsError(
+            'unauthenticated', 
+            'only authenticated users can add ratings'
+        );
+    }
+    if (data.text.length > 50){
+        throw new functions.https.HttpsError(
+            'invalid-argument', 
+            'rating cannot be longer than 50 characters'
+        );
+    }
+
+    return admin.firestore().collection('ratings').add({
+        rewiewMsg: data.text,
+        rating: 0
     });
 });

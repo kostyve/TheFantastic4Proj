@@ -193,7 +193,7 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
       totalRating=apt.reviews.length;
       for(j=0;j<apt.reviews.length;j++){
-        if(apt.reviews[0].studentId=="reviewZero"){
+        if(apt.reviews.length == 1){
           collectReviws+=`
             This apartment dont have any reviews yet.
           `;
@@ -300,6 +300,7 @@ function Confirmation(aptId=""){
 
     //update the apartment.
     if(aptId!=""){
+      console.log("renting");
       rentAprt(aptId)
     }
   alert(txt);
@@ -308,6 +309,7 @@ function Confirmation(aptId=""){
 
 function rentAprt(aptId, unRent=false){
   //update the apartment by aptId.
+  const user = auth.currentUser;
   db.collection('apartments').doc(aptId).update({
     studentId: unRent?"":user.uid,
     studentName: unRent?"":user.email,
@@ -407,8 +409,13 @@ function addReview(aptId){
 function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
-  //const apt = db.collection('apartments').doc("OGqYOFoudZ1Ctk6jLMKJ").get().then(doc => {});
 
-  alert(data);
+  var storage = firebase.storage();
+  var pathReference = storage.ref('images/stars.jpg');
+  var gsReference = storage.refFromURL('gs://img/JSvalQuTC5g8szds1FIYX4MiPsZ2');
+  //var httpsReference = storage.refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg');
+  //console.log(httpsReference);
+  document.querySelector('img').src = gsReference;
+  alert("done");
 
 }

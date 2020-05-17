@@ -1,7 +1,5 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
-
-
 //add admin cloud functions reference so that we could make someone an admin
 const adminForm = document.querySelector('.admin-actions');
 adminForm.addEventListener('submit', (e) => {
@@ -16,7 +14,7 @@ adminForm.addEventListener('submit', (e) => {
         M.Modal.getInstance(modal).close();
         adminForm.reset();
     });
-    
+
 });
 //listen for auth status changes login and logout added method to check if a user is an admin
 auth.onAuthStateChanged(user => {
@@ -92,12 +90,14 @@ createForm.addEventListener('submit', (e) =>{
     console.log(uid,name,email)
 
 
-    let reviews=[];
-    let rev={
+    let reviews=[{
       studentId:"reviewZero",
       rating:3,
       revMsg:"zero"
-    };
+    }];
+
+    let imgs=["","",""];
+
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.
@@ -110,6 +110,7 @@ createForm.addEventListener('submit', (e) =>{
         price: createForm['price'].value,
         reviews: reviews,
         ownerId: uid,
+        imgs: imgs,
         //attributes to help recognize buyer.
         studentId: '',
         studentName: '',
@@ -137,8 +138,11 @@ signupForm.addEventListener('submit', (e) => {
     //get user info, we can use the fields using square bracket notation with the id in''
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
-    const fName = signupForm['signup-familyname'].value;
-    
+    const fName = signupForm['signup-firstname'].value;
+    const lName = signupForm['signup-familyname'].value;
+    const bDate = signupForm['bday'].value;
+    const isLandLord = signupForm['land-lord'].checked;
+
     console.log(fName);
     /* sign up the user
     this task is async, so were going to have to deal
@@ -149,19 +153,47 @@ signupForm.addEventListener('submit', (e) => {
         //colection, so when we try to create something that doesnt exist yet, google creates
         //auto uid for the document *THIS MAY CHANGE IN THE FUTURE*
         return db.collection('users').doc(cred.user.uid).set({
-            firstName: signupForm['signup-firstname'].value,
-            isVerified: false,
             email: email,
-            familyName: fName,
+            firstName: fName,
+            familyName: lName,
+            birthDate: bDate,
+            imgUrl:"",
+            LandLord:isLandLord
         });
         // now after the entry is created with the unique user id which is going inside the collection
         // and we finally when the db entry is done, we clear our form and reset it for further use
     }).then(() => {
+      //after user signup if he mark the "i am landlord", then make him landlord(admin).
+        if(isLandLord){
+          //we create a reference of the function named addAdminRole thorugh the callable as we created in functions/index.js
+
+          const addAdminRole = functions.httpsCallable('addAdminRole');
+          //this is how we call it, that adminEmail represents the 'data' in the cloud functions
+        addAdminRole({email: email}).then(result => {
+            console.log(result);
+            const modal = document.querySelector('#modal-landlord');
+            M.Modal.getInstance(modal).close();
+            adminForm.reset();
+        }).then(() => {
+          alert("Its take some time to get your permission to add apartments, please wait wait a couple of minutes before you login.");
+          const modal = document.querySelector('#modal-signup');
+          M.Modal.getInstance(modal).close();
+          signupForm.reset();
+          signupForm.querySelector('.error').innerHTML = '';
+          location.reload();
+
+        }).catch(error => {
+            signupForm.querySelector('.error').innerHTML = error.message;
+        });
+      }else{
         const modal = document.querySelector('#modal-signup');
         M.Modal.getInstance(modal).close();
         signupForm.reset();
         signupForm.querySelector('.error').innerHTML = '';
         location.reload();
+      }
+      auth.signOut();
+
     }).catch(error => {
         signupForm.querySelector('.error').innerHTML = error.message;
     });

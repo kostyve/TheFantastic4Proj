@@ -193,7 +193,10 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
       totalRating=apt.reviews.length;
       for(j=0;j<apt.reviews.length;j++){
-        if(apt.reviews.studentId=="reviewZero"){
+        if(apt.reviews[0].studentId=="reviewZero"){
+          collectReviws+=`
+            This apartment dont have any reviews yet.
+          `;
           //pass this one.
         }else{
           rev=apt.reviews[j];
@@ -212,10 +215,11 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
     }else {
       console.log("work B");
-      for(i=0;i<(totalRating/apt.reviews.length);i++){
+      const avarageRating=(totalRating/apt.reviews.length)-1
+      for(i=0;i<avarageRating;i++){
       li+=`stars`;
       }
-      for(i=0;i<5-(totalRating/apt.reviews.length);i++){
+      for(i=0;i<5-avarageRating;i++){
       li+=`star_border`;
       }
     }
@@ -404,16 +408,7 @@ function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
   //const apt = db.collection('apartments').doc("OGqYOFoudZ1Ctk6jLMKJ").get().then(doc => {});
-    let getDoc = db.collection('apartments').doc("7QT3TdSU4cYgfLMpavUE").get().then(doc => {
-        if (!doc.exists) {
-          console.log('No such document!');
-        } else {
-          console.log('Document data:', doc.data().reviews.length);
-        }
-      })
-      .catch(err => {
-        console.log('Error getting document', err);
-      });
-  alert("test");
+
+  alert(data);
 
 }

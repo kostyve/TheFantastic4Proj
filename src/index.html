@@ -31,17 +31,17 @@
           <img src="/img/SamiRoomLogo_low_px.png" style="width: 100px; margin-top: 10px;">
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li class="logged-in" style="display: none">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload Student ID</a>
-          </li>
-          <li class="logged-in" style="display: none">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-landlord">Become a Landlord</a>
-          </li>
+
+
             <li class="logged-in" style="display: none">
               <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
             </li>
             <li class="logged-in" style="display: none">
               <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+            </li>
+            <!--make only normal users see the upload picture-->
+            <li class="user" style="display: none">
+                  <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload Student ID</a>
             </li>
             <!--make only admin see the create apartment-->
             <li class="admin" style="display: none">
@@ -138,16 +138,25 @@
             <label for="signup-password">Password</label>
           </div>
           <div class="input-field">
-            <input type="text" id="signup-firstname" required />
+            <input type="text" id="signup-firstname" name="signup-firstname" required />
             <label for="signup-firstname">First name</label>
           </div>
           <div class="input-field">
-            <input type="text" id="signup-familyname" required />
+            <input type="text" id="signup-familyname" name="signup-familyname" required />
             <label for="signup-familyname">Family name</label>
           </div>
           <div class="input-field">
-            <input type="date" id="date" class="bday" required/>
+            <input type="date" id="date" class="bday" name="bday" required/>
             <label for="bday">Date of birth</label>
+          </div>
+          <div class="input-field">
+            <p>
+            <label>
+              <label for="bday"><b>I am landLord: </b></label>
+              <input type="checkbox" class="LandLord" id="land-lord" name="landlordCheckBox" value="LLvalue"/>
+              <span>.</span>
+            </label>
+            </p>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Sign up</button>
           <p class="error green-text center-align"></p>

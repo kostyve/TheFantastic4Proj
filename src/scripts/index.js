@@ -83,13 +83,10 @@ const setupApts = (data, isAdmin, searchWord="") => {
       const apt = doc.data();
 
       if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
-
       // we summ our const li templates appending each cycle
-      const li = readApartments(doc.id, apt,isAdmin);
-
-     
-      html += li;
-      }
+        const li = readApartments(doc.id, apt,isAdmin);
+        html += li;
+        }
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
 
     });
@@ -326,7 +323,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   let apt;
   let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
       if (!doc.exists) {
-      
+        console.log('error, cannot find document');
       } else {
         apt = doc.data();
       }
@@ -350,6 +347,7 @@ function addReview(aptId){
   let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
       let apt;
       if (!doc.exists) {
+        console.log('error, cannot find the document.');
       } else {
         apt = doc.data();
       }

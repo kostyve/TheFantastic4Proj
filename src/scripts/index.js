@@ -408,16 +408,7 @@ function experimentalFunction(data=""){
   //function for testing.... will be deleted later..
   //let testString="starting:\n";
   //const apt = db.collection('apartments').doc("OGqYOFoudZ1Ctk6jLMKJ").get().then(doc => {});
-    let getDoc = db.collection('apartments').doc("7QT3TdSU4cYgfLMpavUE").get().then(doc => {
-        if (!doc.exists) {
-          console.log('No such document!');
-        } else {
-          console.log('Document data:', doc.data().reviews.length);
-        }
-      })
-      .catch(err => {
-        console.log('Error getting document', err);
-      });
-  alert("test");
+
+  alert(data);
 
 }

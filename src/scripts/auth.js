@@ -1,7 +1,5 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
-
-
 //add admin cloud functions reference so that we could make someone an admin
 const adminForm = document.querySelector('.admin-actions');
 adminForm.addEventListener('submit', (e) => {
@@ -97,7 +95,8 @@ createForm.addEventListener('submit', (e) =>{
       rating:3,
       revMsg:"zero"
     }];
-    
+
+    let imgs=["","",""];
 
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
@@ -111,6 +110,7 @@ createForm.addEventListener('submit', (e) =>{
         price: createForm['price'].value,
         reviews: reviews,
         ownerId: uid,
+        imgs: imgs,
         //attributes to help recognize buyer.
         studentId: '',
         studentName: '',
@@ -157,6 +157,7 @@ signupForm.addEventListener('submit', (e) => {
             firstName: fName,
             familyName: lName,
             birthDate: bDate,
+            imgUrl:"",
             LandLord:isLandLord
         });
         // now after the entry is created with the unique user id which is going inside the collection

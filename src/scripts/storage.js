@@ -27,8 +27,21 @@ function error(err){
 },
 
 function complete(){
-  var userId = auth.currentUser.uid;
+  
   console.log('Upload finished')
+  //Create a reference under which you want to list
+  //create full path for the url
+  storageRef.getMetadata().then(metadata => {
+    console.log(metadata.fullPath);
+    db.collection('users').doc(userId).update({
+      imgUrl: metadata.fullPath
+    }).then(() => {
+      console.log('metadata deployed');
+    }).catch(err => {
+      console.log(err.messege);
+    })
+  })
+  
   db.collection('users').doc(userId).update({
     isVerified: true
   }).then(()=>{

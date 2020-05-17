@@ -9,7 +9,6 @@ adminForm.addEventListener('submit', (e) => {
     const addAdminRole = functions.httpsCallable('addAdminRole');
     //this is how we call it, that adminEmail represents the 'data' in the cloud functions
     addAdminRole({email: adminEmail}).then(result => {
-        console.log(result);
         const modal = document.querySelector('#modal-landlord');
         M.Modal.getInstance(modal).close();
         adminForm.reset();
@@ -24,8 +23,6 @@ auth.onAuthStateChanged(user => {
             user.admin = idTokenResult.claims.admin;
             setupUI(user);
 
-        //TODO: remove this console log when project is finalized
-        console.log('user logged in: ', user.email);
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
         db.collection('apartments').onSnapshot(snapshot => {
@@ -87,8 +84,6 @@ createForm.addEventListener('submit', (e) =>{
         email= user.email;
         uid = user.uid;
     }
-    console.log(uid,name,email)
-
 
     let reviews=[{
       studentId:"reviewZero",
@@ -143,7 +138,6 @@ signupForm.addEventListener('submit', (e) => {
     const bDate = signupForm['bday'].value;
     const isLandLord = signupForm['land-lord'].checked;
 
-    console.log(fName);
     /* sign up the user
     this task is async, so were going to have to deal
     a promise with .then().    cred is when a user created, you get their credentials back
@@ -170,7 +164,6 @@ signupForm.addEventListener('submit', (e) => {
           const addAdminRole = functions.httpsCallable('addAdminRole');
           //this is how we call it, that adminEmail represents the 'data' in the cloud functions
         addAdminRole({email: email}).then(result => {
-            console.log(result);
             const modal = document.querySelector('#modal-landlord');
             M.Modal.getInstance(modal).close();
             adminForm.reset();

@@ -83,13 +83,10 @@ const setupApts = (data, isAdmin, searchWord="") => {
       const apt = doc.data();
 
       if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
-
       // we summ our const li templates appending each cycle
-      const li = readApartments(doc.id, apt,isAdmin);
-
-      // TODO:'*****'must setup here the proper function for stars. this is just for visualization
-      html += li;
-      }
+        const li = readApartments(doc.id, apt,isAdmin);
+        html += li;
+        }
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
 
     });
@@ -135,7 +132,6 @@ const getMyOwnAprts = (data, isAdmin=false) => {
 
     //if the user is admin show the currect information(owned apartments and incomes) in the dashboard
     if(isAdmin){
-      console.log("info: "+countTotalApt+", "+totalIncome);
     html += `
             <li>
               ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
@@ -206,15 +202,14 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         }
       }
     }
-    //console.log(pt.reviews.length);
-    console.log((Array.isArray(apt.reviews) && apt.reviews.length)==1);
+   
 
     if((Array.isArray(apt.reviews) && apt.reviews.length)==1){
 
       li+=`star_borderstar_borderstar_borderstar_borderstar_border`;
 
     }else {
-      console.log("work B");
+      
       const avarageRating=(totalRating/apt.reviews.length)-1
       for(i=0;i<avarageRating;i++){
       li+=`stars`;
@@ -268,7 +263,7 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         `;
       }
     }
-    //TODO: review scroll.
+    
       li+=`
       <div><h5><b>Reviews:</b></h5></div>
       `;
@@ -300,7 +295,7 @@ function Confirmation(aptId=""){
 
     //update the apartment.
     if(aptId!=""){
-      console.log("renting");
+     
       rentAprt(aptId)
     }
   alert(txt);
@@ -315,7 +310,7 @@ function rentAprt(aptId, unRent=false){
     studentName: unRent?"":user.email,
     rented: unRent?false:true
   }).then(()=>{
-    console.log("aprtment updated.");
+   
   }).catch(err => {
     console.log(err.message);
   });
@@ -328,7 +323,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   let apt;
   let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
       if (!doc.exists) {
-        console.log('No such document!');
+        console.log('error, cannot find document');
       } else {
         apt = doc.data();
       }
@@ -343,7 +338,6 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
     price: INprice==""?apt.city:INprice,
 
   }).then(()=>{
-    console.log("aprtment updated.");
   }).catch(err => {
     console.log(err.message);
   });
@@ -353,11 +347,9 @@ function addReview(aptId){
   let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
       let apt;
       if (!doc.exists) {
-        console.log('No such document!');
+        console.log('error, cannot find the document.');
       } else {
         apt = doc.data();
-        console.log(apt);
-
       }
 
   //popup masseg and input field for review msg.
@@ -381,10 +373,8 @@ function addReview(aptId){
     revMsg:msg
   };
    if (Array.isArray(reviews) && reviews.length){
-     console.log("is emty");
     reviews[0]=rev;
   }else {
-    console.log("is not! emty: "+reviews.length+"\n"+ apt.reviews);
     apt.reviews.forEach(item => {
       reviews.push(item);
     });
@@ -414,7 +404,6 @@ function experimentalFunction(data=""){
   var pathReference = storage.ref('images/stars.jpg');
   var gsReference = storage.refFromURL('gs://img/JSvalQuTC5g8szds1FIYX4MiPsZ2');
   //var httpsReference = storage.refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg');
-  //console.log(httpsReference);
   document.querySelector('img').src = gsReference;
   alert("done");
 

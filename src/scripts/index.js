@@ -34,8 +34,8 @@ const setupUI = (user) => {
       //we will use in case of an admin a check. if user is admin then 'Admin' else ''
       const html = `
       <div>Logged in as ${user.email}</div>
-      <div>${doc.data().firstName}</div>
-      <div class="green-text">${user.admin ? 'Admin' : ''}</div>
+      <div>${doc.data().firstName} ${doc.data().familyName}</div>
+      <div class="green-text">${user.admin ? 'Landlord' : 'Student'}</div>
       `;
       // get the account-details class of the inner html
       accountDetails.innerHTML = html;
@@ -49,7 +49,7 @@ const setupUI = (user) => {
   }else{
     //hide admin items
     adminItems.forEach(item => item.style.display = 'none');
-
+    searchEngine.forEach(item => item.style.display = 'none');
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
     //hide the account info

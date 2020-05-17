@@ -12,7 +12,11 @@ adminForm.addEventListener('submit', (e) => {
     //this is how we call it, that adminEmail represents the 'data' in the cloud functions
     addAdminRole({email: adminEmail}).then(result => {
         console.log(result);
+        const modal = document.querySelector('#modal-landlord');
+        M.Modal.getInstance(modal).close();
+        adminForm.reset();
     });
+    
 });
 //listen for auth status changes login and logout added method to check if a user is an admin
 auth.onAuthStateChanged(user => {
@@ -133,7 +137,9 @@ signupForm.addEventListener('submit', (e) => {
     //get user info, we can use the fields using square bracket notation with the id in''
     const email = signupForm['signup-email'].value;
     const password = signupForm['signup-password'].value;
-
+    const fName = signupForm['signup-familyname'].value;
+    
+    console.log(fName);
     /* sign up the user
     this task is async, so were going to have to deal
     a promise with .then().    cred is when a user created, you get their credentials back
@@ -144,7 +150,9 @@ signupForm.addEventListener('submit', (e) => {
         //auto uid for the document *THIS MAY CHANGE IN THE FUTURE*
         return db.collection('users').doc(cred.user.uid).set({
             firstName: signupForm['signup-firstname'].value,
-            isVerified: false
+            isVerified: false,
+            email: email,
+            familyName: fName,
         });
         // now after the entry is created with the unique user id which is going inside the collection
         // and we finally when the db entry is done, we clear our form and reset it for further use
@@ -153,6 +161,7 @@ signupForm.addEventListener('submit', (e) => {
         M.Modal.getInstance(modal).close();
         signupForm.reset();
         signupForm.querySelector('.error').innerHTML = '';
+        location.reload();
     }).catch(error => {
         signupForm.querySelector('.error').innerHTML = error.message;
     });

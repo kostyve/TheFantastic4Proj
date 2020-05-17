@@ -32,7 +32,10 @@
         </a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li class="logged-in" style="display: none">
-            <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload</a>
+            <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload Student ID</a>
+          </li>
+          <li class="logged-in" style="display: none">
+            <a href="#" class="grey-text modal-trigger" data-target="modal-landlord">Become a Landlord</a>
           </li>
             <li class="logged-in" style="display: none">
               <a href="#" class="grey-text modal-trigger" data-target="modal-dashboard">Dashboard</a>
@@ -82,6 +85,17 @@
       </div>
     </div>
 
+    <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
+    <div id="modal-landlord" class="modal">
+      <div class="modal-content center-align">
+        <h4>Input your email to become a landlord and start creating apartments</h4><br />
+        <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;">
+          <input type="email" placeholder="User email" id="admin-email" required />
+          <button class="btn-small yellow darken-2 z-depth-0">Become a landlord</button>
+        </form>
+      </div>
+    </div>
+
     <!--Test experimental function.. will be deleted later..-->
     <form class="tesing" style="margin: 10px auto; max-width: 300px;">
       <label for="signup-password">Click to run experimental function -></label>
@@ -94,16 +108,6 @@
         <button class="btn-small green darken-2 z-depth-0">Search</button>
       </form>
 
-
-
-
-
-
-    <!--ADMIN EXAMPLE OF CLOUD FUNCTIONS-->
-    <form class="center-align admin-actions admin" style="margin: 40px auto; max-width: 300px;display: none;">
-      <input type="email" placeholder="User email" id="admin-email" required />
-      <button class="btn-small yellow darken-2 z-depth-0">Make admin</button>
-    </form>
 
     <!--DASHBOARD MODAL-->
     <div id="modal-dashboard" class="modal">
@@ -138,8 +142,12 @@
             <label for="signup-firstname">First name</label>
           </div>
           <div class="input-field">
-            <input type="text" id="date" class="datepicker" required/>
-            <label for="date">choose a date...</label>
+            <input type="text" id="signup-familyname" required />
+            <label for="signup-familyname">Family name</label>
+          </div>
+          <div class="input-field">
+            <input type="date" id="date" class="bday" required/>
+            <label for="bday">Date of birth</label>
           </div>
           <button class="btn yellow darken-2 z-depth-0">Sign up</button>
           <p class="error green-text center-align"></p>

@@ -27,8 +27,15 @@ function error(err){
 },
 
 function complete(){
-  var user = auth.currentUser;
+  var userId = auth.currentUser.uid;
   console.log('Upload finished')
+  db.collection('users').doc(userId).update({
+    isVerified: true
+  }).then(()=>{
+      console.log('verified student')
+  }).catch(err => {
+    console.log(err.messege)
+  })
   alert("Uploaded successfully!");
   //create the data we need
   

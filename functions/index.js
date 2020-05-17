@@ -11,9 +11,10 @@ admin.initializeApp();
 //data is goin to inclue any data, like email of the user. context is the authenticataion of the user
 exports.addAdminRole = functions.https.onCall((data, context) => {
     //check request is made by an admin
-    if(context.auth.token.admin !== true) {
-        return {error: 'only admins can add other admins, sucker'}
-    }
+    console.log(context.auth.token);
+    // if(context.auth.token.admin !== true) {
+        // return {error: 'only admins can add other admins, sucker'}
+    // }
     //get user and add custom clain (admin)
     // will return this promise over a value because some1 somewhere will call this func to get the value
     return admin.auth().getUserByEmail(data.email).then(user => {
@@ -44,7 +45,7 @@ exports.newUserSignup = functions.auth.user().onCreate(user => {
 
 //trigger for user deletion
 exports.userDeleted = functions.auth.user().onDelete(user => {
-    console.log('user created ', user.email, user.uid);
+    console.log('user deleted ', user.email, user.uid);
     //for backgroud triggers you must return a value/promise
     const doc = admin.firestore().collection('users').doc(user.uid);
     

@@ -92,12 +92,13 @@ createForm.addEventListener('submit', (e) =>{
     console.log(uid,name,email)
 
 
-    let reviews=[];
-    let rev={
+    let reviews=[{
       studentId:"reviewZero",
       rating:3,
       revMsg:"zero"
-    };
+    }];
+    
+
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
         //with square brackets we get the content of the fields in the form in index.html.

@@ -193,7 +193,10 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
       totalRating=apt.reviews.length;
       for(j=0;j<apt.reviews.length;j++){
-        if(apt.reviews.studentId=="reviewZero"){
+        if(apt.reviews[0].studentId=="reviewZero"){
+          collectReviws+=`
+            This apartment dont have any reviews yet.
+          `;
           //pass this one.
         }else{
           rev=apt.reviews[j];
@@ -212,10 +215,11 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
 
     }else {
       console.log("work B");
-      for(i=0;i<(totalRating/apt.reviews.length);i++){
+      const avarageRating=(totalRating/apt.reviews.length)-1
+      for(i=0;i<avarageRating;i++){
       li+=`stars`;
       }
-      for(i=0;i<5-(totalRating/apt.reviews.length);i++){
+      for(i=0;i<5-avarageRating;i++){
       li+=`star_border`;
       }
     }

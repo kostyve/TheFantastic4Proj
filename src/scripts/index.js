@@ -173,11 +173,11 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
     //set up the collapsible gray thing.
     li= `
       <li>
-        <div class="collapsible-header grey lighten-4">${apt.city+" "+apt.street}
+        <div class="collapsible-header grey lighten-4">${apt.city+", "+apt.street}
             <i class="right small material-icons grey-text right">
     `;
 
-    //collec all the apartments reviews to one collection(as string).
+    //collect all the apartments reviews to one collection(as string).
 
     let totalRating = 0;
     let collectReviws="";
@@ -390,21 +390,8 @@ function addReview(aptId){
   }).catch(err => {
     console.log(err.message);
   });
-  alert("We added your review. \nthnks for your time.");
+  alert("We added your review. \nthanks for your time.");
 }).catch(err => {
   console.log('Error getting document', err);
 });
-}
-
-function experimentalFunction(data=""){
-  //function for testing.... will be deleted later..
-  //let testString="starting:\n";
-
-  var storage = firebase.storage();
-  var pathReference = storage.ref('images/stars.jpg');
-  var gsReference = storage.refFromURL('gs://img/JSvalQuTC5g8szds1FIYX4MiPsZ2');
-  //var httpsReference = storage.refFromURL('https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg');
-  document.querySelector('img').src = gsReference;
-  alert("done");
-
 }

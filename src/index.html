@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <div class="cardbg">
-      <div class="card z-depth-5 teal darken-4">
-        <span class="card-title white-text text-darken-4">
-          
-        </span>
-      </div>
-    </div>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -71,7 +64,7 @@
       <div class="modal-content center-align">
         <h4>Upload your student id card for verification</h4><br />
           <div class="progress">
-            <div class="determinate" style="width:30%" value="0" max="100" id="uploader"></div>
+            <div class="determinate" style="width:1%" value="0" max="100" id="uploader"></div>
             <li id="uploader-done" style="display: none;">Done!</label>
           </div>
 
@@ -79,7 +72,7 @@
               <div class="file-field input-field">
                 <div class="btn">
                   <span>File</span>
-                  <input type="file"value="upload" id="fileButton" >
+                  <input type="file"value="upload" id="uploadIdButton" >
                 </div>
                 <div class="file-path-wrapper">
                   <input class="file-path validate" type="text">
@@ -230,6 +223,22 @@
             <input type="text" id="price" required>
             <label for="price">Price</label>
           </div>
+
+          <!--ADDED PHOTOTEST-->
+          <div class="file-field input-field">
+            <div class="progress">
+              <div class="determinate" style="width:1%" value="0" max="100" id="apartmentUploader"></div>
+              <li id="uploader-done" style="display: none;">Done!</label>
+            </div>
+            <div class="btn">
+              <span>File</span>
+              <input type="file"value="upload" id="uploadImgButton" >
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+
           <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
       </div>

@@ -222,13 +222,16 @@ loginForm.addEventListener('submit', (e) => {
 });
 })
 
-//User deletion with the auth firebase
+//User deletion with the auth firebase NOTE: THIS FUNCTION WILL WORK ONLY IF A USER IS SIGNED RECENTLY 
+//OTHERWISE YOU NEED TO RE-AUTHENTICATE, SEE DETAILS IN THE FIREBASE DOCUMENTATION
 function userAccountDelete(){
     // using delete will return a promise, and it will activate the onDelete function in the firebase.functions
     var user = auth.currentUser;
     user.delete().then(() => {
+
         //user deleted
     }).catch(err => {
+    
         //some error happened
-    })
+    });
 }

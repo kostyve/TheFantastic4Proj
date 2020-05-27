@@ -221,3 +221,14 @@ loginForm.addEventListener('submit', (e) => {
         loginForm.querySelector('.error').innerHTML = error.message;
 });
 })
+
+//User deletion with the auth firebase
+function userAccountDelete(){
+    // using delete will return a promise, and it will activate the onDelete function in the firebase.functions
+    var user = auth.currentUser;
+    user.delete().then(() => {
+        //user deleted
+    }).catch(err => {
+        //some error happened
+    })
+}

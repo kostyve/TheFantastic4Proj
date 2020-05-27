@@ -43,6 +43,7 @@ exports.newUserSignup = functions.auth.user().onCreate(user => {
     });
 });
 
+//TODO fill the data so that on user deletion it will wipe all users data, rather only the user doc
 //trigger for user deletion
 exports.userDeleted = functions.auth.user().onDelete(user => {
     console.log('user deleted ', user.email, user.uid);

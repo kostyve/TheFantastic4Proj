@@ -49,14 +49,14 @@ uploadIdButton.addEventListener('change', function(e) {
         isVerified: true,
         imgUrl: downloadURL
       }).then(()=>{
-          console.log('verified student', userId)
+          console.log('verified student', userId);
+          alert("Uploaded successfully!");
+          const modal = document.querySelector('#modal-upload');
+            M.Modal.getInstance(modal).close();
       }).catch(err => {
         console.log(err.messege)
       });
     });
-    
-    alert("Uploaded successfully!");
-
   });
 })
 

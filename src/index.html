@@ -39,7 +39,7 @@
               <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
             </li>
             <!--make only normal users see the upload picture-->
-            <li class="user" style="display: none">
+            <li class="logged-in" style="display: none">
                   <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload Student ID</a>
             </li>
             <!--make only admin see the create apartment-->
@@ -189,6 +189,8 @@
     <div id="modal-account" class="modal">
           <div class="modal-content center-align">
             <h4>Account details</h4><br />
+            <img src='' class="upload-pic" height="200px" width="300px">
+
             <div class="account-details"></div>
             <li class="admin" style="display: none"></li>
           </div>
@@ -250,7 +252,6 @@
 
       </ul>
     </div>
-    <img src='' class="upload-pic" height="200px" width="300px">
    
     <script>
       // Your web app's Firebase configuration

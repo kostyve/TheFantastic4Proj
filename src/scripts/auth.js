@@ -88,8 +88,13 @@ createForm.addEventListener('submit', (e) =>{
         //HERE important thing happens here. we get the authentication method error because were not authenticated
         //now we want to catch it so we could show a different message
     }).catch(err => {
+<<<<<<< Updated upstream
         console.log(err.message)
     })
+=======
+        console.log(err.message);
+    });
+>>>>>>> Stashed changes
 })
 
 
@@ -125,7 +130,7 @@ signupForm.addEventListener('submit', (e) => {
     }).catch(error => {
         signupForm.querySelector('.error').innerHTML = error.message;
     });
-});
+})
 
 
 //logout/signout method
@@ -156,3 +161,76 @@ loginForm.addEventListener('submit', (e) => {
         loginForm.querySelector('.error').innerHTML = error.message;
 });
 })
+<<<<<<< Updated upstream
+=======
+
+//User deletion with the auth firebase NOTE: THIS FUNCTION WILL WORK ONLY IF A USER IS SIGNED RECENTLY
+//OTHERWISE YOU NEED TO RE-AUTHENTICATE, SEE DETAILS IN THE FIREBASE DOCUMENTATION
+function userAccountDelete(){
+    // using delete will return a promise, and it will activate the onDelete function in the firebase.functions
+    var user = auth.currentUser;
+    user.delete().then(() => {
+
+        //user deleted
+    }).catch(err => {
+
+        //some error happened
+    });
+}
+
+//make a ref for the edit form in the admin DASHBOARD.
+const editForm = document.querySelector('#edit-form');
+editForm.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    //example how to pull user data. first we get data from firebase auth
+    //var user = auth.currentUser;
+    const aptId = document.getElementById('apt-id').textContent;
+    const aptCity = editForm['city'].value;
+    const aptStreet = editForm['street'].value;
+    const aptFloor = editForm['floor'].value;
+    const aptDesc = editForm['description'].value;
+    const aptZip = editForm['zip'].value;
+    const aptPrice = editForm['price'].value;
+
+    updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
+
+    }).catch(err => {
+      console.log(err.message);
+});
+
+function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
+  //this function apdate the apartments, only the apartment id.
+  //all the rest have default value if not given any.
+  let apt;
+  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+        if (!doc.exists) {
+          console.log('error, cannot find document');
+        } else {
+          apt = doc.data();
+        }
+
+    db.collection('apartments').doc(aptId).update({
+      //if the INcoming is empty(equal to "") then change nothing.
+      city: (INcity=="")?(apt.city):(INcity),
+      street: INstreet==""?apt.street:INstreet,
+      floor: INfloor==""?apt.floor:INfloor,
+      description: INdescription==""?apt.description:INdescription,
+      zip: INzip==""?apt.zip:INzip,
+      price: INprice==""?apt.price:INprice,
+
+    }).then(()=>{
+    }).catch(err => {
+      console.log(err.message);
+    });
+  }).then(() => {
+      // when it returns the promise we want to reset the form and close the modal
+      const modal = document.querySelector('#modal-edit');
+      M.Modal.getInstance(modal).close();
+      editForm.reset();
+      //HERE important thing happens here. we get the authentication method error because were not authenticated
+      //now we want to catch it so we could show a different message
+  }).catch(err => {
+      console.log(err.message);
+});
+};
+>>>>>>> Stashed changes

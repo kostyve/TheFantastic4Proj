@@ -39,7 +39,7 @@
               <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
             </li>
             <!--make only normal users see the upload picture-->
-            <li class="user" style="display: none">
+            <li class="logged-in" style="display: none">
                   <a href="#" class="grey-text modal-trigger" data-target="modal-upload">Upload Student ID</a>
             </li>
             <!--make only admin see the create apartment-->
@@ -64,7 +64,7 @@
       <div class="modal-content center-align">
         <h4>Upload your student id card for verification</h4><br />
           <div class="progress">
-            <div class="determinate" style="width:30%" value="0" max="100" id="uploader"></div>
+            <div class="determinate" style="width:1%" value="0" max="100" id="uploader"></div>
             <li id="uploader-done" style="display: none;">Done!</label>
           </div>
 
@@ -72,7 +72,7 @@
               <div class="file-field input-field">
                 <div class="btn">
                   <span>File</span>
-                  <input type="file"value="upload" id="fileButton" >
+                  <input type="file"value="upload" id="uploadIdButton" >
                 </div>
                 <div class="file-path-wrapper">
                   <input class="file-path validate" type="text">
@@ -189,6 +189,8 @@
     <div id="modal-account" class="modal">
           <div class="modal-content center-align">
             <h4>Account details</h4><br />
+            <img src='' class="upload-pic" height="200px" width="300px">
+
             <div class="account-details"></div>
             <li class="admin" style="display: none"></li>
           </div>
@@ -223,6 +225,22 @@
             <input type="text" id="price" required>
             <label for="price">Price</label>
           </div>
+
+          <!--ADDED PHOTOTEST-->
+          <div class="file-field input-field">
+            <div class="progress">
+              <div class="determinate" style="width:1%" value="0" max="100" id="apartmentUploader"></div>
+              <li id="uploader-done" style="display: none;">Done!</label>
+            </div>
+            <div class="btn">
+              <span>File</span>
+              <input type="file"value="upload" id="uploadImgButton" >
+            </div>
+            <div class="file-path-wrapper">
+              <input class="file-path validate" type="text">
+            </div>
+          </div>
+
           <button class="btn yellow darken-2 z-depth-0">Create</button>
         </form>
       </div>
@@ -234,7 +252,7 @@
 
       </ul>
     </div>
-
+   
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {

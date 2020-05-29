@@ -303,12 +303,31 @@ function Confirmation(aptId=""){
     //update the apartment.
     if(aptId!=""){
       rentAprt(aptId);
-      rentAprt(aptId);
+      addOrder(aptId, creditCardId);
     }
   alert(txt);
   }
 }
+function addOrder(aptId, creditCardId){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  today = ""+yyyy+"-"+mm+"-"+dd;
+  db.collection('orders').add({
+    aptId: aptId,
+    cardId: creditCardId,
+    studentId: auth.currentUser.uid,
+    orderDate: today,
+    rentStart: "",
+    rentEnd: "",
+    totalSum: 0
+  }).then(() => {
 
+  }).catch(err => {
+      console.log(err.message)
+  });
+}
 function rentAprt(aptId, unRent=false){
   //update the apartment by aptId.
   const user = auth.currentUser;
@@ -323,19 +342,6 @@ function rentAprt(aptId, unRent=false){
   });
 }
 
-function rentAprt(aptId, unRent=false){
-  //update the apartment by aptId.
-  const user = auth.currentUser;
-  db.collection('apartments').doc(aptId).update({
-    studentId: unRent?"":user.uid,
-    studentName: unRent?"":user.email,
-    rented: unRent?false:true
-  }).then(()=>{
-
-  }).catch(err => {
-    console.log(err.message);
-  });
-}
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.

@@ -264,8 +264,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
       floor: INfloor==""?apt.floor:INfloor,
       description: INdescription==""?apt.description:INdescription,
       zip: INzip==""?apt.zip:INzip,
-      price: INprice==""?apt.price:INprice,
-
+      price: INprice==""?apt.price:INprice
     }).then(()=>{
     }).catch(err => {
       console.log(err.message);

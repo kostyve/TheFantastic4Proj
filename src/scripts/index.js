@@ -202,14 +202,14 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         }
       }
     }
-   
+
 
     if((Array.isArray(apt.reviews) && apt.reviews.length)==1){
 
       li+=`star_borderstar_borderstar_borderstar_borderstar_border`;
 
     }else {
-      
+
       const avarageRating=(totalRating/apt.reviews.length)-1
       for(i=0;i<avarageRating;i++){
       li+=`stars`;
@@ -261,9 +261,16 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         li +=  `
         <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
         `;
+      }else if(forDashBoard == true){
+        /*li +=  `
+        <div><a class="waves-effect green btn" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a></div>
+        `;*/
+        li +=  `
+        <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
+        `;
       }
     }
-    
+
       li+=`
       <div><h5><b>Reviews:</b></h5></div>
       `;
@@ -295,8 +302,8 @@ function Confirmation(aptId=""){
 
     //update the apartment.
     if(aptId!=""){
-     
-      rentAprt(aptId)
+      rentAprt(aptId);
+      rentAprt(aptId);
     }
   alert(txt);
   }
@@ -310,12 +317,25 @@ function rentAprt(aptId, unRent=false){
     studentName: unRent?"":user.email,
     rented: unRent?false:true
   }).then(()=>{
-   
+
   }).catch(err => {
     console.log(err.message);
   });
 }
 
+function rentAprt(aptId, unRent=false){
+  //update the apartment by aptId.
+  const user = auth.currentUser;
+  db.collection('apartments').doc(aptId).update({
+    studentId: unRent?"":user.uid,
+    studentName: unRent?"":user.email,
+    rented: unRent?false:true
+  }).then(()=>{
+
+  }).catch(err => {
+    console.log(err.message);
+  });
+}
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.
@@ -394,4 +414,9 @@ function addReview(aptId){
 }).catch(err => {
   console.log('Error getting document', err);
 });
+}
+
+function editFormFunc(aptId){
+  //help pass the apartment id to the editForm section in the auth.js .
+   document.getElementById('apt-id').textContent=aptId;
 }

@@ -246,13 +246,49 @@
       </div>
     </div>
 
+    <!-- EDIT APARTMENT MODAL -->
+    <div id="modal-edit" class="modal">
+      <div class="modal-content">
+        <h4>Edit an Apartment</h4><br />
+        <form id="edit-form">
+          <h4>Apartment id: </h4>
+          <h4 id="apt-id">aptid</h4>
+          <div class="input-field">
+            <input type="text" id="city" >
+            <label for="city">City</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="street" >
+            <label for="street">Street</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="floor" >
+            <label for="floor">Floor</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="description" >
+            <label for="description">Description</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="zip" >
+            <label for="zip">Zip</label>
+          </div>
+          <div class="input-field">
+            <input type="text" id="price" >
+            <label for="price">Price</label>
+          </div>
+          <button class="btn yellow darken-2 z-depth-0">Edit</button>
+        </form>
+      </div>
+    </div>
+
     <!-- APARTMENT LIST -->
     <div class="container" style="margin-top: 40px;">
       <ul class="collapsible z-depth-0 apartments" style="border: none;">
 
       </ul>
     </div>
-   
+
     <script>
       // Your web app's Firebase configuration
       var firebaseConfig = {

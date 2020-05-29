@@ -279,4 +279,4 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   }).catch(err => {
       console.log(err.message);
 });
-};
+}

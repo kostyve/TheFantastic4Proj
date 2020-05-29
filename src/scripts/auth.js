@@ -36,16 +36,6 @@ auth.onAuthStateChanged(user => {
             console.log(error.message)
         });
 
-        //Test experimental function.. will be deleted later..-------------------------------
-        const  experimental = document.querySelector('.tesing');
-          experimental.addEventListener('submit', (e) => {
-            e.preventDefault();
-              db.collection('apartments').onSnapshot(snapshot => {
-            experimentalFunction(snapshot.docs);
-            });
-        });
-        //Test experimental function.. will be deleted later..-------------------------------
-
 
         //grab the search div class from the html.
         const searchEngine = document.querySelector('.search-engine');

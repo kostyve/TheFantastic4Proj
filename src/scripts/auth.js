@@ -226,6 +226,7 @@ function userAccountDelete(){
     });
 }
 
+
 //make a ref for the edit form in the admin DASHBOARD.
 const editForm = document.querySelector('#edit-form');
 editForm.addEventListener('submit', (e) =>{
@@ -242,9 +243,7 @@ editForm.addEventListener('submit', (e) =>{
 
     updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
 
-    }).catch(err => {
-      console.log(err.message);
-});
+  });
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.

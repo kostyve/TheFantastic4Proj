@@ -127,26 +127,69 @@ const getMyOwnAprts = (data, isAdmin=false) => {
       }
       const li = readApartments(doc.id ,apt, isAdmin, user.uid, true);
       apartmentsList += li;
-
     });
 
     //if the user is admin show the currect information(owned apartments and incomes) in the dashboard
     if(isAdmin){
     html += `
             <li>
-              ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
-              ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalRentedApt+"</h6>"}
-              ${"<h6><b>Total income:</b> "+totalIncome+"</h6>"}
-              ${"<h6><b>Total owned apartments:</b> "+countTotalApt+"</h6>"}
+              <div class="row">
+              <div class="col s6">
+    `;
+    //Dashboard personal statistics for landlord(Left side).
+    html += `
+                <table>
+                  <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                    <b>Personal statistics:</b>
+                  </div>
+                  <tbody>
+                    <tr>
+                      <td>Total rented apartments:</td>
+                      <td>${countTotalRentedApt}</td>
+                    </tr>
+                    <tr>
+                      <td>Avarage income:</td>
+                      <td>${totalIncome/countTotalRentedApt}</td>
+                    </tr>
+                    <tr>
+                      <td>Total income:</td>
+                      <td>${totalIncome}</td>
+                    </tr>
+                    <tr>
+                      <td>Total owned apartments:</td>
+                      <td>${countTotalApt}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+      `;
+      //Dashboard personal statistics for landlord(Right side).
+      html += `
+                  <div class="col s6">
+                    <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                      <b>Place holder</b>
+                    </div>
+
+      `;
+       html += `
+
+                    </div>
+                  </div>
+                  <div>
+                </div>
             </li>
-            `;
+            <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+              <h4>Owned apatrments:</h4>
+            </div>
+      `;
     }else{
       //else->show normal user dashboard information(probably rented apartment or nothing).
+
       html += `
               <li>
                 ${"<h6><b>Rented apartments:</h6>"}
               </li>
-              `;
+      `;
     }
     html += apartmentsList;
     if(html == ''){//if the user dont own any apartments.
@@ -256,20 +299,28 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         li +=  `<div>${"<b>Rented:</b> no"}</div>`;
       if(isAdmin==false){
         //admin cant buy apartment, and no one can buy rented apartment.
-        //<a class="waves-effect waves-light btn">button</a>
-
         li +=  `
         <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
         `;
-      }else if(forDashBoard == true){
-        /*li +=  `
-        <div><a class="waves-effect green btn" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a></div>
-        `;*/
-        li +=  `
-        <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
-        `;
       }
     }
+
+    li +=  `
+    <div class="row">
+    `;
+    if(apt.rented==false && forDashBoard == true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
+      `;
+    }
+      if(forDashBoard == true && isAdmin==true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-orders" onclick="getOrders(${"'"+aptId+"'"})">orders</a>
+      `;
+    }
+    li +=  `
+    </div>
+    `;
 
       li+=`
       <div><h5><b>Reviews:</b></h5></div>
@@ -314,10 +365,12 @@ function addOrder(aptId, creditCardId){
   var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
   var yyyy = today.getFullYear();
   today = ""+yyyy+"-"+mm+"-"+dd;
+  const apt = db.collection('apartments').doc(aptId);
   db.collection('orders').add({
     aptId: aptId,
     cardId: creditCardId,
     studentId: auth.currentUser.uid,
+    ownerId: apt.ownerId,
     orderDate: today,
     rentStart: "",
     rentEnd: "",
@@ -425,4 +478,56 @@ function addReview(aptId){
 function editFormFunc(aptId){
   //help pass the apartment id to the editForm section in the auth.js .
    document.getElementById('apt-id').textContent=aptId;
+}
+
+function getOrders(aptId){
+  const ordersList = document.querySelector('.aprtment-orders');
+  let  html = "<li>";
+  //ordersList.innerHTML = '<h5 class="center-align">Login to view available apartments</h5>';
+
+  db.collection('orders').where('aptId', '==', aptId).onSnapshot(snapshot => {
+    const docs = snapshot.docs;
+    console.log(auth.currentUser.uid);
+    if(docs != ''){
+    docs.forEach(doc => {
+      const order = doc.data();
+      html += `
+        <li>
+        <div class="collapsible-header"><i class="material-icons">
+        </i>${order.orderDate}</div>
+        <div class="collapsible-body"><span>
+        <table>
+          <tbody>
+            <table>
+          <tbody>
+                 <tr>
+                   <td>${"Apartment id: "}</td>
+                   <td>${order.aptId}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Student id: "}</td>
+                   <td>${order.studentId}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Order date: "}</td>
+                   <td>${order.orderDate}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Credit card id: "}</td>
+                   <td>${order.cardId}</td>
+                 </tr>
+                </tbody>
+              </table>
+            </span>
+          </div>
+        </li>
+     `;
+    });
+    html += `</li>`;
+  }else {
+    html += `<h5>Cant find any orders history..</h5>`;
+  }
+  ordersList.innerHTML = html;
+  html = '';
+})
 }

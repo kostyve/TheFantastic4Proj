@@ -106,7 +106,9 @@
     <!--DASHBOARD MODAL-->
     <div id="modal-dashboard" class="modal">
       <div class="modal-content center-align">
-        <h4>Your Dashboard</h4><br />
+        <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+          <h4>Your Dashboard</h4>
+        </div>
           <!--show list of owned apartments if user is admin-->
             <div class="container" style="margin-top: 40px;">
               <ul class="collapsible z-depth-0 owned-Apartments" style="border: none;">
@@ -118,10 +120,29 @@
       </div>
     </div>
 
+    <!--ORDERS BOARD-->
+    <div id="modal-orders" class="modal">
+      <div class="modal-content center-align">
+        <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+          <h4>Apartment orders:</h4>
+        </div>
+          <!--show list of owned apartments if user is admin-->
+            <div class="container" style="margin-top: 40px;">
+              <ul class="collapsible z-depth-0 aprtment-orders" style="border: none;">
+
+              </ul>
+            </div>
+
+        <div class="dashboard-details"></div>
+      </div>
+    </div>
+
     <!-- SIGN UP MODAL ADD FUNCTIONALITY HERE FOR USER STORY-->
     <div id="modal-signup" class="modal">
       <div class="modal-content">
-        <h4>Sign up</h4><br />
+        <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+          <h4>Sign up</h4>
+        </div>
         <form id="signup-form">
           <div class="input-field">
             <input type="email" id="signup-email" required />
@@ -164,7 +185,9 @@
     <!-- LOGIN MODAL -->
     <div id="modal-login" class="modal">
       <div class="modal-content">
-        <h4>Login</h4><br />
+        <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+            <h4>Login</h4>
+        </div>
         <form id="login-form">
           <div class="input-field">
             <input type="email" id="login-email" required />
@@ -183,7 +206,9 @@
     <!-- ACCOUNT MODAL -->
     <div id="modal-account" class="modal">
           <div class="modal-content center-align">
-            <h4>Account details</h4><br />
+            <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                <h4>Account details</h4>
+            </div>
             <img src='' class="upload-pic" height="200px" width="300px">
 
             <div class="account-details"></div>
@@ -244,7 +269,9 @@
     <!-- EDIT APARTMENT MODAL -->
     <div id="modal-edit" class="modal">
       <div class="modal-content">
-        <h4>Edit an Apartment</h4><br />
+        <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+          <h4>Edit an Apartment</h4>
+        </div>
         <form id="edit-form">
           <h4>Apartment id: </h4>
           <h4 id="apt-id">aptid</h4>

@@ -60,18 +60,12 @@ uploadIdButton.addEventListener('change', function(e) {
   });
 })
 
-
-//listen for file selection for apartment upload
-uploadImgButton.addEventListener('change', function(e) {
-
+//For now the addition of apts will be here
+uploadAptsImgButton.addEventListener('change', function(e) {
+  const aptId = document.getElementById('apt-id').textContent;
   var file = e.target.files[0];
-  var userId ='';
-  //sketchy
-  try{userId = auth.currentUser.uid}catch(err){console.log(err.code)}
-  var imgPath = 'apts/' + userId;
-
+  var imgPath = 'apts/' + aptId;
   var storageRef = cloudStorage.ref(imgPath + '/' + file.name);
-
   var task = storageRef.put(file);
 
   task.on('state_changed',
@@ -85,20 +79,34 @@ uploadImgButton.addEventListener('change', function(e) {
   },
 
   function complete(){
+    
+    let apt
     task.snapshot.ref.getDownloadURL().then(downloadURL => {
-      console.log('File available at:' , downloadURL)
-      db.collection('users').doc(userId).update({
-        isVerified: true,
-        imgUrl: downloadURL
-      }).then(()=>{
-          //TODO need to design this method properly.
-          //here we need to assign the apartment images to the apt but the apt is not yet created.
-          //so we need to implement it in one of three ways: Extra writes, first save imgs then rewrite them
-          //                                                 Add images after apartment creation
-          //                                                 call func during the db entry creation
-      }).catch(err => {
-        console.log(err.messege)
-      });
+      let newImgURL = []
+      console.log('File available at:' , downloadURL);
+      db.collection('apartments').doc(aptId).get().then(doc =>{
+        apt = doc.data();
+        console.log(apt);
+        newImgURL = apt.imgURL
+        console.log(newImgURL);
+        if(newImgURL.find(a => a.includes(file.name)) == false){
+          newImgURL.push(downloadURL);
+          console.log(newImgURL);
+          db.collection('apartments').doc(aptId).update({
+            imgURL: newImgURL
+          }).then(()=>{
+              
+          }).catch(err => {
+            console.log(err.messege)
+          });
+        }else{
+          console.log('file has been previously uploaded');
+        }
+        
+      })
+      
+      
+        
     });
     
     alert("Uploaded successfully!");

@@ -291,7 +291,7 @@ db.collection('attractions').onSnapshot(snapshot => {
       const aptPrice = editForm['price'].value;
 
       updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
-
+      
       let attractionsIds=[];
       const numOfAttractions = document.getElementById('numOfAttractions').textContent;
       let attrRadioButton;
@@ -317,7 +317,7 @@ function updateAttractionsProximity(attId, aptId){
   console.log("check2: "+attId+", "+aptId);
   let proximityApt=[]
   //let attraction = doc.data();
-  let getDoc = db.collection('attractions').doc(attId).get().then(doc => {
+  db.collection('attractions').doc(attId).get().then(doc => {
       if (!doc.exists) {
         console.log('error, cannot find document');
       } else {
@@ -350,7 +350,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   //this function apdate the apartments, only the apartment id.
   //all the rest have default value if not given any.
   let apt;
-  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+  db.collection('apartments').doc(aptId).get().then(doc => {
         if (!doc.exists) {
           console.log('error, cannot find document');
         } else {

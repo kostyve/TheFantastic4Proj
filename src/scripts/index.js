@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //setup apartments
-const setupApts = (data, isAdmin, searchWord="") => {
+const setupApts = (attrData, data, isAdmin, searchWord="") => {
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
       //we need to create a template and run through our data and input it inside
@@ -84,7 +84,7 @@ const setupApts = (data, isAdmin, searchWord="") => {
 
       if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
       // we summ our const li templates appending each cycle
-        const li = readApartments(doc.id, apt,isAdmin);
+        const li = readApartments(attrData, doc.id, apt,isAdmin);
         html += li;
         }
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
@@ -100,7 +100,7 @@ const setupApts = (data, isAdmin, searchWord="") => {
 
 };
 
-const getMyOwnAprts = (data, isAdmin=false) => {
+const getMyOwnAprts = (attrData, data, isAdmin=false) => {
   //this function get the current user apartments,total income, avarage income and
   // everything that should be in the dashboard.
   let countTotalApt=0;
@@ -125,7 +125,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
           totalIncome += Number(apt.price);
         }
       }
-      const li = readApartments(doc.id ,apt, isAdmin, user.uid, true);
+      const li = readApartments(attrData, doc.id ,apt, isAdmin, user.uid, true);
       apartmentsList += li;
     });
 
@@ -203,7 +203,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
   }
 };
 
-function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoard=false){
+function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoard=false){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
@@ -278,16 +278,76 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
       }
       li+=`</i>`;
     }
-    //for the thing that the collapsible open(that board thing).
+      li+=`
+      </div>
+      <div class="collapsible-body white">
+          <p>
+          <div class="row">
+        `;
+    //for the thing that the collapsible open(that board thing)->(left side).
     li+=`
-        </div>
-        <div class="collapsible-body white">
-        ${"<b>description:</b> "+apt.description}
-        <div>${"<b>Floor:</b> "+apt.floor}</div>
-        <div>${"<b>Zip code:</b> "+apt.zip}</div>
-        <div>${"<b>Price:</b> "+apt.price}</div>
+            <div class="col s6">
+              <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                  <b>Apartment details:</b>
+              </div>
+              <div>${"<b>description:</b> "+apt.description}</div>
+              <div>${"<b>Floor:</b> "+apt.floor}</div>
+              <div>${"<b>Zip code:</b> "+apt.zip}</div>
+              <div>${"<b>Price:</b> "+apt.price}</div>
+            </div>
     `;
+    //for the thing that the collapsible open(that board thing)->(right side).
+    li+=`
+            <div class="col s6">
+              <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                  <b>Nearby attractions:</b>
+              </div>
+                <div style=": background-color: lightblue; width: 400px; height: 150px; overflow: scroll;">
 
+    `;
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    if(attrData.length){
+      let attr;
+      li+=`
+      <table>
+        <thead>
+            <tr>
+              <th>${"No."}</th>
+              <th>${"Place name"}</th>
+              <th>${"Location"}</th>
+            </tr>
+        </thead>
+      `;
+      attrData.forEach((doc, i) => {
+        attr=doc.data();
+        if(attr.proximity.includes(aptId)){
+          li+=`
+            <tbody>
+             <tr>
+               <td>${"["+i+"]"}</td>
+               <td>${attr.name}</td>
+               <td>${attr.city+" "+attr.street}</td>
+             </tr>
+            </tbody>
+          `;
+        }
+      });
+    }else{
+      li+=`
+      This apartment dont have any attraction nearby.
+      `;
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    li+=`
+                  </table>
+                </div>
+            </div>
+    `;
+      li+=`
+          </div>
+        </p>
+      `;
     //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
       li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;

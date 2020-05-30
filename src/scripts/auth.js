@@ -25,14 +25,17 @@ auth.onAuthStateChanged(user => {
 
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
-        db.collection('apartments').onSnapshot(snapshot => {
-            //to know if the person that ask for apartments is an admin or not.
-            getMyOwnAprts(snapshot.docs, idTokenResult.claims.admin);
-            //show as default all the apartments in the database.
-            setupApts(snapshot.docs, user.admin);
+        db.collection('apartments').onSnapshot(snapshotApar => {
+          db.collection('attractions').onSnapshot(snapshotAttr => {
 
-            setAtractionForm(snapshot.docs);
+            //to know if the person that ask for apartments is an admin or not.
+            getMyOwnAprts(snapshotAttr.docs, snapshotApar.docs, idTokenResult.claims.admin);
+            //show as default all the apartments in the database.
+            setupApts(snapshotAttr.docs, snapshotApar.docs, user.admin);
+
+            setAtractionForm(snapshotApar.docs);
             //here we call setup ui with user so it will eval true = will show ui
+          })
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
             console.log(error.message)
@@ -269,8 +272,6 @@ attractionsForm.addEventListener('submit', (e) =>{
 
 });
 
-
-
 //make a ref for the edit form in the admin DASHBOARD.
 const editForm = document.querySelector('#edit-form');
 db.collection('attractions').onSnapshot(snapshot => {
@@ -321,10 +322,6 @@ function updateAttractionsProximity(attId, aptId){
       } else {
         attraction = doc.data();
       }
-
-  console.log("test1: "+aptId);
-  console.log("test2: "+attraction.proximity);
-  console.log("test3: "+attraction.proximity.includes(aptId));
 
   if(attraction.proximity.includes(aptId) == false){
     proximityApt = attraction.proximity;

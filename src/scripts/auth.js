@@ -25,26 +25,21 @@ auth.onAuthStateChanged(user => {
 
         //get data through snapshot, but we changed here to
         // onSnapshot() so that our db will update realtime!! that easy
-        db.collection('apartments').onSnapshot(snapshot => {
+        db.collection('apartments').onSnapshot(snapshotApar => {
+          db.collection('attractions').onSnapshot(snapshotAttr => {
+
             //to know if the person that ask for apartments is an admin or not.
-            getMyOwnAprts(snapshot.docs, idTokenResult.claims.admin);
+            getMyOwnAprts(snapshotAttr.docs, snapshotApar.docs, idTokenResult.claims.admin);
             //show as default all the apartments in the database.
-            setupApts(snapshot.docs, user.admin);
+            setupApts(snapshotAttr.docs, snapshotApar.docs, user.admin);
+
+            setAtractionForm(snapshotApar.docs);
             //here we call setup ui with user so it will eval true = will show ui
+          })
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
             console.log(error.message)
         });
-
-        //Test experimental function.. will be deleted later..-------------------------------
-        const  experimental = document.querySelector('.tesing');
-          experimental.addEventListener('submit', (e) => {
-            e.preventDefault();
-              db.collection('apartments').onSnapshot(snapshot => {
-            experimentalFunction(snapshot.docs);
-            });
-        });
-        //Test experimental function.. will be deleted later..-------------------------------
 
 
         //grab the search div class from the html.
@@ -64,6 +59,7 @@ auth.onAuthStateChanged(user => {
         setupUI();
         setupApts([]);
         getMyOwnAprts([]);
+        setAtractionForm([]);
     }
 });
 
@@ -223,8 +219,7 @@ loginForm.addEventListener('submit', (e) => {
 });
 })
 
-//TODO need to finalize the automatic deletion
-//User deletion with the auth firebase NOTE: THIS FUNCTION WILL WORK ONLY IF A USER IS SIGNED RECENTLY 
+//User deletion with the auth firebase NOTE: THIS FUNCTION WILL WORK ONLY IF A USER IS SIGNED RECENTLY
 //OTHERWISE YOU NEED TO RE-AUTHENTICATE, SEE DETAILS IN THE FIREBASE DOCUMENTATION
 function userAccountDelete(){
     // using delete will return a promise, and it will activate the onDelete function in the firebase.functions
@@ -233,7 +228,155 @@ function userAccountDelete(){
 
         //user deleted
     }).catch(err => {
-    
+
         //some error happened
     });
+}
+
+//make a ref for the attration form in the nav bar.
+const attractionsForm = document.querySelector('#attraction-form');
+attractionsForm.addEventListener('submit', (e) =>{
+  e.preventDefault();
+
+  let proximityApt=[];
+  const numOfAprtments = document.getElementById('numOfAprt').textContent;
+  let aptRadioButton;
+  let aptId;
+  for (var i = 0; i < numOfAprtments; i++) {
+    aptRadioButto = attractionsForm['checkApt'+i].checked;
+    aptId = document.getElementById('closeApt'+i).textContent;
+
+    if(aptRadioButto==true){
+      proximityApt.push(aptId);
+    }
+  }
+  db.collection('attractions').add({
+      //with square brackets we get the content of the fields in the form in index.html.
+      //better to use this rather than . notation because they dont work with hyphen text
+      city: attrationForm['city'].value,
+      street: attrationForm['street'].value,
+      name: attrationForm['name'].value,
+      description: attrationForm['description'].value,
+      phone: attrationForm['phone'].value,
+      proximity: proximityApt
+      // this is going to store an entry into our db, which works as asynch method !
+  }).then(() => {
+      // when it returns the promise we want to reset the form and close the modal
+      const modal = document.querySelector('#modal-attraction');
+      M.Modal.getInstance(modal).close();
+      attrationForm.reset();
+      //HERE important thing happens here. we get the authentication method error because were not authenticated
+      //now we want to catch it so we could show a different message
+  }).catch(err => {
+      console.log(err.message)
+  });
+
+});
+
+//make a ref for the edit form in the admin DASHBOARD.
+const editForm = document.querySelector('#edit-form');
+db.collection('attractions').onSnapshot(snapshot => {
+  setEditForm(snapshot.docs);
+
+  editForm.addEventListener('submit', (e) =>{
+      e.preventDefault();
+      //example how to pull user data. first we get data from firebase auth
+      //var user = auth.currentUser;
+      const aptId = document.getElementById('apt-id').textContent;
+      const aptCity = editForm['city'].value;
+      const aptStreet = editForm['street'].value;
+      const aptFloor = editForm['floor'].value;
+      const aptDesc = editForm['description'].value;
+      const aptZip = editForm['zip'].value;
+      const aptPrice = editForm['price'].value;
+
+      updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
+
+      let attractionsIds=[];
+      const numOfAttractions = document.getElementById('numOfAttractions').textContent;
+      let attrRadioButton;
+      let attrId;
+      console.log("num of attactions: "+numOfAttractions);
+      for (var i = 0; i < numOfAttractions; i++) {
+        attrRadioButton = editForm['checkAtrr'+i].checked;
+        attrId = document.getElementById('closeAtrr'+i).textContent;
+
+        if(attrRadioButton==true){
+          attractionsIds.push(attrId);
+        }
+      }
+      console.log(attractionsIds);
+      attractionsIds.forEach(attId => {
+        console.log("check1: "+attId+", "+aptId);
+        updateAttractionsProximity(attId, aptId);
+      });
+  })
+});
+
+function updateAttractionsProximity(attId, aptId){
+  console.log("check2: "+attId+", "+aptId);
+  let proximityApt=[]
+  //let attraction = doc.data();
+  let getDoc = db.collection('attractions').doc(attId).get().then(doc => {
+      if (!doc.exists) {
+        console.log('error, cannot find document');
+      } else {
+        attraction = doc.data();
+      }
+
+  if(attraction.proximity.includes(aptId) == false){
+    proximityApt = attraction.proximity;
+    proximityApt.push(aptId);
+    db.collection('attractions').doc(attId).update({
+      proximity: proximityApt
+          // this is going to store an entry into our db, which works as asynch method !
+      }).then(() => {
+          // when it returns the promise we want to reset the form and close the modal
+          const modal = document.querySelector('#modal-attraction');
+          M.Modal.getInstance(modal).close();
+          attrationForm.reset();
+          //HERE important thing happens here. we get the authentication method error because were not authenticated
+          //now we want to catch it so we could show a different message
+      }).catch(err => {
+          console.log(err.message);
+      });
+    }else{
+      console.log("attraction->"+attId+" alredy connect to apatrment->"+aptId+". [drop update operation]");
+    }
+  });
+}
+
+function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
+  //this function apdate the apartments, only the apartment id.
+  //all the rest have default value if not given any.
+  let apt;
+  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+        if (!doc.exists) {
+          console.log('error, cannot find document');
+        } else {
+          apt = doc.data();
+        }
+
+    db.collection('apartments').doc(aptId).update({
+      //if the INcoming is empty(equal to "") then change nothing.
+      city: (INcity=="")?(apt.city):(INcity),
+      street: INstreet==""?apt.street:INstreet,
+      floor: INfloor==""?apt.floor:INfloor,
+      description: INdescription==""?apt.description:INdescription,
+      zip: INzip==""?apt.zip:INzip,
+      price: INprice==""?apt.price:INprice
+    }).then(()=>{
+    }).catch(err => {
+      console.log(err.message);
+    });
+  }).then(() => {
+      // when it returns the promise we want to reset the form and close the modal
+      const modal = document.querySelector('#modal-edit');
+      M.Modal.getInstance(modal).close();
+      editForm.reset();
+      //HERE important thing happens here. we get the authentication method error because were not authenticated
+      //now we want to catch it so we could show a different message
+  }).catch(err => {
+      console.log(err.message);
+});
 }

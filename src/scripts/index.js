@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //setup apartments
-const setupApts = (data, isAdmin, searchWord="") => {
+const setupApts = (attrData, data, isAdmin, searchWord="") => {
   //check len on the data, if we have no length then user is not logged in. we show different data
   if (data.length){
       //we need to create a template and run through our data and input it inside
@@ -84,7 +84,7 @@ const setupApts = (data, isAdmin, searchWord="") => {
 
       if(apt.city.includes(searchWord) || apt.street.includes(searchWord)){
       // we summ our const li templates appending each cycle
-        const li = readApartments(doc.id, apt,isAdmin);
+        const li = readApartments(attrData, doc.id, apt,isAdmin);
         html += li;
         }
       // so lets say if we run this 3 times in the data loop there will be 3 sets of li
@@ -100,7 +100,7 @@ const setupApts = (data, isAdmin, searchWord="") => {
 
 };
 
-const getMyOwnAprts = (data, isAdmin=false) => {
+const getMyOwnAprts = (attrData, data, isAdmin=false) => {
   //this function get the current user apartments,total income, avarage income and
   // everything that should be in the dashboard.
   let countTotalApt=0;
@@ -125,28 +125,71 @@ const getMyOwnAprts = (data, isAdmin=false) => {
           totalIncome += Number(apt.price);
         }
       }
-      const li = readApartments(doc.id ,apt, isAdmin, user.uid, true);
+      const li = readApartments(attrData, doc.id ,apt, isAdmin, user.uid, true);
       apartmentsList += li;
-
     });
 
     //if the user is admin show the currect information(owned apartments and incomes) in the dashboard
     if(isAdmin){
     html += `
             <li>
-              ${"<h6><b>Total rented apartments:</b> "+countTotalRentedApt+"</h6>"}
-              ${"<h6><b>Avarage income:</b> "+totalIncome/countTotalRentedApt+"</h6>"}
-              ${"<h6><b>Total income:</b> "+totalIncome+"</h6>"}
-              ${"<h6><b>Total owned apartments:</b> "+countTotalApt+"</h6>"}
+              <div class="row">
+              <div class="col s6">
+    `;
+    //Dashboard personal statistics for landlord(Left side).
+    html += `
+                <table>
+                  <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                    <b>Personal statistics:</b>
+                  </div>
+                  <tbody>
+                    <tr>
+                      <td>Total rented apartments:</td>
+                      <td>${countTotalRentedApt}</td>
+                    </tr>
+                    <tr>
+                      <td>Avarage income:</td>
+                      <td>${totalIncome/countTotalRentedApt}</td>
+                    </tr>
+                    <tr>
+                      <td>Total income:</td>
+                      <td>${totalIncome}</td>
+                    </tr>
+                    <tr>
+                      <td>Total owned apartments:</td>
+                      <td>${countTotalApt}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                </div>
+      `;
+      //Dashboard personal statistics for landlord(Right side).
+      html += `
+                  <div class="col s6">
+                    <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                      <b>Place holder</b>
+                    </div>
+
+      `;
+       html += `
+
+                    </div>
+                  </div>
+                  <div>
+                </div>
             </li>
-            `;
+            <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+              <h4>Owned apatrments:</h4>
+            </div>
+      `;
     }else{
       //else->show normal user dashboard information(probably rented apartment or nothing).
+
       html += `
               <li>
                 ${"<h6><b>Rented apartments:</h6>"}
               </li>
-              `;
+      `;
     }
     html += apartmentsList;
     if(html == ''){//if the user dont own any apartments.
@@ -160,7 +203,7 @@ const getMyOwnAprts = (data, isAdmin=false) => {
   }
 };
 
-function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoard=false){
+function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoard=false){
   //function for gettin list of apartments based on user id. This function populates setupApts with data
   //a template whic is dynamically constructed
   //backticks used in js to create template string. ${} is a placeholder
@@ -202,14 +245,14 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         }
       }
     }
-   
+
 
     if((Array.isArray(apt.reviews) && apt.reviews.length)==1){
 
       li+=`star_borderstar_borderstar_borderstar_borderstar_border`;
 
     }else {
-      
+
       const avarageRating=(totalRating/apt.reviews.length)-1
       for(i=0;i<avarageRating;i++){
       li+=`stars`;
@@ -235,16 +278,24 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
       }
       li+=`</i>`;
     }
-    //for the thing that the collapsible open(that board thing).
+      li+=`
+      </div>
+      <div class="collapsible-body white">
+          <p>
+          <div class="row">
+        `;
+    //for the thing that the collapsible open(that board thing)->(left side).
     li+=`
-        </div>
-        <div class="collapsible-body white">
-        ${"<b>description:</b> "+apt.description}
-        <div>${"<b>Floor:</b> "+apt.floor}</div>
-        <div>${"<b>Zip code:</b> "+apt.zip}</div>
-        <div>${"<b>Price:</b> "+apt.price}</div>
-    `;
+            <div class="col s6">
+              <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                  <b>Apartment details:</b>
+              </div>
+              <div>${"<b>description:</b> "+apt.description}</div>
+              <div>${"<b>Floor:</b> "+apt.floor}</div>
+              <div>${"<b>Zip code:</b> "+apt.zip}</div>
+              <div>${"<b>Price:</b> "+apt.price}</div>
 
+    `;
     //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
       li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
@@ -256,14 +307,85 @@ function readApartments(aptId, apt, isAdmin = false,id = apt.ownerId, forDashBoa
         li +=  `<div>${"<b>Rented:</b> no"}</div>`;
       if(isAdmin==false){
         //admin cant buy apartment, and no one can buy rented apartment.
-        //<a class="waves-effect waves-light btn">button</a>
-
         li +=  `
         <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
         `;
       }
     }
-    
+    if(apt.rented==false && forDashBoard == true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
+      `;
+    }
+      if(forDashBoard == true && isAdmin==true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-orders" onclick="getOrders(${"'"+aptId+"'"})">orders</a>
+      `;
+    }
+    //for the thing that the collapsible open(that board thing)->(right side).
+    li+=`
+      </div>
+            <div class="col s6">
+              <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
+                  <b>Nearby attractions:</b>
+              </div>
+                <div style=": background-color: lightblue; width: 400px; height: 150px; overflow: scroll;">
+
+    `;
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //list of attractions.
+    if(attrData.length){
+      let attr;
+      li+=`
+      <table>
+        <thead>
+            <tr>
+              <th>${"No."}</th>
+              <th>${"Place name"}</th>
+              <th>${"Location"}</th>
+            </tr>
+        </thead>
+      `;
+      attrData.forEach((doc, i) => {
+        attr=doc.data();
+        if(attr.proximity.includes(aptId)){
+          li+=`
+            <tbody>
+             <tr>
+               <td>${"["+i+"]"}</td>
+               <td>${attr.name}</td>
+               <td>${attr.city+" "+attr.street}</td>
+             </tr>
+            </tbody>
+          `;
+        }
+      });
+    }else{
+      li+=`
+      This apartment dont have any attraction nearby.
+      `;
+    }
+    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    li+=`
+                  </table>
+                </div>
+            </div>
+    `;
+      li+=`
+          </div>
+        </p>
+      `;
+
+
+    li +=  `
+    <div class="row">
+    `;
+
+    li +=  `
+    </div>
+    `;
+
       li+=`
       <div><h5><b>Reviews:</b></h5></div>
       `;
@@ -295,11 +417,34 @@ function Confirmation(aptId=""){
 
     //update the apartment.
     if(aptId!=""){
-     
-      rentAprt(aptId)
+      rentAprt(aptId);
+      addOrder(aptId, creditCardId);
     }
   alert(txt);
   }
+}
+
+function addOrder(aptId, creditCardId){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+  today = ""+yyyy+"-"+mm+"-"+dd;
+  const apt = db.collection('apartments').doc(aptId);
+  db.collection('orders').add({
+    aptId: aptId,
+    cardId: creditCardId,
+    studentId: auth.currentUser.uid,
+    ownerId: apt.ownerId,
+    orderDate: today,
+    rentStart: "",
+    rentEnd: "",
+    totalSum: 0
+  }).then(() => {
+
+  }).catch(err => {
+      console.log(err.message)
+  });
 }
 
 function rentAprt(aptId, unRent=false){
@@ -310,12 +455,11 @@ function rentAprt(aptId, unRent=false){
     studentName: unRent?"":user.email,
     rented: unRent?false:true
   }).then(()=>{
-   
+
   }).catch(err => {
     console.log(err.message);
   });
 }
-
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.
@@ -394,4 +538,142 @@ function addReview(aptId){
 }).catch(err => {
   console.log('Error getting document', err);
 });
+}
+
+function editFormFunc(aptId){
+  //help pass the apartment id to the editForm section in the auth.js .
+   document.getElementById('apt-id').textContent=aptId;
+}
+
+function getOrders(aptId){
+  const ordersList = document.querySelector('.aprtment-orders');
+  let  html = "<li>";
+  //ordersList.innerHTML = '<h5 class="center-align">Login to view available apartments</h5>';
+
+  db.collection('orders').where('aptId', '==', aptId).onSnapshot(snapshot => {
+    const docs = snapshot.docs;
+    console.log(auth.currentUser.uid);
+    if(docs != ''){
+    docs.forEach(doc => {
+      const order = doc.data();
+      html += `
+        <li>
+        <div class="collapsible-header"><i class="material-icons">
+        </i>${order.orderDate}</div>
+        <div class="collapsible-body"><span>
+        <table>
+          <tbody>
+            <table>
+          <tbody>
+                 <tr>
+                   <td>${"Apartment id: "}</td>
+                   <td>${order.aptId}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Student id: "}</td>
+                   <td>${order.studentId}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Order date: "}</td>
+                   <td>${order.orderDate}</td>
+                 </tr>
+                 <tr>
+                   <td>${"Credit card id: "}</td>
+                   <td>${order.cardId}</td>
+                 </tr>
+                </tbody>
+              </table>
+            </span>
+          </div>
+        </li>
+     `;
+    });
+    html += `</li>`;
+  }else {
+    html += `<h5>Cant find any orders history..</h5>`;
+  }
+  ordersList.innerHTML = html;
+  html = '';
+})
+}
+
+function setEditForm(data){
+  const createForm = document.querySelector('.close-atractions');
+  let numOfAttractions = 0;
+  let html = `
+    <h5>Chose nearby atractions:</h5>
+    <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+  `;
+  const user = auth.currentUser;
+
+  if (data.length){
+    data.forEach(doc => {
+      const atraction = doc.data();
+        html +=`
+            <p>
+            <div class="row">
+              <div class="col s12">
+                    <div class="card gray-grey darken-1">
+                      <label>
+                        <input type="checkbox" id="checkAtrr${numOfAttractions}"  />
+                        <span>
+                          ${atraction.name+" "+atraction.city+" "+atraction.street}
+                          <p id="closeAtrr${numOfAttractions}" style="display: none;">${doc.id}</p>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            </p>
+          `;
+          numOfAttractions++;
+    })
+    html +=`
+      <p id="numOfAttractions" style="display: none;">${numOfAttractions}</p>
+    `;
+  }
+  html += `</div>`;
+  createForm.innerHTML = html;
+}
+
+function setAtractionForm(data){
+  const createForm = document.querySelector('.close-apartments');
+  let numOfApartments = 0;
+  let html = `
+    <h5>Chose nearby apartments:</h5>
+    <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+  `;
+  const user = auth.currentUser;
+
+  if (data.length){
+    data.forEach(doc => {
+      const apt = doc.data();
+      if(apt.ownerId==user.uid){
+        html +=`
+            <p>
+            <div class="row">
+              <div class="col s12">
+                    <div class="card gray-grey darken-1">
+                      <label>
+                        <input type="checkbox" id="checkApt${numOfApartments}"  />
+                        <span>
+                          ${apt.city+" "+apt.street}
+                          <p id="closeApt${numOfApartments}" style="display: none;">${doc.id}</p>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            </p>
+          `;
+          numOfApartments++;
+      }
+    })
+    html +=`
+      <p id="numOfAprt" style="display: none;">${numOfApartments}</p>
+    `;
+  }
+  html += `</div>`;
+  createForm.innerHTML = html;
+
 }

@@ -359,6 +359,7 @@ function Confirmation(aptId=""){
   alert(txt);
   }
 }
+
 function addOrder(aptId, creditCardId){
   var today = new Date();
   var dd = String(today.getDate()).padStart(2, '0');
@@ -381,6 +382,7 @@ function addOrder(aptId, creditCardId){
       console.log(err.message)
   });
 }
+
 function rentAprt(aptId, unRent=false){
   //update the apartment by aptId.
   const user = auth.currentUser;
@@ -394,7 +396,6 @@ function rentAprt(aptId, unRent=false){
     console.log(err.message);
   });
 }
-
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.
@@ -530,4 +531,85 @@ function getOrders(aptId){
   ordersList.innerHTML = html;
   html = '';
 })
+}
+
+function setEditForm(data){
+  const createForm = document.querySelector('.close-atractions');
+  let numOfAttractions = 0;
+  let html = `
+    <h5>Chose nearby atractions:</h5>
+    <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+  `;
+  const user = auth.currentUser;
+
+  if (data.length){
+    data.forEach(doc => {
+      const atraction = doc.data();
+        html +=`
+            <p>
+            <div class="row">
+              <div class="col s12">
+                    <div class="card gray-grey darken-1">
+                      <label>
+                        <input type="checkbox" id="checkAtrr${numOfAttractions}"  />
+                        <span>
+                          ${atraction.name+" "+atraction.city+" "+atraction.street}
+                          <p id="closeAtrr${numOfAttractions}" style="display: none;">${doc.id}</p>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            </p>
+          `;
+          numOfAttractions++;
+    })
+    html +=`
+      <p id="numOfAttractions" style="display: none;">${numOfAttractions}</p>
+    `;
+  }
+  html += `</div>`;
+  createForm.innerHTML = html;
+}
+
+function setAtractionForm(data){
+  const createForm = document.querySelector('.close-apartments');
+  let numOfApartments = 0;
+  let html = `
+    <h5>Chose nearby apartments:</h5>
+    <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+  `;
+  const user = auth.currentUser;
+
+  if (data.length){
+    data.forEach(doc => {
+      const apt = doc.data();
+      if(apt.ownerId==user.uid){
+        html +=`
+            <p>
+            <div class="row">
+              <div class="col s12">
+                    <div class="card gray-grey darken-1">
+                      <label>
+                        <input type="checkbox" id="checkApt${numOfApartments}"  />
+                        <span>
+                          ${apt.city+" "+apt.street}
+                          <p id="closeApt${numOfApartments}" style="display: none;">${doc.id}</p>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+            </p>
+          `;
+          numOfApartments++;
+      }
+    })
+    html +=`
+      <p id="numOfAprt" style="display: none;">${numOfApartments}</p>
+    `;
+  }
+  html += `</div>`;
+  createForm.innerHTML = html;
+
 }

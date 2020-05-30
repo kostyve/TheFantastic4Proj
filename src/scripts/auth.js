@@ -30,6 +30,8 @@ auth.onAuthStateChanged(user => {
             getMyOwnAprts(snapshot.docs, idTokenResult.claims.admin);
             //show as default all the apartments in the database.
             setupApts(snapshot.docs, user.admin);
+
+            setAtractionForm(snapshot.docs);
             //here we call setup ui with user so it will eval true = will show ui
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
@@ -54,6 +56,7 @@ auth.onAuthStateChanged(user => {
         setupUI();
         setupApts([]);
         getMyOwnAprts([]);
+        setAtractionForm([]);
     }
 });
 
@@ -226,24 +229,124 @@ function userAccountDelete(){
     });
 }
 
+//make a ref for the attration form in the nav bar.
+const attractionsForm = document.querySelector('#attraction-form');
+attractionsForm.addEventListener('submit', (e) =>{
+  e.preventDefault();
+
+  let proximityApt=[];
+  const numOfAprtments = document.getElementById('numOfAprt').textContent;
+  let aptRadioButton;
+  let aptId;
+  for (var i = 0; i < numOfAprtments; i++) {
+    aptRadioButto = attractionsForm['checkApt'+i].checked;
+    aptId = document.getElementById('closeApt'+i).textContent;
+
+    if(aptRadioButto==true){
+      proximityApt.push(aptId);
+    }
+  }
+  db.collection('attractions').add({
+      //with square brackets we get the content of the fields in the form in index.html.
+      //better to use this rather than . notation because they dont work with hyphen text
+      city: attrationForm['city'].value,
+      street: attrationForm['street'].value,
+      name: attrationForm['name'].value,
+      description: attrationForm['description'].value,
+      phone: attrationForm['phone'].value,
+      proximity: proximityApt
+      // this is going to store an entry into our db, which works as asynch method !
+  }).then(() => {
+      // when it returns the promise we want to reset the form and close the modal
+      const modal = document.querySelector('#modal-attraction');
+      M.Modal.getInstance(modal).close();
+      attrationForm.reset();
+      //HERE important thing happens here. we get the authentication method error because were not authenticated
+      //now we want to catch it so we could show a different message
+  }).catch(err => {
+      console.log(err.message)
+  });
+
+});
+
+
 
 //make a ref for the edit form in the admin DASHBOARD.
 const editForm = document.querySelector('#edit-form');
-editForm.addEventListener('submit', (e) =>{
-    e.preventDefault();
-    //example how to pull user data. first we get data from firebase auth
-    //var user = auth.currentUser;
-    const aptId = document.getElementById('apt-id').textContent;
-    const aptCity = editForm['city'].value;
-    const aptStreet = editForm['street'].value;
-    const aptFloor = editForm['floor'].value;
-    const aptDesc = editForm['description'].value;
-    const aptZip = editForm['zip'].value;
-    const aptPrice = editForm['price'].value;
+db.collection('attractions').onSnapshot(snapshot => {
+  setEditForm(snapshot.docs);
 
-    updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
+  editForm.addEventListener('submit', (e) =>{
+      e.preventDefault();
+      //example how to pull user data. first we get data from firebase auth
+      //var user = auth.currentUser;
+      const aptId = document.getElementById('apt-id').textContent;
+      const aptCity = editForm['city'].value;
+      const aptStreet = editForm['street'].value;
+      const aptFloor = editForm['floor'].value;
+      const aptDesc = editForm['description'].value;
+      const aptZip = editForm['zip'].value;
+      const aptPrice = editForm['price'].value;
 
+      updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
+
+      let attractionsIds=[];
+      const numOfAttractions = document.getElementById('numOfAttractions').textContent;
+      let attrRadioButton;
+      let attrId;
+      console.log("num of attactions: "+numOfAttractions);
+      for (var i = 0; i < numOfAttractions; i++) {
+        attrRadioButton = editForm['checkAtrr'+i].checked;
+        attrId = document.getElementById('closeAtrr'+i).textContent;
+
+        if(attrRadioButton==true){
+          attractionsIds.push(attrId);
+        }
+      }
+      console.log(attractionsIds);
+      attractionsIds.forEach(attId => {
+        console.log("check1: "+attId+", "+aptId);
+        updateAttractionsProximity(attId, aptId);
+      });
+  })
+});
+
+function updateAttractionsProximity(attId, aptId){
+  console.log("check2: "+attId+", "+aptId);
+  let proximityApt=[]
+  //let attraction = doc.data();
+  let getDoc = db.collection('attractions').doc(attId).get().then(doc => {
+      if (!doc.exists) {
+        console.log('error, cannot find document');
+      } else {
+        attraction = doc.data();
+      }
+
+  console.log("test1: "+aptId);
+  console.log("test2: "+attraction.proximity);
+  console.log("test3: "+attraction.proximity.includes(aptId));
+
+  if(attraction.proximity.includes(aptId) == false){
+    proximityApt = attraction.proximity;
+    proximityApt.push(aptId);
+    db.collection('attractions').doc(attId).update({
+      proximity: proximityApt
+          // this is going to store an entry into our db, which works as asynch method !
+      }).then(() => {
+          // when it returns the promise we want to reset the form and close the modal
+          const modal = document.querySelector('#modal-attraction');
+          M.Modal.getInstance(modal).close();
+          attrationForm.reset();
+          //HERE important thing happens here. we get the authentication method error because were not authenticated
+          //now we want to catch it so we could show a different message
+      }).catch(err => {
+          console.log(err.message);
+      });
+    }else{
+      console.log("attraction->"+attId+" alredy connect to apatrment->"+aptId+". [drop update operation]");
+    }
   });
+}
 
 function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
   //this function apdate the apartments, only the apartment id.

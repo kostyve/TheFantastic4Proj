@@ -112,7 +112,8 @@ createForm.addEventListener('submit', (e) =>{
         rented: false
 
         // this is going to store an entry into our db, which works as asynch method !
-    }).then(() => {
+    }).then((docRef) => {
+        console.log('The doc id created is: ' + docRef.id);
         // when it returns the promise we want to reset the form and close the modal
         const modal = document.querySelector('#modal-create');
         M.Modal.getInstance(modal).close();
@@ -222,6 +223,7 @@ loginForm.addEventListener('submit', (e) => {
 });
 })
 
+//TODO need to finalize the automatic deletion
 //User deletion with the auth firebase NOTE: THIS FUNCTION WILL WORK ONLY IF A USER IS SIGNED RECENTLY 
 //OTHERWISE YOU NEED TO RE-AUTHENTICATE, SEE DETAILS IN THE FIREBASE DOCUMENTATION
 function userAccountDelete(){

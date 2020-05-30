@@ -68,7 +68,7 @@ uploadImgButton.addEventListener('change', function(e) {
   var userId ='';
   //sketchy
   try{userId = auth.currentUser.uid}catch(err){console.log(err.code)}
-  var imgPath = 'img/' + userId;
+  var imgPath = 'apts/' + userId;
 
   var storageRef = cloudStorage.ref(imgPath + '/' + file.name);
 

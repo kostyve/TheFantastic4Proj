@@ -294,10 +294,37 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
               <div>${"<b>Floor:</b> "+apt.floor}</div>
               <div>${"<b>Zip code:</b> "+apt.zip}</div>
               <div>${"<b>Price:</b> "+apt.price}</div>
-            </div>
+
     `;
+    //if apartment is rented then put a "yes" to the variable, if not put "no".
+    if(apt.rented==true){
+      li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
+      if(isAdmin==true){
+        //if the user is admin->show the name of the creditCardId that rent the aprtment(relevent to the dashboard).
+        li +=  `<div><b>student email:</b>${apt.studentName}</div>`;
+      }
+    }else{
+        li +=  `<div>${"<b>Rented:</b> no"}</div>`;
+      if(isAdmin==false){
+        //admin cant buy apartment, and no one can buy rented apartment.
+        li +=  `
+        <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
+        `;
+      }
+    }
+    if(apt.rented==false && forDashBoard == true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
+      `;
+    }
+      if(forDashBoard == true && isAdmin==true){
+      li +=  `
+      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-orders" onclick="getOrders(${"'"+aptId+"'"})">orders</a>
+      `;
+    }
     //for the thing that the collapsible open(that board thing)->(right side).
     li+=`
+      </div>
             <div class="col s6">
               <div id="site-layout-example-top" class="col s12 card-panel grey lighten-2">
                   <b>Nearby attractions:</b>
@@ -306,6 +333,7 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
 
     `;
     //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    //list of attractions.
     if(attrData.length){
       let attr;
       li+=`
@@ -348,36 +376,12 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
           </div>
         </p>
       `;
-    //if apartment is rented then put a "yes" to the variable, if not put "no".
-    if(apt.rented==true){
-      li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
-      if(isAdmin==true){
-        //if the user is admin->show the name of the creditCardId that rent the aprtment(relevent to the dashboard).
-        li +=  `<div><b>student email:</b>${apt.studentName}</div>`;
-      }
-    }else{
-        li +=  `<div>${"<b>Rented:</b> no"}</div>`;
-      if(isAdmin==false){
-        //admin cant buy apartment, and no one can buy rented apartment.
-        li +=  `
-        <div><a class="waves-effect green btn" onclick="Confirmation(${"'"+aptId+"'"})">press to order</a></div>
-        `;
-      }
-    }
+
 
     li +=  `
     <div class="row">
     `;
-    if(apt.rented==false && forDashBoard == true){
-      li +=  `
-      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-edit" onclick="editFormFunc(${"'"+aptId+"'"})">Edit</a>
-      `;
-    }
-      if(forDashBoard == true && isAdmin==true){
-      li +=  `
-      <a href="#" class="waves-effect green btn modal-trigger" data-target="modal-orders" onclick="getOrders(${"'"+aptId+"'"})">orders</a>
-      `;
-    }
+
     li +=  `
     </div>
     `;

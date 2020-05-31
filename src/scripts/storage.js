@@ -79,29 +79,23 @@ uploadAptsImgButton.addEventListener('change', function(e) {
   },
 
   function complete(){
-    
-    let apt
+    let newImgURL;
     task.snapshot.ref.getDownloadURL().then(downloadURL => {
-      let newImgURL = []
       console.log('File available at:' , downloadURL);
       db.collection('apartments').doc(aptId).get().then(doc =>{
         apt = doc.data();
-        console.log(apt);
-        newImgURL = apt.imgURL
-        console.log(newImgURL);
-        if(newImgURL.find(a => a.includes(file.name)) == false){
-          newImgURL.push(downloadURL);
-          console.log(newImgURL);
-          db.collection('apartments').doc(aptId).update({
-            imgURL: newImgURL
-          }).then(()=>{
-              
-          }).catch(err => {
-            console.log(err.messege)
-          });
-        }else{
-          console.log('file has been previously uploaded');
-        }
+        newImgURL = apt.imgURL;
+        console.log("aptURL is: " + apt.imgURL);
+        console.log("newimgURL is: " + newImgURL);
+        newImgURL.push(downloadURL);
+        console.log("after the push it is:" + newImgURL);
+        db.collection('apartments').doc(aptId).update({
+          imgURL: newImgURL
+        }).then((s)=>{
+            console.log(s);
+        }).catch(err => {
+          console.log(err.messege)
+        });
       })
     });
     

@@ -246,11 +246,13 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
       }
     }
     //here we populate the gallery apartment images
-    if(apt.imgURL[0]){
+    if(apt.imgURL){
       for(k=0; k<apt.imgURL.length; k++){
-        url=apt.imgURL[k];
-        aptImages+=`<img src="${url}" width="300" height="200">
-        `
+        if(apt.imgURL[k] != ""){
+          url=apt.imgURL[k];
+          aptImages+=`<img src="${url}" width="300" height="200">
+          `
+        }
       }
     }else{
       aptImages+='<p>No uploaded images!</p>'

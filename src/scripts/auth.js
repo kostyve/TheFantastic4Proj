@@ -108,7 +108,8 @@ createForm.addEventListener('submit', (e) =>{
         rented: false
 
         // this is going to store an entry into our db, which works as asynch method !
-    }).then(() => {
+    }).then((docRef) => {
+        console.log('The doc id created is: ' + docRef.id);
         // when it returns the promise we want to reset the form and close the modal
         const modal = document.querySelector('#modal-create');
         M.Modal.getInstance(modal).close();
@@ -290,7 +291,7 @@ db.collection('attractions').onSnapshot(snapshot => {
       const aptPrice = editForm['price'].value;
 
       updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
-
+      
       let attractionsIds=[];
       const numOfAttractions = document.getElementById('numOfAttractions').textContent;
       let attrRadioButton;
@@ -316,7 +317,7 @@ function updateAttractionsProximity(attId, aptId){
   console.log("check2: "+attId+", "+aptId);
   let proximityApt=[]
   //let attraction = doc.data();
-  let getDoc = db.collection('attractions').doc(attId).get().then(doc => {
+  db.collection('attractions').doc(attId).get().then(doc => {
       if (!doc.exists) {
         console.log('error, cannot find document');
       } else {
@@ -349,7 +350,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   //this function apdate the apartments, only the apartment id.
   //all the rest have default value if not given any.
   let apt;
-  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+  db.collection('apartments').doc(aptId).get().then(doc => {
         if (!doc.exists) {
           console.log('error, cannot find document');
         } else {

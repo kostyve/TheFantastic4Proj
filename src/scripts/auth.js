@@ -253,18 +253,48 @@ attractionsForm.addEventListener('submit', (e) =>{
   db.collection('attractions').add({
       //with square brackets we get the content of the fields in the form in index.html.
       //better to use this rather than . notation because they dont work with hyphen text
-      city: attrationForm['city'].value,
-      street: attrationForm['street'].value,
-      name: attrationForm['name'].value,
-      description: attrationForm['description'].value,
-      phone: attrationForm['phone'].value,
+      city: attractionsForm['city'].value,
+      street: attractionsForm['street'].value,
+      name: attractionsForm['name'].value,
+      description: attractionsForm['description'].value,
+      phone: attractionsForm['phone'].value,
       proximity: proximityApt
       // this is going to store an entry into our db, which works as asynch method !
-  }).then(() => {
+  }).then((docRef) => {
+    //we will addimagesforthe attraction  
+    const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
+      if(selectedFile){
+        console.log(selectedFile.name + docRef.id);
+        var imgPath = 'attractions/' + docRef.id;
+        var storageRef = cloudStorage.ref(imgPath + '/' + selectedFile.name);
+        var task = storageRef.put(selectedFile);
+
+        task.on('state_changed',
+
+          function progress(snapshot){
+              var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              uploader.style.width = percentage +'%';
+          },
+          function error(err){
+            console.log(err)
+          },
+
+          function complete(){
+            task.snapshot.ref.getDownloadURL().then(downloadURL => {
+              console.log('File available at:' , downloadURL)
+              db.collection('attractions').doc(docRef.id).update({
+                imgURL: downloadURL
+              }).then(()=>{
+              }).catch(err => {
+                console.log(err.messege)
+              });
+            });
+          });
+      }
       // when it returns the promise we want to reset the form and close the modal
       const modal = document.querySelector('#modal-attraction');
       M.Modal.getInstance(modal).close();
-      attrationForm.reset();
+      attractionsForm.reset();
       //HERE important thing happens here. we get the authentication method error because were not authenticated
       //now we want to catch it so we could show a different message
   }).catch(err => {
@@ -334,7 +364,7 @@ function updateAttractionsProximity(attId, aptId){
           // when it returns the promise we want to reset the form and close the modal
           const modal = document.querySelector('#modal-attraction');
           M.Modal.getInstance(modal).close();
-          attrationForm.reset();
+          attractionsForm.reset();
           //HERE important thing happens here. we get the authentication method error because were not authenticated
           //now we want to catch it so we could show a different message
       }).catch(err => {

@@ -102,6 +102,7 @@ createForm.addEventListener('submit', (e) =>{
         reviews: reviews,
         ownerId: uid,
         imgURL: imgURL,
+        discount: 0,
         //attributes to help recognize buyer.
         studentId: '',
         studentName: '',
@@ -261,7 +262,7 @@ attractionsForm.addEventListener('submit', (e) =>{
       proximity: proximityApt
       // this is going to store an entry into our db, which works as asynch method !
   }).then((docRef) => {
-    //we will addimagesforthe attraction  
+    //we will addimagesforthe attraction
     const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
       if(selectedFile){
         console.log(selectedFile.name + docRef.id);
@@ -319,9 +320,10 @@ db.collection('attractions').onSnapshot(snapshot => {
       const aptDesc = editForm['description'].value;
       const aptZip = editForm['zip'].value;
       const aptPrice = editForm['price'].value;
+      const aptdiscount = editForm['discount'].value;
 
-      updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice);
-      
+      updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice, aptdiscount);
+
       let attractionsIds=[];
       const numOfAttractions = document.getElementById('numOfAttractions').textContent;
       let attrRadioButton;
@@ -376,7 +378,7 @@ function updateAttractionsProximity(attId, aptId){
   });
 }
 
-function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice=""){
+function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice="", INdiscount=""){
   //this function apdate the apartments, only the apartment id.
   //all the rest have default value if not given any.
   let apt;
@@ -394,7 +396,8 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
       floor: INfloor==""?apt.floor:INfloor,
       description: INdescription==""?apt.description:INdescription,
       zip: INzip==""?apt.zip:INzip,
-      price: INprice==""?apt.price:INprice
+      price: INprice==""?apt.price:INprice,
+      discount: INdiscount==""?apt.discount:INdiscount
     }).then(()=>{
     }).catch(err => {
       console.log(err.message);

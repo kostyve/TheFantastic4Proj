@@ -308,6 +308,13 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
               <div>${"<b>Price:</b> "+apt.price}</div>
 
     `;
+    if((apt.discount != 0)&&(apt.discount)){
+      li+=`
+                <div id="site-layout-example-top" class="col s12 card-panel green lighten-1">
+                    <b>Discount for nearby attractions: ${apt.discount}%</b>
+                </div>
+        `;
+    }
     //if apartment is rented then put a "yes" to the variable, if not put "no".
     if(apt.rented==true){
       li +=  `<div>${"<b>Rented:</b> Yes"}</div>`;
@@ -392,12 +399,9 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
 
 
     li +=  `
-    </div>
     `;
 
     li+=`
-    </div>
-    <div class="collapsible-body white">
         <p>
         <div class="row">
       `;
@@ -428,9 +432,10 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
       `
       li+=`</div>`;
       //ADDING IMAGES
-      
+
       //close the thing that the collapsible open(that board thing).
-    li+= `</div></div></li>`;
+    li+= `</div></div></li></div>
+`;
   }
   return li
 }

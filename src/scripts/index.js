@@ -221,7 +221,7 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
     `;
 
     //collect all the apartments reviews to one collection(as string).
-
+    let aptImages = "";
     let totalRating = 0;
     let collectReviws="";
     let rev="";
@@ -244,6 +244,16 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
           collectReviws+="<p>"+rev.revMsg+"</p>";
         }
       }
+    }
+    //here we populate the gallery apartment images
+    if(apt.imgURL[0]){
+      for(k=0; k<apt.imgURL.length; k++){
+        url=apt.imgURL[k];
+        aptImages+=`<img src="${url}" width="300" height="200">
+        `
+      }
+    }else{
+      aptImages+='<p>No uploaded images!</p>'
     }
 
 
@@ -378,13 +388,17 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
       `;
 
 
-    li +=  `
-    <div class="row">
-    `;
 
     li +=  `
     </div>
     `;
+
+    li+=`
+    </div>
+    <div class="collapsible-body white">
+        <p>
+        <div class="row">
+      `;
 
       li+=`
       <div><h5><b>Reviews:</b></h5></div>
@@ -393,13 +407,28 @@ function readApartments(attrData, aptId, apt, isAdmin = false,id = apt.ownerId, 
 
       //add the collection of reviews msgs here.
       li+=`
-      <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;">
+      <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;" class="col s6">
       ${collectReviws}
       </div>
       `;
 
+      //ADDING IMAGES
+      li+=`
+        <div class="col s6">
+        <div><h5><b>Gallery:</b></h5></div>
+        <p>hell its about time</p>
+      `;
+
+      li+=`
+        <div style=": background-color: lightblue; width: 500px; height: 150px; overflow: scroll;" class="col s6">
+        ${aptImages}
+        </div>
+      `
+      li+=`</div>`;
+      //ADDING IMAGES
+      
       //close the thing that the collapsible open(that board thing).
-    li+= `</div></li>`;
+    li+= `</div></div></li>`;
   }
   return li
 }

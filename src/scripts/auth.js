@@ -87,7 +87,7 @@ createForm.addEventListener('submit', (e) =>{
       revMsg:"zero"
     }];
 
-    let imgs=["","",""];
+    let imgURL=[""];
 
     //we add apartment to the collection by adding an object which looks like {address: '', description: ''}
     db.collection('apartments').add({
@@ -101,7 +101,7 @@ createForm.addEventListener('submit', (e) =>{
         price: createForm['price'].value,
         reviews: reviews,
         ownerId: uid,
-        imgs: imgs,
+        imgURL: imgURL,
         //attributes to help recognize buyer.
         studentId: '',
         studentName: '',

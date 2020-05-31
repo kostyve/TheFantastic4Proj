@@ -60,7 +60,7 @@ uploadIdButton.addEventListener('change', function(e) {
   });
 })
 
-//For now the addition of apts will be here
+//UPLOADING APARTMENT IMAGES IN THE EDITING MODULE
 uploadAptsImgButton.addEventListener('change', function(e) {
   const aptId = document.getElementById('apt-id').textContent;
   var file = e.target.files[0];
@@ -102,11 +102,7 @@ uploadAptsImgButton.addEventListener('change', function(e) {
         }else{
           console.log('file has been previously uploaded');
         }
-        
       })
-      
-      
-        
     });
     
     alert("Uploaded successfully!");

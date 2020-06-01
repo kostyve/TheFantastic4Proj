@@ -35,6 +35,17 @@ auth.onAuthStateChanged(user => {
 
             setAtractionForm(snapshotApar.docs);
             //here we call setup ui with user so it will eval true = will show ui
+
+            //grab the search div class from the html.
+            const searchEngine = document.querySelector('.search-engine');
+              searchEngine.addEventListener('submit', (e) => {
+                e.preventDefault();
+                db.collection('apartments').onSnapshot(snapshot => {
+
+                  //reconstruct the apartment list to match the searchword.
+                  setupApts(snapshotAttr.docs, snapshot.docs, user.admin, document.querySelector('#searchs').value);
+              });
+            });
           })
         }, error =>{
             //this is how to handle error on listeners, that is the onSnapshot!
@@ -42,15 +53,7 @@ auth.onAuthStateChanged(user => {
         });
 
 
-        //grab the search div class from the html.
-        const searchEngine = document.querySelector('.search-engine');
-          searchEngine.addEventListener('submit', (e) => {
-            e.preventDefault();
-            db.collection('apartments').onSnapshot(snapshot => {
-              //reconstruct the apartment list to match the searchword.
-              setupApts(snapshot.docs, user.admin, document.querySelector('#searchs').value);
-          });
-        });
+
       });
     }else{
         //we hide the data so when were not logged in, essentially no data is shown

@@ -2,6 +2,8 @@
 
 //ref to the dom though the class name, which is : class="collapsible z-depth-0 apartments"
 const apartmentList = document.querySelector('.apartments');
+//select student elements
+const studentLinks = document.querySelectorAll('.student')
 //ref to the logged out class so that we could implement button hiding when user is logged in/out
 const loggedOutLinks = document.querySelectorAll('.logged-out');
 const loggedInLinks = document.querySelectorAll('.logged-in');
@@ -39,6 +41,11 @@ const setupUI = (user) => {
       `;
       // get the account-details class of the inner html
       accountDetails.innerHTML = html;
+      if(user.isVerified == false){
+        studentLinks.forEach(item => item.style.display = 'block')
+      }else{
+        studentLinks.forEach(item => item.style.display = 'none' )
+      }
     });
 
     // display = block means to show the items, where as none is to hide them
@@ -75,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //setup apartments
 const setupApts = (attrData, data, isAdmin, searchWord="") => {
   //check len on the data, if we have no length then user is not logged in. we show different data
-  if (data.length){
+  if (data){
       //we need to create a template and run through our data and input it inside
     let html = '';
 

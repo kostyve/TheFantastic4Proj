@@ -116,7 +116,7 @@ const getMyOwnAprts = (attrData, data, isAdmin=false) => {
   const user = auth.currentUser;
 
   //check len on the data, if we have no length then user is not logged in. we show different data
-  if (data.length){
+  if (data){
     //the final output to the dashboard.
     let html = '';
     //list of all the apartments.
@@ -649,7 +649,7 @@ function setEditForm(data){
   `;
   const user = auth.currentUser;
 
-  if (data.length){
+  if (data){
     data.forEach(doc => {
       const atraction = doc.data();
         html +=`
@@ -688,7 +688,7 @@ function setAtractionForm(data){
   `;
   const user = auth.currentUser;
 
-  if (data.length){
+  if (data){
     data.forEach(doc => {
       const apt = doc.data();
       if(apt.ownerId==user.uid){

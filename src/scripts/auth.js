@@ -169,7 +169,7 @@ signupForm.addEventListener('submit', (e) => {
             M.Modal.getInstance(modal).close();
             adminForm.reset();
         }).then(() => {
-          alert("Its take some time to get your permission to add apartments, please wait wait a couple of minutes before you login.");
+          alert("Its going to take a few moments to set up your permission to add apartments, please relogin.");
           const modal = document.querySelector('#modal-signup');
           M.Modal.getInstance(modal).close();
           signupForm.reset();
@@ -186,7 +186,7 @@ signupForm.addEventListener('submit', (e) => {
         signupForm.querySelector('.error').innerHTML = '';
         location.reload();
       }
-      auth.signOut();
+      //auth.signOut();
 
     }).catch(error => {
         signupForm.querySelector('.error').innerHTML = error.message;

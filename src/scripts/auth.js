@@ -67,7 +67,7 @@ auth.onAuthStateChanged(user => {
         setAtractionForm([]);
     }
 });
-//add deletion module to the file
+
 
 /* CREATION OF A NEW APARTMENTF FROM THE FORM
     creation of a new form using the query selector to find createform class
@@ -418,3 +418,4 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
       console.log(err.message);
 });
 }
+//end of file

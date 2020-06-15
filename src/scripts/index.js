@@ -59,6 +59,7 @@ const setupUI = (user) => {
     searchEngine.forEach(item => item.style.display = 'none');
     loggedInLinks.forEach(item => item.style.display = 'none');
     loggedOutLinks.forEach(item => item.style.display = 'block');
+    userItems.forEach(item => item.style.display = 'none');
     //hide the account info
     accountDetails.innerHTML = '';
   }

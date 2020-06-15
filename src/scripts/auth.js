@@ -1,5 +1,6 @@
 /* eslint-disable no-undef, no-global-assign, no-unused-vars, no-undef */
 
+
 //add admin cloud functions reference so that we could make someone an admin
 const adminForm = document.querySelector('.admin-actions');
 adminForm.addEventListener('submit', (e) => {
@@ -15,6 +16,7 @@ adminForm.addEventListener('submit', (e) => {
     });
 
 });
+
 //listen for auth status changes login and logout added method to check if a user is an admin
 auth.onAuthStateChanged(user => {
     if (user) {
@@ -65,7 +67,7 @@ auth.onAuthStateChanged(user => {
         setAtractionForm([]);
     }
 });
-
+//add deletion module to the file
 
 /* CREATION OF A NEW APARTMENTF FROM THE FORM
     creation of a new form using the query selector to find createform class

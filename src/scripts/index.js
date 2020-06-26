@@ -550,8 +550,30 @@ function addReview(aptId){
     }
   }
   let reviews=[];
+  // let rev={
+  //   studentId: auth.currentUser.uid,
+  //   rating:rating,
+  //   revMsg:msg
+  // };
+  //  if (Array.isArray(reviews) && reviews.length){
+  //   reviews[0]=rev;
+  // }else {
+  //   apt.reviews.forEach(item => {
+  //     reviews.push(item);
+  //   });
+  //   reviews.push(rev);
+  // }
+  reviews = fillRevDetails(auth.currentUser.uid, rating, msg, apt)
+  updateAptReview(reviews, aptId);
+}).catch(err => {
+  console.log('Error getting document', err);
+});
+}
+//refactored filling reviews
+function fillRevDetails(currUserUid, rating, msg, apt){
+  let reviews=[];
   let rev={
-    studentId: auth.currentUser.uid,
+    studentId: currUserUid,
     rating:rating,
     revMsg:msg
   };
@@ -563,20 +585,9 @@ function addReview(aptId){
     });
     reviews.push(rev);
   }
-  updateAptReview(reviews, aptId);
-  // db.collection('apartments').doc(aptId).update({
-  //   reviews: reviews
-  // }).then(()=>{
-  //   console.log("aprtment updated.");
-  // }).catch(err => {
-  //   console.log(err.message);
-  // });
-  // alert("We added your review. \nthanks for your time.");
-}).catch(err => {
-  console.log('Error getting document', err);
-});
+  return reviews
 }
-
+//refactored updating reviews
 function updateAptReview(reviews, aptId){
   db.collection('apartments').doc(aptId).update({
     reviews: reviews

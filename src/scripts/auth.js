@@ -178,6 +178,16 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
   //this function apdate the apartments, only the apartment id.
   //all the rest have default value if not given any.
   let apt;
+  var dict = {
+    INcity: INcity,
+    INstreet: INstreet,
+    INfloor: INfloor,
+    INdescription: INdescription,
+    INzip: INzip,
+    INprice: INprice,
+    INdiscount: INdiscount
+  };
+
   db.collection('apartments').doc(aptId).get().then(doc => {
     if (!doc.exists) {
       console.log('error, cannot find document');
@@ -185,8 +195,8 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
       apt = doc.data();
     }
 
-    updateAptDoc(apt, aptId, INcity, INstreet, INfloor, INdescription, INzip, INprice, INdiscount)
-    
+    updateAptDoc(apt, aptId, dict)
+
   }).then(() => {
       // when it returns the promise we want to reset the form and close the modal
       const modal = document.querySelector('#modal-edit');
@@ -197,16 +207,16 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
 });
 }
 
-function updateAptDoc(apt, aptId, INcity, INstreet, INfloor, INdescription, INzip, INprice, INdiscount){
+function updateAptDoc(apt, aptId, INdict){
   db.collection('apartments').doc(aptId).update({
     //if the INcoming is empty(equal to "") then change nothing.
-    city: (INcity=="")?(apt.city):(INcity),
-    street: INstreet==""?apt.street:INstreet,
-    floor: INfloor==""?apt.floor:INfloor,
-    description: INdescription==""?apt.description:INdescription,
-    zip: INzip==""?apt.zip:INzip,
-    price: INprice==""?apt.price:INprice,
-    discount: INdiscount==""?apt.discount:INdiscount
+    city: INdict['INcity']==="" ? apt.city : INdict['INcity'],
+    street: INdict['INstreet']==="" ? apt.street : INdict['INstreet'],
+    floor: INdict['INfloor']==="" ? apt.floor : INdict['INfloor'],
+    description: INdict['INdescription']==="" ? apt.description : INdict['INdescription'],
+    zip: INdict['INzip']==="" ? apt.zip : INdict['INzip'],
+    price: INdict['INprice']==="" ? apt.price : INdict['INprice'],
+    discount: INdict['INdiscount']==="" ? apt.discount : INdict['INdiscount']
   }).then(()=>{
   }).catch(err => {
     console.log(err.message);

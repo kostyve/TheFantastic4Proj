@@ -186,19 +186,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
     }
 
     updateAptDoc(apt, aptId, INcity, INstreet, INfloor, INdescription, INzip, INprice, INdiscount)
-    // db.collection('apartments').doc(aptId).update({
-    //   //if the INcoming is empty(equal to "") then change nothing.
-    //   city: (INcity=="")?(apt.city):(INcity),
-    //   street: INstreet==""?apt.street:INstreet,
-    //   floor: INfloor==""?apt.floor:INfloor,
-    //   description: INdescription==""?apt.description:INdescription,
-    //   zip: INzip==""?apt.zip:INzip,
-    //   price: INprice==""?apt.price:INprice,
-    //   discount: INdiscount==""?apt.discount:INdiscount
-    // }).then(()=>{
-    // }).catch(err => {
-    //   console.log(err.message);
-    // });
+    
   }).then(() => {
       // when it returns the promise we want to reset the form and close the modal
       const modal = document.querySelector('#modal-edit');

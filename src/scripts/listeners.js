@@ -188,7 +188,13 @@ function attractionImgUpload(docRef){
     const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
       if(selectedFile){
         var storageRef = cloudStorage.ref('attractions/' + docRef.id + '/' + selectedFile.name);
-        var task = storageRef.put(selectedFile);
+        sendTask(storageRef, selectedFile, docRef.id, 'attractions');
+      }
+}
+
+function sendTask(storageRef, selectedFile, id, collection){
+    //will get storage reference and then create a task to upload the file
+    var task = storageRef.put(selectedFile);
         task.on('state_changed',
           function progress(snapshot){
               var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -199,7 +205,7 @@ function attractionImgUpload(docRef){
           },
           function complete(){
             task.snapshot.ref.getDownloadURL().then(downloadURL => {
-              db.collection('attractions').doc(docRef.id).update({
+              db.collection(collection).doc(id).update({
                 imgURL: downloadURL
               }).then(()=>{
               }).catch(err => {
@@ -207,5 +213,4 @@ function attractionImgUpload(docRef){
               });
             });
           });
-      }
 }

@@ -50,19 +50,9 @@ const setupUI = (user) => {
 
     // display = block means to show the items, where as none is to hide them
     showLoggedInItems();
-    // loggedInLinks.forEach(item => item.style.display = 'block');
-    // searchEngine.forEach(item => item.style.display = 'block');
-    // loggedOutLinks.forEach(item => item.style.display = 'none');
-
   }else{
     //hide admin items
     hideAdminItems();
-    // adminItems.forEach(item => item.style.display = 'none');
-    // searchEngine.forEach(item => item.style.display = 'none');
-    // loggedInLinks.forEach(item => item.style.display = 'none');
-    // loggedOutLinks.forEach(item => item.style.display = 'block');
-    // userItems.forEach(item => item.style.display = 'none');
-    //hide the account info
     accountDetails.innerHTML = '';
   }
 }

@@ -187,7 +187,6 @@ attractionsForm.addEventListener('submit', (e) =>{
 function attractionImgUpload(docRef){
     const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
       if(selectedFile){
-        console.log(selectedFile.name + docRef.id);
         var imgPath = 'attractions/' + docRef.id;
         var storageRef = cloudStorage.ref(imgPath + '/' + selectedFile.name);
         var task = storageRef.put(selectedFile);
@@ -201,7 +200,6 @@ function attractionImgUpload(docRef){
           function error(err){
             console.log(err)
           },
-
           function complete(){
             task.snapshot.ref.getDownloadURL().then(downloadURL => {
               console.log('File available at:' , downloadURL)

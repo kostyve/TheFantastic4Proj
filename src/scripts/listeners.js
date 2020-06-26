@@ -62,23 +62,6 @@ signupForm.addEventListener('submit', (e) => {
         if(isLandLord){
           //we create a reference of the function named addAdminRole thorugh the callable as we created in functions/index.js
             addAdministrationPermissions(email);
-        //   const addAdminRole = functions.httpsCallable('addAdminRole');
-        //   //this is how we call it, that adminEmail represents the 'data' in the cloud functions
-        //     addAdminRole({email: email}).then(result => {
-        //         const modal = document.querySelector('#modal-landlord');
-        //         M.Modal.getInstance(modal).close();
-        //         adminForm.reset();
-        //     }).then(() => {
-        //         alert("Its going to take a few moments to set up your permission to add apartments, please relogin.");
-        //         const modal = document.querySelector('#modal-signup');
-        //         M.Modal.getInstance(modal).close();
-        //         signupForm.reset();
-        //         signupForm.querySelector('.error').innerHTML = '';
-        //         location.reload();
-
-        //     }).catch(error => {
-        //         signupForm.querySelector('.error').innerHTML = error.message;
-        //     });
       }else{
         const modal = document.querySelector('#modal-signup');
         M.Modal.getInstance(modal).close();

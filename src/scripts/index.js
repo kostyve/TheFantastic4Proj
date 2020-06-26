@@ -556,19 +556,7 @@ function addReview(aptId){
     }
   }
   let reviews=[];
-  // let rev={
-  //   studentId: auth.currentUser.uid,
-  //   rating:rating,
-  //   revMsg:msg
-  // };
-  //  if (Array.isArray(reviews) && reviews.length){
-  //   reviews[0]=rev;
-  // }else {
-  //   apt.reviews.forEach(item => {
-  //     reviews.push(item);
-  //   });
-  //   reviews.push(rev);
-  // }
+
   reviews = fillRevDetails(auth.currentUser.uid, rating, msg, apt)
   updateAptReview(reviews, aptId);
 }).catch(err => {

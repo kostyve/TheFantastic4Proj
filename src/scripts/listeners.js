@@ -2,18 +2,6 @@
 
 //add admin cloud functions reference so that we could make someone an admin
 const adminForm = document.querySelector('.admin-actions');
-adminForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const adminEmail = document.querySelector('#admin-email').value;
-    //we create a reference of the function named addAdminRole thorugh the callable as we created in functions/index.js
-    const addAdminRole = functions.httpsCallable('addAdminRole');
-    //this is how we call it, that adminEmail represents the 'data' in the cloud functions
-    addAdminRole({email: adminEmail}).then(result => {
-        const modal = document.querySelector('#modal-landlord');
-        M.Modal.getInstance(modal).close();
-        adminForm.reset();
-    });
-});
 
 /* CREATION OF A NEW APARTMENTF FROM THE FORM
 creation of a new form using the query selector to find createform class
@@ -73,24 +61,24 @@ signupForm.addEventListener('submit', (e) => {
       //after user signup if he mark the "i am landlord", then make him landlord(admin).
         if(isLandLord){
           //we create a reference of the function named addAdminRole thorugh the callable as we created in functions/index.js
+            addAdministrationPermissions(email);
+        //   const addAdminRole = functions.httpsCallable('addAdminRole');
+        //   //this is how we call it, that adminEmail represents the 'data' in the cloud functions
+        //     addAdminRole({email: email}).then(result => {
+        //         const modal = document.querySelector('#modal-landlord');
+        //         M.Modal.getInstance(modal).close();
+        //         adminForm.reset();
+        //     }).then(() => {
+        //         alert("Its going to take a few moments to set up your permission to add apartments, please relogin.");
+        //         const modal = document.querySelector('#modal-signup');
+        //         M.Modal.getInstance(modal).close();
+        //         signupForm.reset();
+        //         signupForm.querySelector('.error').innerHTML = '';
+        //         location.reload();
 
-          const addAdminRole = functions.httpsCallable('addAdminRole');
-          //this is how we call it, that adminEmail represents the 'data' in the cloud functions
-        addAdminRole({email: email}).then(result => {
-            const modal = document.querySelector('#modal-landlord');
-            M.Modal.getInstance(modal).close();
-            adminForm.reset();
-        }).then(() => {
-          alert("Its going to take a few moments to set up your permission to add apartments, please relogin.");
-          const modal = document.querySelector('#modal-signup');
-          M.Modal.getInstance(modal).close();
-          signupForm.reset();
-          signupForm.querySelector('.error').innerHTML = '';
-          location.reload();
-
-        }).catch(error => {
-            signupForm.querySelector('.error').innerHTML = error.message;
-        });
+        //     }).catch(error => {
+        //         signupForm.querySelector('.error').innerHTML = error.message;
+        //     });
       }else{
         const modal = document.querySelector('#modal-signup');
         M.Modal.getInstance(modal).close();
@@ -104,6 +92,26 @@ signupForm.addEventListener('submit', (e) => {
         signupForm.querySelector('.error').innerHTML = error.message;
     });
 });
+
+function addAdministrationPermissions(em){
+    const addAdminRole = functions.httpsCallable('addAdminRole');
+          //this is how we call it, that adminEmail represents the 'data' in the cloud functions
+        addAdminRole({email: em}).then(result => {
+            const modal = document.querySelector('#modal-landlord');
+            M.Modal.getInstance(modal).close();
+            adminForm.reset();
+        }).then(() => {
+            alert("Its going to take a few moments to set up your permission to add apartments, please relogin.");
+            const modal = document.querySelector('#modal-signup');
+            M.Modal.getInstance(modal).close();
+            signupForm.reset();
+            signupForm.querySelector('.error').innerHTML = '';
+            location.reload();
+
+        }).catch(error => {
+            signupForm.querySelector('.error').innerHTML = error.message;
+        });
+}
 
 //logout/signout method
 const logout = document.querySelector('#logout');
@@ -162,6 +170,21 @@ attractionsForm.addEventListener('submit', (e) =>{
       // this is going to store an entry into our db, which works as asynch method !
   }).then((docRef) => {
     //we will addimagesforthe attraction
+    attractionImgUpload(docRef);
+    
+      // when it returns the promise we want to reset the form and close the modal
+      const modal = document.querySelector('#modal-attraction');
+      M.Modal.getInstance(modal).close();
+      attractionsForm.reset();
+      //HERE important thing happens here. we get the authentication method error because were not authenticated
+      //now we want to catch it so we could show a different message
+  }).catch(err => {
+      console.log(err.message)
+  });
+
+});
+
+function attractionImgUpload(docRef){
     const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
       if(selectedFile){
         console.log(selectedFile.name + docRef.id);
@@ -191,14 +214,4 @@ attractionsForm.addEventListener('submit', (e) =>{
             });
           });
       }
-      // when it returns the promise we want to reset the form and close the modal
-      const modal = document.querySelector('#modal-attraction');
-      M.Modal.getInstance(modal).close();
-      attractionsForm.reset();
-      //HERE important thing happens here. we get the authentication method error because were not authenticated
-      //now we want to catch it so we could show a different message
-  }).catch(err => {
-      console.log(err.message)
-  });
-
-});
+}

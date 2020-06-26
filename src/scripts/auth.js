@@ -110,15 +110,25 @@ db.collection('attractions').onSnapshot(snapshot => {
       //example how to pull user data. first we get data from firebase auth
       //var user = auth.currentUser;
       const aptId = document.getElementById('apt-id').textContent;
-      const aptCity = editForm['city'].value;
-      const aptStreet = editForm['street'].value;
-      const aptFloor = editForm['floor'].value;
-      const aptDesc = editForm['description'].value;
-      const aptZip = editForm['zip'].value;
-      const aptPrice = editForm['price'].value;
-      const aptdiscount = editForm['discount'].value;
 
-      updateApartment(aptId, aptCity, aptStreet, aptFloor, aptDesc, aptZip, aptPrice, aptdiscount);
+      const aptINDict = {
+        INcity: editForm['city'].value,
+        INstreet: editForm['street'].value,
+        INfloor: editForm['floor'].value,
+        INdescription: editForm['description'].value,
+        INzip: editForm['zip'].value,
+        INprice: editForm['price'].value,
+        INdiscount: editForm['discount'].value
+      };
+      // const aptCity = editForm['city'].value;
+      // const aptStreet = editForm['street'].value;
+      // const aptFloor = editForm['floor'].value;
+      // const aptDesc = editForm['description'].value;
+      // const aptZip = editForm['zip'].value;
+      // const aptPrice = editForm['price'].value;
+      // const aptdiscount = editForm['discount'].value;
+
+      updateApartment(aptId, aptINDict);
 
       let attractionsIds=[];
       const numOfAttractions = document.getElementById('numOfAttractions').textContent;
@@ -174,19 +184,19 @@ function updateAttractionsProximity(attId, aptId){
   });
 }
 
-function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescription="", INzip="", INprice="", INdiscount=""){
+function updateApartment(aptId, dict){
   //this function apdate the apartments, only the apartment id.
   //all the rest have default value if not given any.
   let apt;
-  var dict = {
-    INcity: INcity,
-    INstreet: INstreet,
-    INfloor: INfloor,
-    INdescription: INdescription,
-    INzip: INzip,
-    INprice: INprice,
-    INdiscount: INdiscount
-  };
+  // var dict = {
+  //   INcity: INcity,
+  //   INstreet: INstreet,
+  //   INfloor: INfloor,
+  //   INdescription: INdescription,
+  //   INzip: INzip,
+  //   INprice: INprice,
+  //   INdiscount: INdiscount
+  // };
 
   db.collection('apartments').doc(aptId).get().then(doc => {
     if (!doc.exists) {

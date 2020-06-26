@@ -533,18 +533,14 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
 
 function addReview(aptId){
   let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
-      let apt;
-      if (!doc.exists) {
-        console.log('error, cannot find the document.');
-      } else {
-        apt = doc.data();
-      }
-
-  //popup masseg and input field for review msg.
+    let apt;
+    if (!doc.exists) {
+      console.log('error, cannot find the document.');
+    } else {
+      apt = doc.data();
+    }
   let msg = prompt("Your review:", "");
-  //popup masseg and input field for ratin(number[0-5]).
   let rating = prompt("Your rating(number between 0 to 5):", "");
-  //check if rating is number.
   if(!isNaN==rating){
     const num = Number(rating);
     //check if the rating is between 0 to 5.
@@ -553,7 +549,6 @@ function addReview(aptId){
       return;
     }
   }
-
   let reviews=[];
   let rev={
     studentId: auth.currentUser.uid,
@@ -566,11 +561,23 @@ function addReview(aptId){
     apt.reviews.forEach(item => {
       reviews.push(item);
     });
-
     reviews.push(rev);
   }
+  updateAptReview(reviews, aptId);
+  // db.collection('apartments').doc(aptId).update({
+  //   reviews: reviews
+  // }).then(()=>{
+  //   console.log("aprtment updated.");
+  // }).catch(err => {
+  //   console.log(err.message);
+  // });
+  // alert("We added your review. \nthanks for your time.");
+}).catch(err => {
+  console.log('Error getting document', err);
+});
+}
 
-
+function updateAptReview(reviews, aptId){
   db.collection('apartments').doc(aptId).update({
     reviews: reviews
   }).then(()=>{
@@ -579,9 +586,6 @@ function addReview(aptId){
     console.log(err.message);
   });
   alert("We added your review. \nthanks for your time.");
-}).catch(err => {
-  console.log('Error getting document', err);
-});
 }
 
 function editFormFunc(aptId){

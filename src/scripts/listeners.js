@@ -187,12 +187,9 @@ attractionsForm.addEventListener('submit', (e) =>{
 function attractionImgUpload(docRef){
     const selectedFile = document.getElementById('uploadAttractionImgButton').files[0];
       if(selectedFile){
-        var imgPath = 'attractions/' + docRef.id;
-        var storageRef = cloudStorage.ref(imgPath + '/' + selectedFile.name);
+        var storageRef = cloudStorage.ref('attractions/' + docRef.id + '/' + selectedFile.name);
         var task = storageRef.put(selectedFile);
-
         task.on('state_changed',
-
           function progress(snapshot){
               var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               uploader.style.width = percentage +'%';
@@ -202,7 +199,6 @@ function attractionImgUpload(docRef){
           },
           function complete(){
             task.snapshot.ref.getDownloadURL().then(downloadURL => {
-              console.log('File available at:' , downloadURL)
               db.collection('attractions').doc(docRef.id).update({
                 imgURL: downloadURL
               }).then(()=>{

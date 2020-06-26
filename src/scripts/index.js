@@ -49,20 +49,36 @@ const setupUI = (user) => {
     });
 
     // display = block means to show the items, where as none is to hide them
-    loggedInLinks.forEach(item => item.style.display = 'block');
-    searchEngine.forEach(item => item.style.display = 'block');
-    loggedOutLinks.forEach(item => item.style.display = 'none');
+    showLoggedInItems();
+    // loggedInLinks.forEach(item => item.style.display = 'block');
+    // searchEngine.forEach(item => item.style.display = 'block');
+    // loggedOutLinks.forEach(item => item.style.display = 'none');
 
   }else{
     //hide admin items
-    adminItems.forEach(item => item.style.display = 'none');
-    searchEngine.forEach(item => item.style.display = 'none');
-    loggedInLinks.forEach(item => item.style.display = 'none');
-    loggedOutLinks.forEach(item => item.style.display = 'block');
-    userItems.forEach(item => item.style.display = 'none');
+    hideAdminItems();
+    // adminItems.forEach(item => item.style.display = 'none');
+    // searchEngine.forEach(item => item.style.display = 'none');
+    // loggedInLinks.forEach(item => item.style.display = 'none');
+    // loggedOutLinks.forEach(item => item.style.display = 'block');
+    // userItems.forEach(item => item.style.display = 'none');
     //hide the account info
     accountDetails.innerHTML = '';
   }
+}
+
+function showLoggedInItems(){
+  loggedInLinks.forEach(item => item.style.display = 'block');
+  searchEngine.forEach(item => item.style.display = 'block');
+  loggedOutLinks.forEach(item => item.style.display = 'none');
+}
+
+function hideAdminItems(){
+  adminItems.forEach(item => item.style.display = 'none');
+  searchEngine.forEach(item => item.style.display = 'none');
+  loggedInLinks.forEach(item => item.style.display = 'none');
+  loggedOutLinks.forEach(item => item.style.display = 'block');
+  userItems.forEach(item => item.style.display = 'none');
 }
 
 // setup MATERIALIZE components

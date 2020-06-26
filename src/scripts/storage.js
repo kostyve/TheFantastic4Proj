@@ -30,34 +30,6 @@ uploadIdButton.addEventListener('change', function(e) {
 
   var storageRef = cloudStorage.ref(imgPath + '/' + file.name);
   sendTask(storageRef, file, userId, 'users');
-  // var task = storageRef.put(file);
-
-  // task.on('state_changed',
-
-  // function progress(snapshot){
-  //     var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //     uploader.style.width = percentage +'%';
-  // },
-  // function error(err){
-  //   console.log(err)
-  // },
-
-  // function complete(){
-  //   task.snapshot.ref.getDownloadURL().then(downloadURL => {
-  //     console.log('File available at:' , downloadURL)
-  //     db.collection('users').doc(userId).update({
-  //       isVerified: true,
-  //       imgUrl: downloadURL
-  //     }).then(()=>{
-  //         console.log('verified student', userId);
-  //         alert("Uploaded successfully!");
-  //         const modal = document.querySelector('#modal-upload');
-  //           M.Modal.getInstance(modal).close();
-  //     }).catch(err => {
-  //       console.log(err.messege)
-  //     });
-  //   });
-  // });
 })
 
 //UPLOADING APARTMENT IMAGES IN THE EDITING MODULE

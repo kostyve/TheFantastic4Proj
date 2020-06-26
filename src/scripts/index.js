@@ -532,7 +532,7 @@ function updateApartment(aptId, INcity="", INstreet="", INfloor="", INdescriptio
 }
 
 function addReview(aptId){
-  let getDoc = db.collection('apartments').doc(aptId).get().then(doc => {
+  db.collection('apartments').doc(aptId).get().then(doc => {
     let apt;
     if (!doc.exists) {
       console.log('error, cannot find the document.');
@@ -569,7 +569,7 @@ function addReview(aptId){
   console.log('Error getting document', err);
 });
 }
-//refactored filling reviews
+//refactored filling reviews for addReview
 function fillRevDetails(currUserUid, rating, msg, apt){
   let reviews=[];
   let rev={
@@ -587,7 +587,7 @@ function fillRevDetails(currUserUid, rating, msg, apt){
   }
   return reviews
 }
-//refactored updating reviews
+//refactored updating reviews for addReview
 function updateAptReview(reviews, aptId){
   db.collection('apartments').doc(aptId).update({
     reviews: reviews

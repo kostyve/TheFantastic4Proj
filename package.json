@@ -484,7 +484,7 @@
     "wrappy": "^1.0.2",
     "write": "^1.0.3",
     "write-file-atomic": "^3.0.3",
-    "ws": "^7.2.3",
+    "ws": "^7.4.6",
     "xml-name-validator": "^3.0.0",
     "xmlchars": "^2.2.0",
     "xregexp": "^4.3.0",

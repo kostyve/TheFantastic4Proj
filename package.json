@@ -274,7 +274,7 @@
     "js-tokens": "^4.0.0",
     "js-yaml": "^3.13.1",
     "jsbn": "^0.1.1",
-    "jsdom": "^15.2.1",
+    "jsdom": "^16.5.0",
     "jsesc": "^2.5.2",
     "json-schema": "^0.2.3",
     "json-schema-traverse": "^0.4.1",
